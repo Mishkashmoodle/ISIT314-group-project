@@ -3,7 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <Style>
-        body {font-family: Arial, Helvetica, sans-serif;}
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 15px;
+        background-color: #f3f9ff;
+        }
+
+    .header 
+    {
+      background-color: dodgerblue;
+      color: white;
+      padding: 40px 40px;
+      text-align: left;
+    }
+
+    .main 
+    {
+      max-width: 900px;/*limit the overall width just incase*/
+      margin: 40px auto;/*make same by defaut*/
+      padding: 20px;
+    }
+
+    .box /*page containters with 2 main sections*/
+    {
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .listing_box /*box that shows a preview of a job*/
+    {
+      margin-top: 20px;
+      max-width: 600px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      background-color: #ffffff;
+      padding: 20px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .listing_box:hover
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
+    }
 
         /* Full-width input fields */
         input[type=text], input[type=password] {
@@ -15,7 +61,6 @@
             box-sizing: border-box;
         }
 
-        /* Set a style for all buttons */
         button {
             background-color: dodgerblue;
             color: white;
@@ -26,6 +71,7 @@
             width: 100%;
         }
         .buttonlogin {
+            background-color: black;
             border: none;
             color: white;
             padding: 20px;
@@ -127,11 +173,23 @@
                 width: 100%;
             }
         }
+
+
+
     </Style>
 </head>
+
+
+
 <body>
+
+<div class="header">
+    <h1>Talent Match</h1>
+</div>
+
+<div class="main">
 <button class="button buttonlogin" onclick="document.getElementById('id01').style.display='block'"
-        style="width:auto">login
+        style="width:auto" >login
 </button>
 <div id="id01" class="modal">
 
@@ -154,7 +212,7 @@
         </div>
 
         <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('id02').style.display='block'">register</button>
+            <button type="button" onclick="document.getElementById('id02').style.display='block'; document.getElementById('id01').style.display='none'">register</button>
             <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
             <span class="psw">Forgot <a href="#">password?</a></span>
         </div>
@@ -184,7 +242,7 @@
             <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
 
             <div class="clearfix">
-                <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+                <button type="button" onclick="document.getElementById('id02').style.display='none'; document.getElementById('id01').style.display='block'" class="cancelbtn">Cancel</button>
                 <button type="submit" class="signupbtn">Sign Up</button>
             </div>
         </div>
@@ -209,5 +267,16 @@
         }
     }
 </script>
+
+
+    <div class="box">
+      <h2>Recent Job Listings</h2>
+      <hr>
+      <div class="listing_box">
+        <p>Job listings can appear here in boxes like this.........................</p>
+      </div>
+      </div>
+    </div>
+
 </body>
 </html>
