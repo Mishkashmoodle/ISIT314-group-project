@@ -1,2 +1,2 @@
 # ISIT314
-Due to us not starting yet there is no readme instructions :(
+Django must be installed (pip install django djangorestframework)
