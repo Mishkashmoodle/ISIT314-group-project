@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>business view profile</title>
+  <style>
+    body
+    {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 15px;
+      background-color: #dadada;
+    }
+
+    p
+    {
+      padding: 10px;
+    }
+
+    .header
+    {
+      background-color: dodgerblue;
+      color: white;
+      padding: 40px 40px;
+      text-align: left;
+    }
+
+    .main
+    {
+      width: 100%;
+      margin: 40px auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .box
+    {
+      width: 100%;
+      box-sizing: border-box;
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .box_header
+    {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    h1, h2
+    {
+      margin-top: 10px;
+      padding: 10px;
+    }
+
+    .button_row
+    {
+      margin-top: 15px;
+      padding: 10px;
+    }
+
+    .blue_button
+    {
+      background-color: dodgerblue;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .blue_button:hover
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
+    }
+
+    .listing_box
+    {
+      margin-top: 20px;
+      max-width: 600px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      background-color: #ffffff;
+      padding: 20px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .listing_box:hover
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
+    }
+
+    .modal
+    {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.45);
+      padding-top: 60px;
+    }
+
+    .modal_content
+    {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: min(90%, 560px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .close_button
+    {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 30px;
+      color: #333333;
+      cursor: pointer;
+    }
+
+    .close_button:hover
+    {
+      color: #f44336;
+    }
+
+    .form_input
+    {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 15px 0;
+      padding: 12px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      background-color: #f8fbff;
+      font-size: 16px;
+    }
+
+    .helper_text
+    {
+      background-color: #eef6ff;
+      border-left: 4px solid dodgerblue;
+      padding: 14px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .status_text
+    {
+      padding: 0;
+      margin: 10px 0 0;
+      color: #333333;
+      font-size: 16px;
+    }
+
+    .form_label
+    {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .skills_container
+    {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .skill_input_wrapper
+    {
+      position: relative;
+    }
+
+    .skill_suggestions
+    {
+      display: none;
+      position: absolute;
+      top: calc(100% - 8px);
+      left: 0;
+      right: 0;
+      background-color: white;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      max-height: 180px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .skill_suggestion_item
+    {
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .skill_suggestion_item:hover
+    {
+      background-color: #eef6ff;
+    }
+
+    .skill_chip
+    {
+      background-color: #d9ecff;
+      color: #0b3d75;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill_chip button
+    {
+      border: none;
+      background: transparent;
+      color: #0b3d75;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <button class="blue_button" onclick="window.location.href='main.html'">
+      < back to home
+    </button>
+    <h1>Talent Match - Business Profile</h1>
+  </div>
+
+  <div class="main">
+
+    <div class="box">
+      <div class="box_header">
+        <h2>Welcome to your Profile</h2>
+        <button class="blue_button">Edit Profile</button>
+      </div>
+      <p>Potential candidates can be matched to the jobs your business creates and manages here.</p>
+    </div>
+
+    <div class="box">
+      <div class="box_header">
+        <h2>Candidate That Fit Your Job Postings</h2>
+        <button class="blue_button">Manage Matches</button>
+      </div>
+      <div class="listing_box">
+        <p>Candidate matches can appear here in boxes like this.........................</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box_header">
+        <h2>Current Listings</h2>
+        <button class="blue_button" onclick="openJobPostModal()">Create Job Post</button>
+      </div>
+      <div class="listing_box">
+        <p>Jobs you create can appear here in boxes like this.........................</p>
+      </div>
+    </div>
+
+    <div id="jobPostModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeJobPostModal()" title="Close Create Job Post">&times;</span>
+        <h2>Create Job Post</h2>
+        <p>Enter the details for the role you want to advertise and match with suitable candidates.</p>
+        <form>
+          <label class="form_label" for="jobTitle"><b>Job Title</b></label>
+          <input class="form_input" id="jobTitle" type="text" name="jobTitle" placeholder="Enter job title">
+
+          <label class="form_label" for="educationRequirement"><b>Education Requirement</b></label>
+          <select class="form_input" id="educationRequirement" name="educationRequirement">
+            <option value="">Select an education level</option>
+            <option>None</option>
+            <option>High School</option>
+            <option>Certificate I</option>
+            <option>Certificate II</option>
+            <option>Certificate III</option>
+            <option>Certificate IV</option>
+            <option>Diploma</option>
+            <option>Advanced Diploma</option>
+            <option>Associate Degree</option>
+            <option>Bachelor's Degree</option>
+            <option>Graduate Certificate</option>
+            <option>Graduate Diploma</option>
+            <option>Master's Degree</option>
+            <option>Doctorate</option>
+          </select>
+
+          <label class="form_label" for="skillRequirement"><b>Skill Requirement</b></label>
+          <div class="skill_input_wrapper">
+            <input class="form_input" id="skillRequirement" type="text" name="skillRequirement" autocomplete="off" placeholder="Start typing a skill">
+            <div id="skillSuggestions" class="skill_suggestions"></div>
+          </div>
+
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="addSkillRequirement()">Add Skill</button>
+          </div>
+
+          <div id="skillsContainer" class="skills_container"></div>
+          <p id="jobPostStatus" class="status_text">Add one or more skill requirements for better matching.</p>
+
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="submitJobPost()">Create Job Post</button>
+            <button type="button" class="blue_button" onclick="closeJobPostModal()">Cancel</button>
+          </div>
+        </form>
+        <div class="helper_text">
+          <strong>Future workflow:</strong>
+          In a later step this job post can be matched against candidate education, experience, and skills to recommend the strongest applicants for your business.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    var selectedSkills = [];
+    var availableSkills = [
+      "Communication",
+      "Customer Service",
+      "Data Analysis",
+      "Excel",
+      "Figma",
+      "HTML",
+      "Java",
+      "JavaScript",
+      "Leadership",
+      "Marketing",
+      "Project Management",
+      "Python",
+      "Sales",
+      "SQL",
+      "UI/UX Design",
+      "Verbal Communication",
+      "Written Communication",
+      "Active Listening",
+      "Interpersonal Skills",
+      "Teamwork",
+      "Collaboration",
+      "Problem Solving",
+      "Critical Thinking",
+      "Decision Making",
+      "Time Management",
+      "Prioritization",
+      "Adaptability",
+      "Flexibility",
+      "Work Ethic",
+      "Reliability",
+      "Accountability",
+      "Resilience",
+      "Emotional Intelligence",
+      "Conflict Resolution",
+      "Stress Management",
+      "Creativity",
+      "Initiative",
+      "Motivation",
+      "Attention to Detail",
+      "Organization"
+    ];
+
+    function openJobPostModal() {
+      document.getElementById("jobPostModal").style.display = "block";
+    }
+
+    function closeJobPostModal() {
+      document.getElementById("jobPostModal").style.display = "none";
+    }
+
+    function addSkillRequirement() {
+      var skillInput = document.getElementById("skillRequirement");
+      var jobPostStatus = document.getElementById("jobPostStatus");
+      var skillValue = skillInput.value.trim();
+
+      if (!skillValue) {
+        jobPostStatus.textContent = "Enter a skill requirement before adding it.";
+        return;
+      }
+
+      if (selectedSkills.indexOf(skillValue) !== -1) {
+        jobPostStatus.textContent = "That skill has already been added.";
+        return;
+      }
+
+      selectedSkills.push(skillValue);
+      skillInput.value = "";
+      hideSkillSuggestions();
+      renderSelectedSkills();
+      jobPostStatus.textContent = "Current skills: " + selectedSkills.join(", ");
+    }
+
+    function removeSkillRequirement(skillValue) {
+      selectedSkills = selectedSkills.filter(function(skill) {
+        return skill !== skillValue;
+      });
+
+      renderSelectedSkills();
+
+      if (selectedSkills.length) {
+        document.getElementById("jobPostStatus").textContent = "Current skills: " + selectedSkills.join(", ");
+      } else {
+        document.getElementById("jobPostStatus").textContent = "Add one or more skill requirements for better matching.";
+      }
+    }
+
+    function renderSelectedSkills() {
+      var skillsContainer = document.getElementById("skillsContainer");
+      skillsContainer.innerHTML = "";
+
+      selectedSkills.forEach(function(skill) {
+        var chip = document.createElement("span");
+        chip.className = "skill_chip";
+        chip.textContent = skill;
+
+        var removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.innerHTML = "&times;";
+        removeButton.title = "Remove " + skill;
+        removeButton.onclick = function() {
+          removeSkillRequirement(skill);
+        };
+
+        chip.appendChild(removeButton);
+        skillsContainer.appendChild(chip);
+      });
+    }
+
+    function submitJobPost() {
+      var jobTitle = document.getElementById("jobTitle").value.trim();
+      var educationRequirement = document.getElementById("educationRequirement").value;
+      var jobPostStatus = document.getElementById("jobPostStatus");
+
+      if (!jobTitle) {
+        jobPostStatus.textContent = "Please enter a job title before creating the job post.";
+        return;
+      }
+
+      if (!educationRequirement) {
+        jobPostStatus.textContent = "Please select an education requirement.";
+        return;
+      }
+
+      if (!selectedSkills.length) {
+        jobPostStatus.textContent = "Please add at least one skill requirement.";
+        return;
+      }
+
+      jobPostStatus.textContent = "Job post created for " + jobTitle + " with " + educationRequirement + " and skills: " + selectedSkills.join(", ");
+    }
+
+    function renderSkillSuggestions(matches) {
+      var suggestionsBox = document.getElementById("skillSuggestions");
+      suggestionsBox.innerHTML = "";
+
+      if (!matches.length) {
+        hideSkillSuggestions();
+        return;
+      }
+
+      matches.forEach(function(skill) {
+        var suggestionItem = document.createElement("div");
+        suggestionItem.className = "skill_suggestion_item";
+        suggestionItem.textContent = skill;
+        suggestionItem.onmousedown = function() {
+          document.getElementById("skillRequirement").value = skill;
+          hideSkillSuggestions();
+        };
+        suggestionsBox.appendChild(suggestionItem);
+      });
+
+      suggestionsBox.style.display = "block";
+    }
+
+    function hideSkillSuggestions() {
+      document.getElementById("skillSuggestions").style.display = "none";
+    }
+
+    document.getElementById("skillRequirement").addEventListener("input", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      if (!query) {
+        hideSkillSuggestions();
+        return;
+      }
+
+      var matches = availableSkills.filter(function(skill) {
+        return skill.toLowerCase().indexOf(query) !== -1;
+      });
+
+      renderSkillSuggestions(matches);
+    });
+
+    document.getElementById("skillRequirement").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addSkillRequirement();
+      }
+    });
+
+    document.getElementById("skillRequirement").addEventListener("blur", function() {
+      setTimeout(hideSkillSuggestions, 100);
+    });
+
+    window.onclick = function(event) {
+      var jobPostModal = document.getElementById("jobPostModal");
+
+      if (event.target == jobPostModal) {
+        closeJobPostModal();
+      }
+
+      if (!document.getElementById("skillSuggestions").contains(event.target) && event.target.id !== "skillRequirement") {
+        hideSkillSuggestions();
+      }
+    }
+  </script>
+
+</body>
+
+</html>
