@@ -160,6 +160,33 @@
       color: #333333;
       font-size: 16px;
     }
+
+    .form_input
+    {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 15px 0;
+      padding: 12px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      background-color: #f8fbff;
+      font-size: 16px;
+    }
+
+    .form_label
+    {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .status_text
+    {
+      padding: 0;
+      margin: 10px 0 0;
+      color: #333333;
+      font-size: 16px;
+    }
   </style>
 </head>
 
@@ -185,13 +212,58 @@
     <div class="box">
       <h2>Options</h2>
       <div class="button_row">
-        <button class="blue_button">Edit Profile</button><!--turn into modal thing like the login button-->
+        <button class="blue_button" onclick="openEditProfileModal()">Edit Profile</button>
         <button class="blue_button" onclick="openResumeModal()">Upload Resume</button>
       </div>
       <hr>
       <h2>Saved Listings</h2>
       <div class="listing_box">
         <p>Job listings can appear here in boxes like this.........................</p>
+      </div>
+    </div>
+
+    <div id="editProfileModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeEditProfileModal()" title="Close Edit Profile">&times;</span>
+        <h2>Edit Profile</h2>
+        <p>Update the information employers use to understand your background and match you to jobs.</p>
+        <form>
+          <label class="form_label" for="candidateFullName"><b>Full Name</b></label>
+          <input class="form_input" id="candidateFullName" type="text" name="candidateFullName" placeholder="Enter your full name">
+
+          <label class="form_label" for="candidateEmail"><b>Email</b></label>
+          <input class="form_input" id="candidateEmail" type="email" name="candidateEmail" placeholder="Enter your email">
+
+          <label class="form_label" for="candidatePhone"><b>Phone Number</b></label>
+          <input class="form_input" id="candidatePhone" type="tel" name="candidatePhone" placeholder="Enter your phone number">
+
+          <label class="form_label" for="candidateEducation"><b>Highest Education</b></label>
+          <select class="form_input" id="candidateEducation" name="candidateEducation">
+            <option value="">Select an education level</option>
+            <option>High School</option>
+            <option>Certificate</option>
+            <option>Diploma</option>
+            <option>Associate Degree</option>
+            <option>Bachelor's Degree</option>
+            <option>Graduate Certificate</option>
+            <option>Graduate Diploma</option>
+            <option>Master's Degree</option>
+            <option>Doctorate</option>
+          </select>
+
+          <label class="form_label" for="candidateSkills"><b>Skills</b></label>
+          <input class="form_input" id="candidateSkills" type="text" name="candidateSkills" placeholder="Example: JavaScript, Customer Service, SQL">
+
+          <label class="form_label" for="candidateSummary"><b>Profile Summary</b></label>
+          <textarea class="form_input" id="candidateSummary" name="candidateSummary" rows="5" placeholder="Write a short summary about your experience and goals"></textarea>
+
+          <p id="editProfileStatus" class="status_text">Keep your education, skills, and summary current to improve job matching.</p>
+
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="saveCandidateProfile()">Save Changes</button>
+            <button type="button" class="blue_button" onclick="closeEditProfileModal()">Cancel</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -230,6 +302,27 @@
   </div>
 
   <script>
+    function openEditProfileModal() {
+      document.getElementById("editProfileModal").style.display = "block";
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById("editProfileModal").style.display = "none";
+    }
+
+    function saveCandidateProfile() {
+      var fullName = document.getElementById("candidateFullName").value.trim();
+      var email = document.getElementById("candidateEmail").value.trim();
+      var editProfileStatus = document.getElementById("editProfileStatus");
+
+      if (!fullName || !email) {
+        editProfileStatus.textContent = "Please enter at least your full name and email before saving.";
+        return;
+      }
+
+      editProfileStatus.textContent = "Profile updated for " + fullName + ".";
+    }
+
     function openResumeModal() {
       document.getElementById("resumeModal").style.display = "block";
     }
@@ -261,7 +354,12 @@
     });
 
     window.onclick = function(event) {
+      var editProfileModal = document.getElementById("editProfileModal");
       var resumeModal = document.getElementById("resumeModal");
+
+      if (event.target == editProfileModal) {
+        closeEditProfileModal();
+      }
 
       if (event.target == resumeModal) {
         closeResumeModal();

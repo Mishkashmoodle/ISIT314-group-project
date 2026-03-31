@@ -257,7 +257,7 @@
     <div class="box">
       <div class="box_header">
         <h2>Welcome to your Profile</h2>
-        <button class="blue_button">Edit Profile</button>
+        <button class="blue_button" onclick="openEditBusinessProfileModal()">Edit Profile</button>
       </div>
       <p>Potential candidates can be matched to the jobs your business creates and manages here.</p>
     </div>
@@ -335,6 +335,43 @@
       </div>
     </div>
 
+    <div id="editBusinessProfileModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeEditBusinessProfileModal()" title="Close Edit Profile">&times;</span>
+        <h2>Edit Business Profile</h2>
+        <p>Update the company information candidates will see when they view your jobs and business profile.</p>
+        <form>
+          <label class="form_label" for="businessName"><b>Business Name</b></label>
+          <input class="form_input" id="businessName" type="text" name="businessName" placeholder="Enter business name">
+
+          <label class="form_label" for="businessAbn"><b>ABN</b></label>
+          <input class="form_input" id="businessAbn" type="text" name="businessAbn" placeholder="Enter ABN">
+
+          <label class="form_label" for="businessIndustry"><b>Industry</b></label>
+          <input class="form_input" id="businessIndustry" type="text" name="businessIndustry" placeholder="Enter industry">
+
+          <label class="form_label" for="businessContactName"><b>Contact Name</b></label>
+          <input class="form_input" id="businessContactName" type="text" name="businessContactName" placeholder="Enter contact name">
+
+          <label class="form_label" for="businessEmail"><b>Business Email</b></label>
+          <input class="form_input" id="businessEmail" type="email" name="businessEmail" placeholder="Enter business email">
+
+          <label class="form_label" for="businessPhone"><b>Phone Number</b></label>
+          <input class="form_input" id="businessPhone" type="tel" name="businessPhone" placeholder="Enter phone number">
+
+          <label class="form_label" for="businessDescription"><b>Business Description</b></label>
+          <textarea class="form_input" id="businessDescription" name="businessDescription" rows="5" placeholder="Describe your company, team, and what candidates can expect"></textarea>
+
+          <p id="businessProfileStatus" class="status_text">Keep your company details current so candidates trust the jobs you post.</p>
+
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="saveBusinessProfile()">Save Changes</button>
+            <button type="button" class="blue_button" onclick="closeEditBusinessProfileModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -386,8 +423,30 @@
       document.getElementById("jobPostModal").style.display = "block";
     }
 
+    function openEditBusinessProfileModal() {
+      document.getElementById("editBusinessProfileModal").style.display = "block";
+    }
+
     function closeJobPostModal() {
       document.getElementById("jobPostModal").style.display = "none";
+    }
+
+    function closeEditBusinessProfileModal() {
+      document.getElementById("editBusinessProfileModal").style.display = "none";
+    }
+
+    function saveBusinessProfile() {
+      var businessName = document.getElementById("businessName").value.trim();
+      var businessEmail = document.getElementById("businessEmail").value.trim();
+      var businessAbn = document.getElementById("businessAbn").value.trim();
+      var businessProfileStatus = document.getElementById("businessProfileStatus");
+
+      if (!businessName || !businessEmail || !businessAbn) {
+        businessProfileStatus.textContent = "Please enter your business name, ABN, and business email before saving.";
+        return;
+      }
+
+      businessProfileStatus.textContent = "Profile updated for " + businessName + ".";
     }
 
     function addSkillRequirement() {
@@ -526,9 +585,14 @@
 
     window.onclick = function(event) {
       var jobPostModal = document.getElementById("jobPostModal");
+      var editBusinessProfileModal = document.getElementById("editBusinessProfileModal");
 
       if (event.target == jobPostModal) {
         closeJobPostModal();
+      }
+
+      if (event.target == editBusinessProfileModal) {
+        closeEditBusinessProfileModal();
       }
 
       if (!document.getElementById("skillSuggestions").contains(event.target) && event.target.id !== "skillRequirement") {
