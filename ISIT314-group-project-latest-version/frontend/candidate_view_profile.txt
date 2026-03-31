@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>candidate view profile</title>
+  <style>/*colours and proper spacing tbd*/
+    body 
+    {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 15px;
+      background-color: #dadada;
+    }
+
+    p
+    {
+      padding: 10px;
+    }
+
+    .header 
+    {
+      background-color: dodgerblue;
+      color: white;
+      padding: 40px 40px;
+      text-align: left;
+    }
+
+    .main 
+    {
+      width: 100%;/*limit the overall width just incase*/
+      margin: 40px auto;/*make same by defaut*/
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .box /*page containters*/
+    {
+      width: 100%;
+      box-sizing: border-box;
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    h1, h2 
+    {
+      margin-top: 10px;
+      padding: 10px;
+    }
+
+    .button_row /*buttons margin*/
+    {
+      margin-top: 15px;
+      padding: 10px;
+    }
+
+    .blue_button /*buttons style smoothing out*/
+    {
+      background-color: dodgerblue;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .blue_button:hover /*just hover opacity of the page buttons*/
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
+    }
+
+    .listing_box /*box that shows a preview of a job*/
+    {
+      margin-top: 20px;
+      max-width: 600px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      background-color: #ffffff;
+      padding: 20px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .listing_box:hover
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
+    }
+
+    .modal
+    {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.45);
+      padding-top: 60px;
+    }
+
+    .modal_content
+    {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: min(90%, 560px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .close_button
+    {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 30px;
+      color: #333333;
+      cursor: pointer;
+    }
+
+    .close_button:hover
+    {
+      color: #f44336;
+    }
+
+    .upload_input
+    {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 15px 0;
+      padding: 12px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      background-color: #f8fbff;
+    }
+
+    .helper_text
+    {
+      background-color: #eef6ff;
+      border-left: 4px solid dodgerblue;
+      padding: 14px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .file_status
+    {
+      padding: 0;
+      margin: 10px 0 0;
+      color: #333333;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+
+
+<body>
+
+  <div class="header">
+          <button class="blue_button" onclick="window.location.href='main.html'">
+      < back to home
+    </button>
+    <h1>Talent Match - Your Profile</h1>
+  </div>
+
+  <div class="main">
+
+    <div class="box">
+      <h2>Welcome to your Profile</h2>
+      <p>Potential employers can view your skills and experience uploaded.</p>
+    </div>
+
+    
+    <div class="box">
+      <h2>Options</h2>
+      <div class="button_row">
+        <button class="blue_button">Edit Profile</button><!--turn into modal thing like the login button-->
+        <button class="blue_button" onclick="openResumeModal()">Upload Resume</button>
+      </div>
+      <hr>
+      <h2>Saved Listings</h2>
+      <div class="listing_box">
+        <p>Job listings can appear here in boxes like this.........................</p>
+      </div>
+    </div>
+
+    <div id="resumeModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeResumeModal()" title="Close Upload Resume">&times;</span>
+        <h2>Upload Resume</h2>
+        <p>Upload your resume as a Microsoft Word document or PDF.</p>
+        <form>
+          <label for="resumeFile"><b>Select Resume</b></label>
+          <input
+            class="upload_input"
+            id="resumeFile"
+            type="file"
+            name="resume"
+            accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+          <p id="fileStatus" class="file_status">Accepted file types: PDF, .doc, .docx</p>
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="submitResume()">Upload Resume</button>
+            <button type="button" class="blue_button" onclick="closeResumeModal()">Cancel</button>
+          </div>
+        </form>
+        <div class="helper_text">
+          <strong>Future workflow:</strong>
+          In a later step this uploaded resume will be scanned to extract work experience, education, and skills so candidate profiles can be matched with available jobs.
+        </div>
+      </div>
+    </div>
+
+<!--Things to add:
+    1. back button - done
+    2. upload resume script
+    3. edit profile functionality
+-->
+
+  </div>
+
+  <script>
+    function openResumeModal() {
+      document.getElementById("resumeModal").style.display = "block";
+    }
+
+    function closeResumeModal() {
+      document.getElementById("resumeModal").style.display = "none";
+    }
+
+    function submitResume() {
+      var resumeFile = document.getElementById("resumeFile");
+      var fileStatus = document.getElementById("fileStatus");
+
+      if (!resumeFile.files.length) {
+        fileStatus.textContent = "Please select a PDF or Microsoft Word document before uploading.";
+        return;
+      }
+
+      fileStatus.textContent = "Selected file: " + resumeFile.files[0].name;
+    }
+
+    document.getElementById("resumeFile").addEventListener("change", function(event) {
+      var fileStatus = document.getElementById("fileStatus");
+
+      if (event.target.files.length) {
+        fileStatus.textContent = "Selected file: " + event.target.files[0].name;
+      } else {
+        fileStatus.textContent = "Accepted file types: PDF, .doc, .docx";
+      }
+    });
+
+    window.onclick = function(event) {
+      var resumeModal = document.getElementById("resumeModal");
+
+      if (event.target == resumeModal) {
+        closeResumeModal();
+      }
+    }
+  </script>
+
+</body>
+
+</html>
