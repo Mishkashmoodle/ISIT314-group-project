@@ -61,6 +61,25 @@
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
+        .account-type-toggle {
+            display: flex;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .account-type-option {
+            flex: 1;
+            background-color: #d9ecff;
+            color: #0b3d75;
+            border: 1px solid #8bbcf2;
+        }
+        .account-type-option.active {
+            background-color: dodgerblue;
+            color: white;
+            border-color: dodgerblue;
+        }
+        .hidden-field {
+            display: none;
+        }
         .buttonaddlisting {
             background-color: dodgerblue;
             color: white;
@@ -235,20 +254,30 @@
 </div>
 
 <div id="id02" class="modal">
-    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
     <form class="modal-content" action="/action_page.php">
         <div class="container">
             <h1>Sign Up</h1>
             <p>Please fill in this form to create an account.</p>
             <hr>
+            <input type="hidden" id="accountType" name="accountType" value="candidate">
+
+            <label><b>Register As</b></label>
+            <div class="account-type-toggle">
+                <button type="button" id="candidateBtn" class="account-type-option active" onclick="setAccountType('candidate')">Candidate</button>
+                <button type="button" id="businessBtn" class="account-type-option" onclick="setAccountType('business')">Business</button>
+            </div>
+
             <label><b>Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" required>
 
             <label><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
 
-            <label><b>Repeat Password</b></label>
-            <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+            <div id="abnField" class="hidden-field">
+                <label><b>ABN Number</b></label>
+                <input type="text" id="abnInput" placeholder="Enter ABN Number" name="abn">
+            </div>
 
             <label>
                 <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
@@ -264,23 +293,29 @@
     </form>
 </div>
 <script>
-    // Get the modal
-    var modal = document.getElementById('id01');
+    function setAccountType(type) {
+        var isBusiness = type === "business";
+        document.getElementById("accountType").value = type;
+        document.getElementById("candidateBtn").classList.toggle("active", !isBusiness);
+        document.getElementById("businessBtn").classList.toggle("active", isBusiness);
+        document.getElementById("abnField").classList.toggle("hidden-field", !isBusiness);
+        document.getElementById("abnInput").required = isBusiness;
+    }
 
-    // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        var loginModal = document.getElementById("id01");
+        var registerModal = document.getElementById("id02");
+
+        if (event.target == loginModal) {
+            loginModal.style.display = "none";
+        }
+
+        if (event.target == registerModal) {
+            registerModal.style.display = "none";
         }
     }
-    var modal = document.getElementById('id02');
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+    setAccountType("candidate");
 </script>
 
 
