@@ -255,7 +255,7 @@
 
 <div id="id02" class="modal">
     <span onclick="closeModal('id02')" class="close" title="Close Modal">&times;</span>
-    <form class="modal-content animate" action="/action_page.php">
+    <form id="registerForm" class="modal-content animate" action="/action_page.php" onsubmit="return validateRegisterForm()">
         <div class="container">
             <h1>Sign Up</h1>
             <p>Please fill in this form to create an account.</p>
@@ -272,7 +272,10 @@
             <input type="text" placeholder="Enter Email" name="email" required>
 
             <label><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
+            <input type="password" id="registerPassword" placeholder="Enter Password" name="psw" required>
+
+            <label><b>Re-enter Password</b></label>
+            <input type="password" id="registerPasswordRepeat" placeholder="Re-enter Password" name="psw-repeat" required>
 
             <div id="abnField" class="hidden-field">
                 <label><b>ABN</b></label>
@@ -318,6 +321,28 @@
         document.getElementById("abnField").classList.toggle("hidden-field", !isBusiness);
         document.getElementById("abnInput").required = isBusiness;
     }
+
+    function validateRegisterForm() {
+        var password = document.getElementById("registerPassword");
+        var repeatPassword = document.getElementById("registerPasswordRepeat");
+
+        if (password.value !== repeatPassword.value) {
+            repeatPassword.setCustomValidity("Passwords do not match.");
+            repeatPassword.reportValidity();
+            return false;
+        }
+
+        repeatPassword.setCustomValidity("");
+        return true;
+    }
+
+    document.getElementById("registerPassword").addEventListener("input", function() {
+        document.getElementById("registerPasswordRepeat").setCustomValidity("");
+    });
+
+    document.getElementById("registerPasswordRepeat").addEventListener("input", function() {
+        this.setCustomValidity("");
+    });
 
     window.onclick = function(event) {
         var loginModal = document.getElementById("id01");
