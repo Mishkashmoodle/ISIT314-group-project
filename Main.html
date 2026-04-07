@@ -14,7 +14,41 @@
       background-color: dodgerblue;
       color: white;
       padding: 40px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
       text-align: left;
+      flex-wrap: wrap;
+    }
+    .header_copy h1 {
+      margin: 0;
+    }
+    .header_auth {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      max-width: 320px;
+    }
+    .header_auth p {
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      text-align: center;
+    }
+    .header_actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .header_action_button {
+      width: auto;
+      min-width: 130px;
+      margin: 0;
+      border-radius: 12px;
+      background-color: black;
     }
 
     .main 
@@ -105,24 +139,6 @@
             cursor: pointer;
             width: 100%;
         }
-        .buttonlogin {
-            background-color: black;
-            border: none;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 12px;
-            position: fixed; /* Positions relative to the browser window */
-            top: 10px;       /* 10px from the top edge */
-            right: 10px;
-            z-index: 1000;
-        }
-
         button:hover {
             opacity: 0.8;
         }
@@ -208,6 +224,21 @@
                 width: 100%;
             }
         }
+        @media screen and (max-width: 700px) {
+            .header {
+                align-items: flex-start;
+            }
+            .header_auth {
+                align-items: center;
+                max-width: none;
+            }
+            .header_auth p {
+                text-align: center;
+            }
+            .header_actions {
+                justify-content: center;
+            }
+        }
 
 
 
@@ -219,13 +250,19 @@
 <body>
 
 <div class="header">
-    <h1>Talent Match</h1>
+    <div class="header_copy">
+        <h1>Talent Match</h1>
+    </div>
+    <div class="header_auth">
+        <p>For personalised listings</p>
+        <div class="header_actions">
+            <button class="header_action_button" type="button" onclick="openModal('id01', true)">Login</button>
+            <button class="header_action_button" type="button" onclick="openModal('id02', true)">Create Account</button>
+        </div>
+    </div>
 </div>
 
 <div class="main">
-<button class="button buttonlogin" onclick="openModal('id01', true)"
-        style="width:auto" >login
-</button>
 <div id="id01" class="modal">
 
     <form class="modal-content animate" action="/action_page.php" method="post">
@@ -289,7 +326,7 @@
             <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
 
             <div class="clearfix">
-                <button type="button" onclick="swapModal('id02', 'id01')" class="cancelbtn">Cancel</button>
+                <button type="button" onclick="swapModal('id02', 'id01')" class="cancelbtn">Already have an account?</button>
                 <button type="submit" class="signupbtn">Sign Up</button>
             </div>
         </div>
