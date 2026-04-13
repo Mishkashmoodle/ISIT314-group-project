@@ -154,6 +154,12 @@
       font-size: 16px;
     }
 
+    .form_input_large
+    {
+      min-height: 120px;
+      resize: vertical;
+    }
+
     .helper_text
     {
       background-color: #eef6ff;
@@ -191,6 +197,11 @@
       position: relative;
     }
 
+    .autocomplete_wrapper
+    {
+      position: relative;
+    }
+
     .skill_suggestions
     {
       display: none;
@@ -215,6 +226,34 @@
     }
 
     .skill_suggestion_item:hover
+    {
+      background-color: #eef6ff;
+    }
+
+    .location_suggestions
+    {
+      display: none;
+      position: absolute;
+      top: calc(100% - 8px);
+      left: 0;
+      right: 0;
+      background-color: white;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      max-height: 180px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .location_suggestion_item
+    {
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .location_suggestion_item:hover
     {
       background-color: #eef6ff;
     }
@@ -289,9 +328,15 @@
         <p>Enter the details for the role you want to advertise and match with suitable candidates.</p>
         <form>
           <label class="form_label" for="jobTitle"><b>Job Title</b></label>
-          <input class="form_input" id="jobTitle" type="text" name="jobTitle" placeholder="Enter job title">
+          <input class="form_input" id="jobTitle" type="text" name="jobTitle" placeholder="Enter job title" required>
 
-          <label class="form_label" for="educationRequirement"><b>Education Requirement</b></label>
+          <label class="form_label" for="companyInformation"><b>Company Information</b></label>
+          <textarea class="form_input form_input_large" id="companyInformation" name="companyInformation" placeholder="Describe your company, team, and what candidates should know" required></textarea>
+
+          <label class="form_label" for="jobDescription"><b>Job Description</b></label>
+          <textarea class="form_input form_input_large" id="jobDescription" name="jobDescription" placeholder="Describe the responsibilities, outcomes, and expectations for this role" required></textarea>
+
+          <label class="form_label" for="educationRequirement"><b>Required Education Level</b></label>
           <select class="form_input" id="educationRequirement" name="educationRequirement">
             <option value="">Select an education level</option>
             <option>None</option>
@@ -310,7 +355,7 @@
             <option>Doctorate</option>
           </select>
 
-          <label class="form_label" for="skillRequirement"><b>Skill Requirement</b></label>
+          <label class="form_label" for="skillRequirement"><b>Required Skills</b></label>
           <div class="skill_input_wrapper">
             <input class="form_input" id="skillRequirement" type="text" name="skillRequirement" autocomplete="off" placeholder="Start typing a skill">
             <div id="skillSuggestions" class="skill_suggestions"></div>
@@ -320,8 +365,25 @@
             <button type="button" class="blue_button" onclick="addSkillRequirement()">Add Skill</button>
           </div>
 
+          <label class="form_label" for="yearsExperience"><b>Years of Experience</b></label>
+          <input class="form_input" id="yearsExperience" type="number" name="yearsExperience" min="0" step="1" placeholder="Enter minimum years of experience" required>
+
+          <label class="form_label" for="workMode"><b>Work Mode</b></label>
+          <select class="form_input" id="workMode" name="workMode" required>
+            <option value="">Select a work mode</option>
+            <option>Remote</option>
+            <option>On-site</option>
+            <option>Hybrid</option>
+          </select>
+
+          <label class="form_label" for="jobLocation"><b>Job Location</b></label>
+          <div class="autocomplete_wrapper">
+            <input class="form_input" id="jobLocation" type="text" name="jobLocation" autocomplete="off" placeholder="Enter suburb, city, or office location" required>
+            <div id="locationSuggestions" class="location_suggestions"></div>
+          </div>
+
           <div id="skillsContainer" class="skills_container"></div>
-          <p id="jobPostStatus" class="status_text">Add one or more skill requirements for better matching.</p>
+          <p id="jobPostStatus" class="status_text">Complete every required field and add one or more skills before creating the post.</p>
 
           <div class="button_row">
             <button type="button" class="blue_button" onclick="submitJobPost()">Create Job Post</button>
@@ -418,6 +480,22 @@
       "Attention to Detail",
       "Organization"
     ];
+    var availableLocations = [
+      "Sydney, NSW",
+      "Melbourne, VIC",
+      "Brisbane, QLD",
+      "Perth, WA",
+      "Adelaide, SA",
+      "Canberra, ACT",
+      "Hobart, TAS",
+      "Darwin, NT",
+      "Parramatta, NSW",
+      "Newcastle, NSW",
+      "Wollongong, NSW",
+      "Geelong, VIC",
+      "Gold Coast, QLD",
+      "Sunshine Coast, QLD"
+    ];
 
     function openJobPostModal() {
       document.getElementById("jobPostModal").style.display = "block";
@@ -509,11 +587,26 @@
 
     function submitJobPost() {
       var jobTitle = document.getElementById("jobTitle").value.trim();
+      var companyInformation = document.getElementById("companyInformation").value.trim();
+      var jobDescription = document.getElementById("jobDescription").value.trim();
       var educationRequirement = document.getElementById("educationRequirement").value;
+      var yearsExperience = document.getElementById("yearsExperience").value.trim();
+      var workMode = document.getElementById("workMode").value;
+      var jobLocation = document.getElementById("jobLocation").value.trim();
       var jobPostStatus = document.getElementById("jobPostStatus");
 
       if (!jobTitle) {
         jobPostStatus.textContent = "Please enter a job title before creating the job post.";
+        return;
+      }
+
+      if (!companyInformation) {
+        jobPostStatus.textContent = "Please provide company information for the job post.";
+        return;
+      }
+
+      if (!jobDescription) {
+        jobPostStatus.textContent = "Please enter a job description.";
         return;
       }
 
@@ -527,7 +620,22 @@
         return;
       }
 
-      jobPostStatus.textContent = "Job post created for " + jobTitle + " with " + educationRequirement + " and skills: " + selectedSkills.join(", ");
+      if (!yearsExperience) {
+        jobPostStatus.textContent = "Please enter the required years of experience.";
+        return;
+      }
+
+      if (!workMode) {
+        jobPostStatus.textContent = "Please select whether the role is remote, on-site, or hybrid.";
+        return;
+      }
+
+      if (!jobLocation) {
+        jobPostStatus.textContent = "Please enter the job location.";
+        return;
+      }
+
+      jobPostStatus.textContent = "Job post created for " + jobTitle + " in " + jobLocation + " as a " + workMode + " role requiring " + yearsExperience + " years of experience.";
     }
 
     function renderSkillSuggestions(matches) {
@@ -557,6 +665,33 @@
       document.getElementById("skillSuggestions").style.display = "none";
     }
 
+    function renderLocationSuggestions(matches) {
+      var suggestionsBox = document.getElementById("locationSuggestions");
+      suggestionsBox.innerHTML = "";
+
+      if (!matches.length) {
+        hideLocationSuggestions();
+        return;
+      }
+
+      matches.forEach(function(location) {
+        var suggestionItem = document.createElement("div");
+        suggestionItem.className = "location_suggestion_item";
+        suggestionItem.textContent = location;
+        suggestionItem.onmousedown = function() {
+          document.getElementById("jobLocation").value = location;
+          hideLocationSuggestions();
+        };
+        suggestionsBox.appendChild(suggestionItem);
+      });
+
+      suggestionsBox.style.display = "block";
+    }
+
+    function hideLocationSuggestions() {
+      document.getElementById("locationSuggestions").style.display = "none";
+    }
+
     document.getElementById("skillRequirement").addEventListener("input", function(event) {
       var query = event.target.value.trim().toLowerCase();
 
@@ -583,6 +718,31 @@
       setTimeout(hideSkillSuggestions, 100);
     });
 
+    document.getElementById("jobLocation").addEventListener("input", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      if (!query) {
+        hideLocationSuggestions();
+        return;
+      }
+
+      var matches = availableLocations.filter(function(location) {
+        return location.toLowerCase().indexOf(query) !== -1;
+      });
+
+      renderLocationSuggestions(matches);
+    });
+
+    document.getElementById("jobLocation").addEventListener("focus", function(event) {
+      if (!event.target.value.trim()) {
+        hideLocationSuggestions();
+      }
+    });
+
+    document.getElementById("jobLocation").addEventListener("blur", function() {
+      setTimeout(hideLocationSuggestions, 100);
+    });
+
     window.onclick = function(event) {
       var jobPostModal = document.getElementById("jobPostModal");
       var editBusinessProfileModal = document.getElementById("editBusinessProfileModal");
@@ -597,6 +757,10 @@
 
       if (!document.getElementById("skillSuggestions").contains(event.target) && event.target.id !== "skillRequirement") {
         hideSkillSuggestions();
+      }
+
+      if (!document.getElementById("locationSuggestions").contains(event.target) && event.target.id !== "jobLocation") {
+        hideLocationSuggestions();
       }
     }
   </script>
