@@ -22,6 +22,42 @@
       color: white;
       padding: 40px 40px;
       text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header_right
+    {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: right;
+      padding: 10px;
+    }
+
+    .header_logout_button
+    {
+      background-color: #d64545;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+      min-width: 120px;
+      transition: transform 0.2s ease;
+    }
+
+    .header_logout_button:hover
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
     }
 
     .main 
@@ -69,7 +105,32 @@
       transition: transform 0.2s ease;
     }
 
+    .action_button
+    {
+      width: 140px;
+      text-align: center;
+      margin: 0;
+    }
+
     .blue_button:hover /*just hover opacity of the page buttons*/
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
+    }
+
+    .red_button
+    {
+      background-color: #d64545;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .red_button:hover
     {
       opacity: 0.8;
       transform: scale(1.03);
@@ -78,13 +139,18 @@
     .listing_box /*box that shows a preview of a job*/
     {
       margin-top: 20px;
-      max-width: 600px;
+      max-width: 760px;
       box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
       border-radius: 10px;
       background-color: #ffffff;
       padding: 20px;
-      display: inline-block;
+      display: block;
       transition: transform 0.2s ease;
+    }
+
+    .listing_box.clickable
+    {
+      cursor: pointer;
     }
 
     .listing_box:hover
@@ -187,6 +253,75 @@
       color: #333333;
       font-size: 16px;
     }
+
+    .profile_highlight
+    {
+      background-color: #eef6ff;
+      border-left: 4px solid dodgerblue;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 12px;
+    }
+
+    .welcome_header
+    {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .welcome_actions
+    {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .welcome_actions .blue_button
+    {
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+
+    .modal_actions_left
+    {
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .job_meta
+    {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .job_tag
+    {
+      background-color: #d9ecff;
+      color: #0b3d75;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .match_label
+    {
+      display: inline-block;
+      background-color: #dff5e5;
+      color: #136b2c;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 
@@ -195,30 +330,99 @@
 <body>
 
   <div class="header">
+    <div>
           <button class="blue_button" onclick="window.location.href='main.html'">
       < back to home
     </button>
-    <h1>Talent Match - Your Profile</h1>
+    <h1>uMatch - Your Profile</h1>
+    </div>
+    <div class="header_right">
+      <div>Welcome Alex</div>
+      <button type="button" class="header_logout_button">Logout</button>
+    </div>
   </div>
 
   <div class="main">
 
     <div class="box">
-      <h2>Welcome to your Profile</h2>
+      <div class="welcome_header">
+        <h2>Welcome to your Profile</h2>
+        <div class="welcome_actions">
+          <button class="blue_button" onclick="openEditProfileModal()">Edit Profile</button>
+          <button class="blue_button" onclick="openResumeModal()">Upload Resume</button>
+        </div>
+      </div>
       <p>Potential employers can view your skills and experience uploaded.</p>
+      <div class="profile_highlight">
+        <strong>Example Candidate</strong>
+        <p><b>Name:</b> Alex Tan</p>
+        <p><b>Education:</b> Bachelor's Degree in Information Systems</p>
+        <p><b>Experience:</b> 2 years</p>
+        <p><b>Skills:</b> SQL, Excel, Data Analysis, Communication</p>
+      </div>
     </div>
 
     
     <div class="box">
-      <h2>Options</h2>
-      <div class="button_row">
-        <button class="blue_button" onclick="openEditProfileModal()">Edit Profile</button>
-        <button class="blue_button" onclick="openResumeModal()">Upload Resume</button>
-      </div>
-      <hr>
       <h2>Saved Listings</h2>
-      <div class="listing_box">
-        <p>Job listings can appear here in boxes like this.........................</p>
+      <div id="jobCard-job1" class="listing_box clickable" onclick="openJobDetailsModal('job1')">
+        <span class="match_label">Best Match for Alex</span>
+        <h3>Junior Data Analyst</h3>
+        <p><b>Company:</b> Bright Insights</p>
+        <p>Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.</p>
+        <div class="job_meta">
+          <span class="job_tag">Bachelor's Degree</span>
+          <span class="job_tag">SQL</span>
+          <span class="job_tag">Excel</span>
+          <span class="job_tag">Data Analysis</span>
+          <span class="job_tag">2 Years Experience</span>
+          <span class="job_tag">Hybrid</span>
+          <span class="job_tag">Sydney, NSW</span>
+        </div>
+      </div>
+      <div id="jobCard-job2" class="listing_box clickable" onclick="openJobDetailsModal('job2')">
+        <h3>Retail Store Supervisor</h3>
+        <p><b>Company:</b> City Style Retail</p>
+        <p>Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.</p>
+        <div class="job_meta">
+          <span class="job_tag">Diploma</span>
+          <span class="job_tag">Leadership</span>
+          <span class="job_tag">Sales</span>
+          <span class="job_tag">Customer Service</span>
+          <span class="job_tag">4 Years Experience</span>
+          <span class="job_tag">On-site</span>
+          <span class="job_tag">Melbourne, VIC</span>
+        </div>
+      </div>
+      <div id="jobCard-job3" class="listing_box clickable" onclick="openJobDetailsModal('job3')">
+        <h3>Senior Python Engineer</h3>
+        <p><b>Company:</b> Cloud Forge Systems</p>
+        <p>Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.</p>
+        <div class="job_meta">
+          <span class="job_tag">Master's Degree</span>
+          <span class="job_tag">Python</span>
+          <span class="job_tag">API Design</span>
+          <span class="job_tag">Leadership</span>
+          <span class="job_tag">6 Years Experience</span>
+          <span class="job_tag">Remote</span>
+          <span class="job_tag">Brisbane, QLD</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="jobDetailsModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeJobDetailsModal()" title="Close Job Details">&times;</span>
+        <h2 id="jobDetailsTitle">Job Details</h2>
+        <p id="jobDetailsCompany"></p>
+        <p id="jobDetailsDescription"></p>
+        <div id="jobDetailsMeta" class="job_meta"></div>
+        <p id="jobDetailsCompanyInfo"></p>
+        <p id="jobDetailsResponsibilities"></p>
+        <div class="modal_actions_left">
+          <button type="button" class="blue_button action_button" onclick="applyForJob()">Apply</button>
+          <button type="button" class="red_button action_button" onclick="removeRecommendedJob()">Remove</button>
+        </div>
       </div>
     </div>
 
@@ -302,6 +506,34 @@
   </div>
 
   <script>
+    var activeJobId = null;
+    var jobDetailsData = {
+      job1: {
+        title: "Junior Data Analyst",
+        company: "Bright Insights Pty Ltd",
+        description: "Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.",
+        meta: ["Bachelor's Degree", "SQL", "Excel", "Data Analysis", "2 Years Experience", "Hybrid", "Sydney, NSW"],
+        companyInfo: "Bright Insights is an analytics consulting business that helps growing companies improve reporting, forecasting, and operational visibility.",
+        responsibilities: "Key focus: dashboard support, spreadsheet analysis, SQL reporting, and stakeholder communication."
+      },
+      job2: {
+        title: "Retail Store Supervisor",
+        company: "City Style Retail",
+        description: "Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.",
+        meta: ["Diploma", "Leadership", "Sales", "Customer Service", "4 Years Experience", "On-site", "Melbourne, VIC"],
+        companyInfo: "City Style Retail operates high-traffic fashion stores and focuses on customer service and store performance.",
+        responsibilities: "Key focus: shift leadership, retail operations, sales reporting, and team supervision."
+      },
+      job3: {
+        title: "Senior Python Engineer",
+        company: "Cloud Forge Systems",
+        description: "Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.",
+        meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Remote", "Brisbane, QLD"],
+        companyInfo: "Cloud Forge Systems builds cloud platforms and internal developer tooling for enterprise technology teams.",
+        responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability."
+      }
+    };
+
     function openEditProfileModal() {
       document.getElementById("editProfileModal").style.display = "block";
     }
@@ -343,6 +575,55 @@
       fileStatus.textContent = "Selected file: " + resumeFile.files[0].name;
     }
 
+    function openJobDetailsModal(jobId) {
+      var job = jobDetailsData[jobId];
+      var metaContainer = document.getElementById("jobDetailsMeta");
+      activeJobId = jobId;
+
+      document.getElementById("jobDetailsTitle").textContent = job.title;
+      document.getElementById("jobDetailsCompany").innerHTML = "<b>Company:</b> " + job.company;
+      document.getElementById("jobDetailsDescription").textContent = job.description;
+      document.getElementById("jobDetailsCompanyInfo").innerHTML = "<b>Company Information:</b> " + job.companyInfo;
+      document.getElementById("jobDetailsResponsibilities").innerHTML = "<b>Role Overview:</b> " + job.responsibilities;
+
+      metaContainer.innerHTML = "";
+      job.meta.forEach(function(item) {
+        var tag = document.createElement("span");
+        tag.className = "job_tag";
+        tag.textContent = item;
+        metaContainer.appendChild(tag);
+      });
+
+      document.getElementById("jobDetailsModal").style.display = "block";
+    }
+
+    function closeJobDetailsModal() {
+      document.getElementById("jobDetailsModal").style.display = "none";
+    }
+
+    function applyForJob() {
+      closeJobDetailsModal();
+      alert("Application started for Alex Tan.");
+    }
+
+    function removeRecommendedJob() {
+      if (!activeJobId) {
+        return;
+      }
+
+      var shouldRemove = confirm("Do you want uMatch to stop recommending this job?");
+      if (!shouldRemove) {
+        return;
+      }
+
+      var jobCard = document.getElementById("jobCard-" + activeJobId);
+      if (jobCard) {
+        jobCard.style.display = "none";
+      }
+
+      closeJobDetailsModal();
+    }
+
     document.getElementById("resumeFile").addEventListener("change", function(event) {
       var fileStatus = document.getElementById("fileStatus");
 
@@ -356,6 +637,7 @@
     window.onclick = function(event) {
       var editProfileModal = document.getElementById("editProfileModal");
       var resumeModal = document.getElementById("resumeModal");
+      var jobDetailsModal = document.getElementById("jobDetailsModal");
 
       if (event.target == editProfileModal) {
         closeEditProfileModal();
@@ -363,6 +645,10 @@
 
       if (event.target == resumeModal) {
         closeResumeModal();
+      }
+
+      if (event.target == jobDetailsModal) {
+        closeJobDetailsModal();
       }
     }
   </script>

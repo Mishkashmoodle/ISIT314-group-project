@@ -22,6 +22,42 @@
       color: white;
       padding: 40px 40px;
       text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header_right
+    {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: right;
+      padding: 10px;
+    }
+
+    .header_logout_button
+    {
+      background-color: #d64545;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+      min-width: 120px;
+      transition: transform 0.2s ease;
+    }
+
+    .header_logout_button:hover
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
     }
 
     .main
@@ -84,6 +120,32 @@
       transform: scale(1.03);
     }
 
+    .red_button
+    {
+      background-color: #d64545;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin: 0;
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .action_button
+    {
+      width: 140px;
+      text-align: center;
+      margin: 0;
+    }
+
+    .red_button:hover
+    {
+      opacity: 0.8;
+      transform: scale(1.03);
+    }
+
     .listing_box
     {
       margin-top: 20px;
@@ -94,6 +156,11 @@
       padding: 20px;
       display: inline-block;
       transition: transform 0.2s ease;
+    }
+
+    .listing_box.clickable
+    {
+      cursor: pointer;
     }
 
     .listing_box:hover
@@ -175,6 +242,18 @@
       margin: 10px 0 0;
       color: #333333;
       font-size: 16px;
+    }
+
+    .status_text.error
+    {
+      color: #d64545;
+      font-weight: bold;
+    }
+
+    .status_text.success
+    {
+      color: #136b2c;
+      font-weight: bold;
     }
 
     .form_label
@@ -279,16 +358,84 @@
       cursor: pointer;
       padding: 0;
     }
+
+    .profile_panel
+    {
+      background-color: #eef6ff;
+      border-left: 4px solid dodgerblue;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    .profile_panel p
+    {
+      padding: 4px 0;
+      margin: 0;
+    }
+
+    .match_label
+    {
+      display: inline-block;
+      background-color: #dff5e5;
+      color: #136b2c;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .job_meta
+    {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .job_tag
+    {
+      background-color: #d9ecff;
+      color: #0b3d75;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .contact_panel
+    {
+      display: none;
+      background-color: #eef6ff;
+      border-left: 4px solid dodgerblue;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 18px;
+    }
+
+    .modal_actions_left
+    {
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
 <body>
 
   <div class="header">
+    <div>
     <button class="blue_button" onclick="window.location.href='main.html'">
       < back to home
     </button>
-    <h1>Talent Match - Business Profile</h1>
+    <h1>uMatch - Business Profile</h1>
+    </div>
+    <div class="header_right">
+      <div>Welcome Bright Insights</div>
+      <button type="button" class="header_logout_button">Logout</button>
+    </div>
   </div>
 
   <div class="main">
@@ -299,6 +446,14 @@
         <button class="blue_button" onclick="openEditBusinessProfileModal()">Edit Profile</button>
       </div>
       <p>Potential candidates can be matched to the jobs your business creates and manages here.</p>
+      <div class="profile_panel">
+        <p><b>Business Name:</b> Bright Insights Pty Ltd</p>
+        <p><b>Industry:</b> Business Intelligence and Analytics Consulting</p>
+        <p><b>Location:</b> Sydney, NSW</p>
+        <p><b>Contact:</b> Sarah Lim, Talent Partner</p>
+        <p><b>Email:</b> careers@brightinsights.example</p>
+        <p><b>About the Business:</b> Bright Insights helps retail and service companies improve decision-making through dashboards, reporting, and data process improvement.</p>
+      </div>
     </div>
 
     <div class="box">
@@ -306,8 +461,13 @@
         <h2>Candidate That Fit Your Job Postings</h2>
         <button class="blue_button">Manage Matches</button>
       </div>
-      <div class="listing_box">
-        <p>Candidate matches can appear here in boxes like this.........................</p>
+      <div id="candidateCard-alex" class="listing_box clickable" onclick="openCandidateDetailsModal()">
+        <span class="match_label">Strong Match</span>
+        <h3>Alex Tan</h3>
+        <p><b>Education:</b> Bachelor's Degree in Information Systems</p>
+        <p><b>Experience:</b> 2 years</p>
+        <p><b>Skills:</b> SQL, Excel, Data Analysis, Communication</p>
+        <p><b>Why this candidate fits:</b> Alex matches the required education, has the requested 2 years of experience, and already has the core analytical skills needed for the role.</p>
       </div>
     </div>
 
@@ -317,7 +477,20 @@
         <button class="blue_button" onclick="openJobPostModal()">Create Job Post</button>
       </div>
       <div class="listing_box">
-        <p>Jobs you create can appear here in boxes like this.........................</p>
+        <span class="match_label">Example Active Posting</span>
+        <h3>Junior Data Analyst</h3>
+        <p><b>Company:</b> Bright Insights Pty Ltd</p>
+        <p>Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.</p>
+        <div class="job_meta">
+          <span class="job_tag">Bachelor's Degree</span>
+          <span class="job_tag">SQL</span>
+          <span class="job_tag">Excel</span>
+          <span class="job_tag">Data Analysis</span>
+          <span class="job_tag">2 Years Experience</span>
+          <span class="job_tag">Hybrid</span>
+          <span class="job_tag">Sydney, NSW</span>
+        </div>
+        <p><b>Company Information:</b> Bright Insights delivers analytics consulting for growing Australian businesses that need clear reporting and better operational visibility.</p>
       </div>
     </div>
 
@@ -434,6 +607,26 @@
       </div>
     </div>
 
+    <div id="candidateDetailsModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeCandidateDetailsModal()" title="Close Candidate Details">&times;</span>
+        <h2>Alex Tan</h2>
+        <p><b>Education:</b> Bachelor's Degree in Information Systems</p>
+        <p><b>Experience:</b> 2 years</p>
+        <p><b>Skills:</b> SQL, Excel, Data Analysis, Communication</p>
+        <p><b>Profile Summary:</b> Alex has hands-on experience supporting reporting and spreadsheet analysis tasks and is looking for an early-career analyst role with room to grow.</p>
+        <p><b>Why this candidate fits:</b> Alex aligns with the Junior Data Analyst posting on education, experience level, and core analytical skill requirements.</p>
+        <div class="modal_actions_left">
+          <button type="button" class="blue_button action_button" onclick="showCandidateContact()">Reach Out</button>
+          <button type="button" class="red_button action_button" onclick="removeRecommendedCandidate()">Remove</button>
+        </div>
+        <div id="candidateContactPanel" class="contact_panel">
+          <p><b>Email:</b> alex.tan@example.com</p>
+          <p><b>Phone:</b> 0412 345 678</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -513,6 +706,33 @@
       document.getElementById("editBusinessProfileModal").style.display = "none";
     }
 
+    function openCandidateDetailsModal() {
+      document.getElementById("candidateContactPanel").style.display = "none";
+      document.getElementById("candidateDetailsModal").style.display = "block";
+    }
+
+    function closeCandidateDetailsModal() {
+      document.getElementById("candidateDetailsModal").style.display = "none";
+    }
+
+    function showCandidateContact() {
+      document.getElementById("candidateContactPanel").style.display = "block";
+    }
+
+    function removeRecommendedCandidate() {
+      var shouldRemove = confirm("Do you want uMatch to stop recommending this candidate?");
+      if (!shouldRemove) {
+        return;
+      }
+
+      var candidateCard = document.getElementById("candidateCard-alex");
+      if (candidateCard) {
+        candidateCard.style.display = "none";
+      }
+
+      closeCandidateDetailsModal();
+    }
+
     function saveBusinessProfile() {
       var businessName = document.getElementById("businessName").value.trim();
       var businessEmail = document.getElementById("businessEmail").value.trim();
@@ -527,18 +747,31 @@
       businessProfileStatus.textContent = "Profile updated for " + businessName + ".";
     }
 
+    function setJobPostError(message) {
+      var jobPostStatus = document.getElementById("jobPostStatus");
+      jobPostStatus.classList.remove("success");
+      jobPostStatus.classList.add("error");
+      jobPostStatus.textContent = message;
+    }
+
+    function setJobPostSuccess(message) {
+      var jobPostStatus = document.getElementById("jobPostStatus");
+      jobPostStatus.classList.remove("error");
+      jobPostStatus.classList.add("success");
+      jobPostStatus.textContent = message;
+    }
+
     function addSkillRequirement() {
       var skillInput = document.getElementById("skillRequirement");
-      var jobPostStatus = document.getElementById("jobPostStatus");
       var skillValue = skillInput.value.trim();
 
       if (!skillValue) {
-        jobPostStatus.textContent = "Enter a skill requirement before adding it.";
+        setJobPostError("Missing field: Required skills. Enter a skill before adding it.");
         return;
       }
 
       if (selectedSkills.indexOf(skillValue) !== -1) {
-        jobPostStatus.textContent = "That skill has already been added.";
+        setJobPostError("Required skills already include " + skillValue + ".");
         return;
       }
 
@@ -546,7 +779,7 @@
       skillInput.value = "";
       hideSkillSuggestions();
       renderSelectedSkills();
-      jobPostStatus.textContent = "Current skills: " + selectedSkills.join(", ");
+      setJobPostSuccess("Current skills: " + selectedSkills.join(", "));
     }
 
     function removeSkillRequirement(skillValue) {
@@ -557,8 +790,9 @@
       renderSelectedSkills();
 
       if (selectedSkills.length) {
-        document.getElementById("jobPostStatus").textContent = "Current skills: " + selectedSkills.join(", ");
+        setJobPostSuccess("Current skills: " + selectedSkills.join(", "));
       } else {
+        document.getElementById("jobPostStatus").classList.remove("error", "success");
         document.getElementById("jobPostStatus").textContent = "Add one or more skill requirements for better matching.";
       }
     }
@@ -593,49 +827,48 @@
       var yearsExperience = document.getElementById("yearsExperience").value.trim();
       var workMode = document.getElementById("workMode").value;
       var jobLocation = document.getElementById("jobLocation").value.trim();
-      var jobPostStatus = document.getElementById("jobPostStatus");
 
       if (!jobTitle) {
-        jobPostStatus.textContent = "Please enter a job title before creating the job post.";
+        setJobPostError("Missing field: Job title.");
         return;
       }
 
       if (!companyInformation) {
-        jobPostStatus.textContent = "Please provide company information for the job post.";
+        setJobPostError("Missing field: Company information.");
         return;
       }
 
       if (!jobDescription) {
-        jobPostStatus.textContent = "Please enter a job description.";
+        setJobPostError("Missing field: Job description.");
         return;
       }
 
       if (!educationRequirement) {
-        jobPostStatus.textContent = "Please select an education requirement.";
+        setJobPostError("Missing field: Required education level.");
         return;
       }
 
       if (!selectedSkills.length) {
-        jobPostStatus.textContent = "Please add at least one skill requirement.";
+        setJobPostError("Missing field: Required skills.");
         return;
       }
 
       if (!yearsExperience) {
-        jobPostStatus.textContent = "Please enter the required years of experience.";
+        setJobPostError("Missing field: Years of experience.");
         return;
       }
 
       if (!workMode) {
-        jobPostStatus.textContent = "Please select whether the role is remote, on-site, or hybrid.";
+        setJobPostError("Missing field: Work mode.");
         return;
       }
 
       if (!jobLocation) {
-        jobPostStatus.textContent = "Please enter the job location.";
+        setJobPostError("Missing field: Job location.");
         return;
       }
 
-      jobPostStatus.textContent = "Job post created for " + jobTitle + " in " + jobLocation + " as a " + workMode + " role requiring " + yearsExperience + " years of experience.";
+      setJobPostSuccess("Job post created for " + jobTitle + " in " + jobLocation + " as a " + workMode + " role requiring " + yearsExperience + " years of experience.");
     }
 
     function renderSkillSuggestions(matches) {
@@ -746,6 +979,7 @@
     window.onclick = function(event) {
       var jobPostModal = document.getElementById("jobPostModal");
       var editBusinessProfileModal = document.getElementById("editBusinessProfileModal");
+      var candidateDetailsModal = document.getElementById("candidateDetailsModal");
 
       if (event.target == jobPostModal) {
         closeJobPostModal();
@@ -753,6 +987,10 @@
 
       if (event.target == editBusinessProfileModal) {
         closeEditBusinessProfileModal();
+      }
+
+      if (event.target == candidateDetailsModal) {
+        closeCandidateDetailsModal();
       }
 
       if (!document.getElementById("skillSuggestions").contains(event.target) && event.target.id !== "skillRequirement") {

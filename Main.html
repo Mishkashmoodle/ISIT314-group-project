@@ -71,13 +71,18 @@
     .listing_box /*box that shows a preview of a job*/
     {
       margin-top: 20px;
-      max-width: 600px;
+      max-width: 760px;
       box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
       border-radius: 10px;
       background-color: #ffffff;
       padding: 20px;
-      display: inline-block;
+      display: block;
       transition: transform 0.2s ease;
+    }
+
+    .listing_box.clickable
+    {
+      cursor: pointer;
     }
 
     .listing_box:hover
@@ -154,6 +159,46 @@
             padding: 16px;
         }
 
+        .job_meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .job_tag {
+            background-color: #d9ecff;
+            color: #0b3d75;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .match_label {
+            display: inline-block;
+            background-color: #dff5e5;
+            color: #136b2c;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .modal_actions_left {
+            display: flex;
+            justify-content: flex-start;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action_button {
+            width: 140px;
+            text-align: center;
+            margin: 0;
+            border-radius: 20px;
+        }
+
         span.psw {
             float: right;
             padding-top: 16px;
@@ -180,6 +225,18 @@
             margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
             border: 1px solid #888;
             width: 80%; /* Could be more or less, depending on screen size */
+            position: relative;
+        }
+
+        .modal-panel {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: min(90%, 560px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border: none;
         }
 
         /* The Close Button (x) */
@@ -251,7 +308,7 @@
 
 <div class="header">
     <div class="header_copy">
-        <h1>Talent Match</h1>
+        <h1>UMatch</h1>
     </div>
     <div class="header_auth">
         <p>For personalised listings</p>
@@ -284,15 +341,15 @@
         </div>
 
         <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="swapModal('id01', 'id02')">register</button>
+            <button type="button" onclick="swapModal('id01', 'id02')">Create Account</button>
             <button type="button" onclick="closeModal('id01')" class="cancelbtn">Cancel</button>
         </div>
     </form>
 </div>
 
 <div id="id02" class="modal">
-    <span onclick="closeModal('id02')" class="close" title="Close Modal">&times;</span>
     <form id="registerForm" class="modal-content animate" action="/action_page.php" onsubmit="return validateRegisterForm()">
+        <span onclick="closeModal('id02')" class="close" title="Close Modal">&times;</span>
         <div class="container">
             <h1>Sign Up</h1>
             <p>Please fill in this form to create an account.</p>
@@ -333,11 +390,40 @@
     </form>
 </div>
 <script>
+    var jobDetailsData = {
+        job1: {
+            title: "Junior Data Analyst",
+            company: "Bright Insights Pty Ltd",
+            description: "Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.",
+            meta: ["Bachelor's Degree", "SQL", "Excel", "Data Analysis", "2 Years Experience", "Hybrid", "Sydney, NSW"],
+            companyInfo: "Bright Insights is an analytics consulting business that helps growing companies improve reporting, forecasting, and operational visibility.",
+            responsibilities: "Key focus: dashboard support, spreadsheet analysis, SQL reporting, and stakeholder communication."
+        },
+        job2: {
+            title: "Retail Store Supervisor",
+            company: "City Style Retail",
+            description: "Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.",
+            meta: ["Diploma", "Leadership", "Sales", "Customer Service", "4 Years Experience", "On-site", "Melbourne, VIC"],
+            companyInfo: "City Style Retail operates high-traffic fashion stores and focuses on customer service and store performance.",
+            responsibilities: "Key focus: shift leadership, retail operations, sales reporting, and team supervision."
+        },
+        job3: {
+            title: "Senior Python Engineer",
+            company: "Cloud Forge Systems",
+            description: "Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.",
+            meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Remote", "Brisbane, QLD"],
+            companyInfo: "Cloud Forge Systems builds cloud platforms and internal developer tooling for enterprise technology teams.",
+            responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability."
+        }
+    };
+
     function openModal(modalId, playAnimation) {
         let modal = document.getElementById(modalId);
-        let content = modal.querySelector(".modal-content");
+        let content = modal.querySelector(".modal-content, .modal-panel");
 
-        content.classList.toggle("animate", playAnimation);
+        if (content) {
+            content.classList.toggle("animate", playAnimation);
+        }
         modal.style.display = "block";
     }
 
@@ -348,6 +434,37 @@
     function swapModal(fromModalId, toModalId) {
         closeModal(fromModalId);
         openModal(toModalId, false);
+    }
+
+    function openJobDetailsModal(jobId) {
+        var job = jobDetailsData[jobId];
+        var metaContainer = document.getElementById("jobDetailsMeta");
+
+        document.getElementById("jobDetailsTitle").textContent = job.title;
+        document.getElementById("jobDetailsCompany").innerHTML = "<b>Company:</b> " + job.company;
+        document.getElementById("jobDetailsDescription").textContent = job.description;
+        document.getElementById("jobDetailsCompanyInfo").innerHTML = "<b>Company Information:</b> " + job.companyInfo;
+        document.getElementById("jobDetailsResponsibilities").innerHTML = "<b>Role Overview:</b> " + job.responsibilities;
+
+        metaContainer.innerHTML = "";
+        job.meta.forEach(function(item) {
+            var tag = document.createElement("span");
+            tag.className = "job_tag";
+            tag.textContent = item;
+            metaContainer.appendChild(tag);
+        });
+
+        openModal("jobDetailsModal", true);
+    }
+
+    function openApplyPrompt() {
+        closeModal("jobDetailsModal");
+        openModal("applyPromptModal", true);
+    }
+
+    function openAuthFromPrompt(modalId) {
+        closeModal("applyPromptModal");
+        openModal(modalId, true);
     }
 
     function setAccountType(type) {
@@ -384,6 +501,8 @@
     window.onclick = function(event) {
         var loginModal = document.getElementById("id01");
         var registerModal = document.getElementById("id02");
+        var jobDetailsModal = document.getElementById("jobDetailsModal");
+        var applyPromptModal = document.getElementById("applyPromptModal");
 
         if (event.target == loginModal) {
             closeModal("id01");
@@ -391,6 +510,14 @@
 
         if (event.target == registerModal) {
             closeModal("id02");
+        }
+
+        if (event.target == jobDetailsModal) {
+            closeModal("jobDetailsModal");
+        }
+
+        if (event.target == applyPromptModal) {
+            closeModal("applyPromptModal");
         }
     }
 
@@ -402,11 +529,81 @@
     <div class="box">
       <h2>Recent Job Listings</h2>
       <hr>
-      <div class="listing_box">
-        <p>Job listings can appear here in boxes like this.........................</p>
+      <div class="listing_box clickable" onclick="openJobDetailsModal('job1')">
+        <span class="match_label">Featured Listing</span>
+        <h3>Junior Data Analyst</h3>
+        <p><b>Company:</b> Bright Insights Pty Ltd</p>
+        <p>Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.</p>
+        <div class="job_meta">
+          <span class="job_tag">Bachelor's Degree</span>
+          <span class="job_tag">SQL</span>
+          <span class="job_tag">Excel</span>
+          <span class="job_tag">Data Analysis</span>
+          <span class="job_tag">2 Years Experience</span>
+          <span class="job_tag">Hybrid</span>
+          <span class="job_tag">Sydney, NSW</span>
+        </div>
       </div>
+      <div class="listing_box clickable" onclick="openJobDetailsModal('job2')">
+        <h3>Retail Store Supervisor</h3>
+        <p><b>Company:</b> City Style Retail</p>
+        <p>Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.</p>
+        <div class="job_meta">
+          <span class="job_tag">Diploma</span>
+          <span class="job_tag">Leadership</span>
+          <span class="job_tag">Sales</span>
+          <span class="job_tag">Customer Service</span>
+          <span class="job_tag">4 Years Experience</span>
+          <span class="job_tag">On-site</span>
+          <span class="job_tag">Melbourne, VIC</span>
+        </div>
+      </div>
+      <div class="listing_box clickable" onclick="openJobDetailsModal('job3')">
+        <h3>Senior Python Engineer</h3>
+        <p><b>Company:</b> Cloud Forge Systems</p>
+        <p>Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.</p>
+        <div class="job_meta">
+          <span class="job_tag">Master's Degree</span>
+          <span class="job_tag">Python</span>
+          <span class="job_tag">API Design</span>
+          <span class="job_tag">Leadership</span>
+          <span class="job_tag">6 Years Experience</span>
+          <span class="job_tag">Remote</span>
+          <span class="job_tag">Brisbane, QLD</span>
+        </div>
       </div>
     </div>
+
+<div id="jobDetailsModal" class="modal">
+    <div class="modal-panel animate">
+        <span onclick="closeModal('jobDetailsModal')" class="close" title="Close Job Details">&times;</span>
+        <div class="container">
+            <h2 id="jobDetailsTitle">Job Details</h2>
+            <p id="jobDetailsCompany"></p>
+            <p id="jobDetailsDescription"></p>
+            <div id="jobDetailsMeta" class="job_meta"></div>
+            <p id="jobDetailsCompanyInfo"></p>
+            <p id="jobDetailsResponsibilities"></p>
+            <div class="modal_actions_left">
+                <button type="button" class="blue_button action_button" onclick="openApplyPrompt()">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="applyPromptModal" class="modal">
+    <div class="modal-panel animate">
+        <span onclick="closeModal('applyPromptModal')" class="close" title="Close Apply Prompt">&times;</span>
+        <div class="container">
+            <h2>Login or Register to Apply</h2>
+            <p>Please log in or create an account to apply for this job on uMatch.</p>
+            <div class="header_actions">
+                <button class="header_action_button" type="button" onclick="openAuthFromPrompt('id01')">Login</button>
+                <button class="header_action_button" type="button" onclick="openAuthFromPrompt('id02')">Create Account</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
