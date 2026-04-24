@@ -8,6 +8,17 @@ class Candidate(models.Model):
     major = models.CharField(max_length=100)
     experience = models.IntegerField()
     skills = models.JSONField()
+    # Allowed work modes for matching jobs
+    WORK_MODE_CHOICES = [
+        ('Remote', 'Remote'),
+        ('On-site', 'On-site'), 
+        ('Hybrid', 'Hybrid'),
+    ]
+    preferred_working_mode = models.CharField(
+        max_length=10,
+        choices=WORK_MODE_CHOICES
+    )
+    preferred_location = models.CharField(max_length=100)
 
 #NEEDS TO BE OBJECT ORIENTED
 
