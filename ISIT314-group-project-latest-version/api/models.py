@@ -20,7 +20,7 @@ class Candidate(models.Model):
     )
     preferred_location = models.CharField(max_length=100)
     #Membership?
-    is_member = models.BooleanField(default=False)
+    membership = models.BooleanField(default=False)
 
 #NEEDS TO BE OBJECT ORIENTED
 
