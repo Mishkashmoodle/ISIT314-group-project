@@ -1,13 +1,18 @@
 # ================= models.py =================
 from django.db import models
 
-class Candidate(models.Model):
+class User(models.Model):
     name = models.CharField(max_length=100)
     contact = models.CharField(max_length=100)
     education = models.CharField(max_length=100)
     major = models.CharField(max_length=100)
     experience = models.IntegerField()
     skills = models.JSONField()
+    #Coice of being a candidate or a company
+    Candidate_or_Company = [
+        ('Candidate', 'Candidate'),
+        ('Company', 'Company'),
+    ]
     # Allowed work modes for matching jobs
     WORK_MODE_CHOICES = [
         ('Remote', 'Remote'),
