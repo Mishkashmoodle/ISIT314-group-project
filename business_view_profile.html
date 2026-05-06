@@ -420,6 +420,94 @@
       gap: 12px;
       margin-top: 20px;
     }
+
+    .search_panel
+    {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .search_field
+    {
+      width: 100%;
+    }
+
+    .search_field label
+    {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .search_field input,
+    .search_field select
+    {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      background-color: #f8fbff;
+      font-size: 16px;
+    }
+
+    .filter_dropdown
+    {
+      border: 1px solid #c9dcf3;
+      border-radius: 10px;
+      background-color: #f8fbff;
+      overflow: hidden;
+    }
+
+    .filter_dropdown summary
+    {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: bold;
+      color: #0b3d75;
+      list-style: none;
+    }
+
+    .filter_dropdown summary::-webkit-details-marker
+    {
+      display: none;
+    }
+
+    .filter_dropdown summary::after
+    {
+      content: "▾";
+      float: right;
+    }
+
+    .filter_dropdown[open] summary::after
+    {
+      content: "▴";
+    }
+
+    .filter_dropdown_content
+    {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      padding: 0 16px 16px;
+    }
+
+    .search_actions
+    {
+      display: flex;
+      align-items: end;
+    }
+
+    .results_status
+    {
+      padding: 0;
+      margin: 16px 0 0;
+      color: #0b3d75;
+      font-size: 16px;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -461,13 +549,75 @@
         <h2>Candidate That Fit Your Job Postings</h2>
         <button class="blue_button">Manage Matches</button>
       </div>
-      <div id="candidateCard-alex" class="listing_box clickable" onclick="openCandidateDetailsModal()">
+      <div class="search_panel">
+        <div class="search_field">
+          <label for="candidateSearchInput">Search Candidates</label>
+          <input id="candidateSearchInput" type="text" placeholder="Search by name or keyword" oninput="filterCandidates()">
+        </div>
+        <details class="filter_dropdown">
+          <summary>Filters</summary>
+          <div class="filter_dropdown_content">
+            <div class="search_field">
+              <label for="candidateEducationFilter">Education Level</label>
+              <select id="candidateEducationFilter" onchange="filterCandidates()">
+                <option value="">All education levels</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="Master's Degree">Master's Degree</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="candidateExperienceFilter">Experience</label>
+              <select id="candidateExperienceFilter" onchange="filterCandidates()">
+                <option value="">All experience levels</option>
+                <option value="1">1 year</option>
+                <option value="2">2 years</option>
+                <option value="5">5 years</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="candidateSkillFilter">Skill</label>
+              <select id="candidateSkillFilter" onchange="filterCandidates()">
+                <option value="">All skills</option>
+                <option value="Communication">Communication</option>
+                <option value="Customer Service">Customer Service</option>
+                <option value="Data Analysis">Data Analysis</option>
+                <option value="Excel">Excel</option>
+                <option value="Leadership">Leadership</option>
+                <option value="Python">Python</option>
+                <option value="SQL">SQL</option>
+                <option value="Stakeholder Management">Stakeholder Management</option>
+              </select>
+            </div>
+            <div class="search_actions">
+              <button type="button" class="blue_button" onclick="resetCandidateFilters()">Reset Filters</button>
+            </div>
+          </div>
+        </details>
+      </div>
+      <p id="candidateResultsStatus" class="results_status">3 candidates found.</p>
+      <div id="candidateCard-alex" class="listing_box clickable candidate_listing_card" data-candidate-id="alex" data-search="Alex Tan Bachelor's Degree Information Systems SQL Excel Data Analysis Communication 2 years" data-education="Bachelor's Degree" data-experience="2" data-skills="SQL|Excel|Data Analysis|Communication" onclick="openCandidateDetailsModal('alex')">
         <span class="match_label">Strong Match</span>
         <h3>Alex Tan</h3>
         <p><b>Education:</b> Bachelor's Degree in Information Systems</p>
         <p><b>Experience:</b> 2 years</p>
         <p><b>Skills:</b> SQL, Excel, Data Analysis, Communication</p>
         <p><b>Why this candidate fits:</b> Alex matches the required education, has the requested 2 years of experience, and already has the core analytical skills needed for the role.</p>
+      </div>
+      <div id="candidateCard-priya" class="listing_box clickable candidate_listing_card" data-candidate-id="priya" data-search="Priya Nair Master's Degree Data Science Python SQL Stakeholder Management 5 years" data-education="Master's Degree" data-experience="5" data-skills="Python|SQL|Stakeholder Management" onclick="openCandidateDetailsModal('priya')">
+        <span class="match_label">Experienced Match</span>
+        <h3>Priya Nair</h3>
+        <p><b>Education:</b> Master's Degree in Data Science</p>
+        <p><b>Experience:</b> 5 years</p>
+        <p><b>Skills:</b> Python, SQL, Stakeholder Management</p>
+        <p><b>Why this candidate fits:</b> Priya can step into analytics projects quickly and has strong delivery experience across reporting and technical coordination.</p>
+      </div>
+      <div id="candidateCard-jordan" class="listing_box clickable candidate_listing_card" data-candidate-id="jordan" data-search="Jordan Lee Diploma Retail Operations Leadership Communication Customer Service 1 year" data-education="Diploma" data-experience="1" data-skills="Leadership|Communication|Customer Service" onclick="openCandidateDetailsModal('jordan')">
+        <h3>Jordan Lee</h3>
+        <p><b>Education:</b> Diploma in Retail Operations</p>
+        <p><b>Experience:</b> 1 year</p>
+        <p><b>Skills:</b> Leadership, Communication, Customer Service</p>
+        <p><b>Why this candidate fits:</b> Jordan is better suited to customer-facing and supervision roles and may be useful for future operational openings.</p>
       </div>
     </div>
 
@@ -610,19 +760,19 @@
     <div id="candidateDetailsModal" class="modal">
       <div class="modal_content">
         <span class="close_button" onclick="closeCandidateDetailsModal()" title="Close Candidate Details">&times;</span>
-        <h2>Alex Tan</h2>
-        <p><b>Education:</b> Bachelor's Degree in Information Systems</p>
-        <p><b>Experience:</b> 2 years</p>
-        <p><b>Skills:</b> SQL, Excel, Data Analysis, Communication</p>
-        <p><b>Profile Summary:</b> Alex has hands-on experience supporting reporting and spreadsheet analysis tasks and is looking for an early-career analyst role with room to grow.</p>
-        <p><b>Why this candidate fits:</b> Alex aligns with the Junior Data Analyst posting on education, experience level, and core analytical skill requirements.</p>
+        <h2 id="candidateDetailsName">Alex Tan</h2>
+        <p id="candidateDetailsEducation"></p>
+        <p id="candidateDetailsExperience"></p>
+        <p id="candidateDetailsSkills"></p>
+        <p id="candidateDetailsSummary"></p>
+        <p id="candidateDetailsReason"></p>
         <div class="modal_actions_left">
           <button type="button" class="blue_button action_button" onclick="showCandidateContact()">Reach Out</button>
           <button type="button" class="red_button action_button" onclick="removeRecommendedCandidate()">Remove</button>
         </div>
         <div id="candidateContactPanel" class="contact_panel">
-          <p><b>Email:</b> alex.tan@example.com</p>
-          <p><b>Phone:</b> 0412 345 678</p>
+          <p id="candidateDetailsEmail"></p>
+          <p id="candidateDetailsPhone"></p>
         </div>
       </div>
     </div>
@@ -630,7 +780,40 @@
   </div>
 
   <script>
+    var activeCandidateId = null;
     var selectedSkills = [];
+    var candidateDetailsData = {
+      alex: {
+        name: "Alex Tan",
+        education: "Bachelor's Degree in Information Systems",
+        experience: "2 years",
+        skills: "SQL, Excel, Data Analysis, Communication",
+        summary: "Alex has hands-on experience supporting reporting and spreadsheet analysis tasks and is looking for an early-career analyst role with room to grow.",
+        reason: "Alex aligns with the Junior Data Analyst posting on education, experience level, and core analytical skill requirements.",
+        email: "alex.tan@example.com",
+        phone: "0412 345 678"
+      },
+      priya: {
+        name: "Priya Nair",
+        education: "Master's Degree in Data Science",
+        experience: "5 years",
+        skills: "Python, SQL, Stakeholder Management",
+        summary: "Priya has delivered analytics and automation initiatives for cross-functional teams and is comfortable balancing technical work with business communication.",
+        reason: "Priya meets advanced technical skill requirements and brings stronger experience for data-heavy and senior analytical roles.",
+        email: "priya.nair@example.com",
+        phone: "0423 456 789"
+      },
+      jordan: {
+        name: "Jordan Lee",
+        education: "Diploma in Retail Operations",
+        experience: "1 year",
+        skills: "Leadership, Communication, Customer Service",
+        summary: "Jordan is building early leadership experience in customer-facing environments and is interested in team-based operational roles.",
+        reason: "Jordan is not the closest fit for analytics work, but remains a possible match for future service or supervision openings.",
+        email: "jordan.lee@example.com",
+        phone: "0434 567 890"
+      }
+    };
     var availableSkills = [
       "Communication",
       "Customer Service",
@@ -706,8 +889,18 @@
       document.getElementById("editBusinessProfileModal").style.display = "none";
     }
 
-    function openCandidateDetailsModal() {
+    function openCandidateDetailsModal(candidateId) {
+      var candidate = candidateDetailsData[candidateId];
+      activeCandidateId = candidateId;
       document.getElementById("candidateContactPanel").style.display = "none";
+      document.getElementById("candidateDetailsName").textContent = candidate.name;
+      document.getElementById("candidateDetailsEducation").innerHTML = "<b>Education:</b> " + candidate.education;
+      document.getElementById("candidateDetailsExperience").innerHTML = "<b>Experience:</b> " + candidate.experience;
+      document.getElementById("candidateDetailsSkills").innerHTML = "<b>Skills:</b> " + candidate.skills;
+      document.getElementById("candidateDetailsSummary").innerHTML = "<b>Profile Summary:</b> " + candidate.summary;
+      document.getElementById("candidateDetailsReason").innerHTML = "<b>Why this candidate fits:</b> " + candidate.reason;
+      document.getElementById("candidateDetailsEmail").innerHTML = "<b>Email:</b> " + candidate.email;
+      document.getElementById("candidateDetailsPhone").innerHTML = "<b>Phone:</b> " + candidate.phone;
       document.getElementById("candidateDetailsModal").style.display = "block";
     }
 
@@ -720,17 +913,63 @@
     }
 
     function removeRecommendedCandidate() {
+      if (!activeCandidateId) {
+        return;
+      }
+
       var shouldRemove = confirm("Do you want uMatch to stop recommending this candidate?");
       if (!shouldRemove) {
         return;
       }
 
-      var candidateCard = document.getElementById("candidateCard-alex");
+      var candidateCard = document.getElementById("candidateCard-" + activeCandidateId);
       if (candidateCard) {
+        candidateCard.dataset.removed = "true";
         candidateCard.style.display = "none";
       }
 
       closeCandidateDetailsModal();
+      filterCandidates();
+    }
+
+    function filterCandidates() {
+      var searchValue = document.getElementById("candidateSearchInput").value.trim().toLowerCase();
+      var educationValue = document.getElementById("candidateEducationFilter").value;
+      var experienceValue = document.getElementById("candidateExperienceFilter").value;
+      var skillValue = document.getElementById("candidateSkillFilter").value;
+      var candidateCards = document.querySelectorAll(".candidate_listing_card");
+      var visibleCount = 0;
+
+      candidateCards.forEach(function(card) {
+        if (card.dataset.removed === "true") {
+          card.style.display = "none";
+          return;
+        }
+
+        var searchableText = card.dataset.search.toLowerCase();
+        var educationMatch = !educationValue || card.dataset.education === educationValue;
+        var experienceMatch = !experienceValue || card.dataset.experience === experienceValue;
+        var skillMatch = !skillValue || card.dataset.skills.indexOf(skillValue) !== -1;
+        var searchMatch = !searchValue || searchableText.indexOf(searchValue) !== -1;
+        var isVisible = educationMatch && experienceMatch && skillMatch && searchMatch;
+
+        card.style.display = isVisible ? "inline-block" : "none";
+        if (isVisible) {
+          visibleCount += 1;
+        }
+      });
+
+      document.getElementById("candidateResultsStatus").textContent = visibleCount === 0
+        ? "No candidates match the current search and filters."
+        : visibleCount + " candidate" + (visibleCount === 1 ? "" : "s") + " found.";
+    }
+
+    function resetCandidateFilters() {
+      document.getElementById("candidateSearchInput").value = "";
+      document.getElementById("candidateEducationFilter").value = "";
+      document.getElementById("candidateExperienceFilter").value = "";
+      document.getElementById("candidateSkillFilter").value = "";
+      filterCandidates();
     }
 
     function saveBusinessProfile() {
@@ -1001,6 +1240,8 @@
         hideLocationSuggestions();
       }
     }
+
+    filterCandidates();
   </script>
 
 </body>
