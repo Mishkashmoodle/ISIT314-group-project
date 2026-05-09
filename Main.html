@@ -400,7 +400,7 @@
 <div class="main">
 <div id="id01" class="modal">
 
-    <form class="modal-content animate" action="/action_page.php" method="post">
+    <form class="modal-content animate" onsubmit="handleLoginSubmit(event)">
         <div class="imgcontainer">
             <span onclick="closeModal('id01')" class="close" title="Close Modal">&times;</span>
         </div>
@@ -426,7 +426,7 @@
 </div>
 
 <div id="id02" class="modal">
-    <form id="registerForm" class="modal-content animate" action="/action_page.php" onsubmit="return validateRegisterForm()">
+    <form id="registerForm" class="modal-content animate" onsubmit="return handleRegisterSubmit(event)">
         <span onclick="closeModal('id02')" class="close" title="Close Modal">&times;</span>
         <div class="container">
             <h1>Sign Up</h1>
@@ -468,6 +468,7 @@
     </form>
 </div>
 <script>
+    var currentJobId = null; // Track the currently viewed job
     var jobDetailsData = {
         job1: {
             title: "Junior Data Analyst",
@@ -515,6 +516,7 @@
     }
 
     function openJobDetailsModal(jobId) {
+        currentJobId = jobId; // Set current job ID
         var job = jobDetailsData[jobId];
         var metaContainer = document.getElementById("jobDetailsMeta");
 
@@ -536,12 +538,125 @@
     }
 
     function openApplyPrompt() {
+        // Open application form immediately without checking login status
         closeModal("jobDetailsModal");
-        openModal("applyPromptModal", true);
+        openApplicationForm();
+    }
+
+    function checkUserLoginStatus() {
+        // Placeholder for authentication check
+        // In a real implementation, this would check session/cookies/localStorage
+        return false; // For demo purposes, assume user is not logged in
+    }
+
+    function handleLoginSubmit(event) {
+        event.preventDefault();
+        alert('Login is currently a placeholder in this demo.');
+        
+        // Check if there's a pending application
+        var pendingData = sessionStorage.getItem('pendingApplicationData');
+        if (pendingData) {
+            // Show application confirmation
+            sessionStorage.removeItem('pendingApplicationData');
+            var applicationRef = generateApplicationReference();
+            closeModal('id01');
+            closeModal('applicationAuthPromptModal');
+            showApplicationConfirmation(applicationRef);
+        } else {
+            closeModal('id01');
+        }
+    }
+
+    function handleRegisterSubmit(event) {
+        if (!validateRegisterForm()) {
+            return false;
+        }
+        event.preventDefault();
+        alert('Account creation is currently a placeholder in this demo.');
+        
+        // Check if there's a pending application
+        var pendingData = sessionStorage.getItem('pendingApplicationData');
+        if (pendingData) {
+            // Show application confirmation
+            sessionStorage.removeItem('pendingApplicationData');
+            var applicationRef = generateApplicationReference();
+            closeModal('id02');
+            closeModal('applicationAuthPromptModal');
+            showApplicationConfirmation(applicationRef);
+        } else {
+            closeModal('id02');
+        }
+        return false;
+    }
+
+    function openApplicationForm() {
+        var job = jobDetailsData[currentJobId];
+        document.getElementById("applyJobTitle").textContent = job.title;
+        document.getElementById("applyCompanyName").textContent = job.company;
+
+        closeModal("jobDetailsModal");
+        openModal("applicationFormModal", true);
+    }
+
+    function submitApplication(event) {
+        event.preventDefault();
+
+        // Get form data
+        var formData = new FormData(event.target);
+        var applicationData = {
+            jobId: currentJobId,
+            coverLetter: formData.get('coverLetter'),
+            resume: formData.get('resume'),
+            portfolio: formData.get('portfolio'),
+            availability: formData.get('availability'),
+            salary: formData.get('salary'),
+            submittedAt: new Date().toISOString()
+        };
+
+        // Store application data temporarily for after authentication
+        sessionStorage.setItem('pendingApplicationData', JSON.stringify(applicationData));
+
+        // Close application form and show auth prompt
+        closeModal("applicationFormModal");
+        openModal("applicationAuthPromptModal", true);
+    }
+
+    function generateApplicationReference() {
+        var timestamp = Date.now();
+        var random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return 'APP-' + timestamp + '-' + random;
+    }
+
+    function showApplicationConfirmation(applicationRef) {
+        var job = jobDetailsData[currentJobId];
+        document.getElementById("confirmJobTitle").textContent = job.title;
+        document.getElementById("confirmCompanyName").textContent = job.company;
+        document.getElementById("applicationRef").textContent = applicationRef;
+        document.getElementById("submissionDate").textContent = new Date().toLocaleDateString('en-AU', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        closeModal("applicationFormModal");
+        openModal("applicationConfirmationModal", true);
+
+        // Reset form
+        document.getElementById("applicationFormModal").querySelector('form').reset();
+    }
+
+    function goToProfile() {
+        // Placeholder for navigation to profile page
+        alert('This would navigate to your profile/applications page');
+        closeModal("applicationConfirmationModal");
     }
 
     function openAuthFromPrompt(modalId) {
         closeModal("applyPromptModal");
+        closeModal("applicationAuthPromptModal");
         openModal(modalId, true);
     }
 
@@ -616,6 +731,9 @@
         var registerModal = document.getElementById("id02");
         var jobDetailsModal = document.getElementById("jobDetailsModal");
         var applyPromptModal = document.getElementById("applyPromptModal");
+        var applicationFormModal = document.getElementById("applicationFormModal");
+        var applicationAuthPromptModal = document.getElementById("applicationAuthPromptModal");
+        var applicationConfirmationModal = document.getElementById("applicationConfirmationModal");
 
         if (event.target == loginModal) {
             closeModal("id01");
@@ -631,6 +749,18 @@
 
         if (event.target == applyPromptModal) {
             closeModal("applyPromptModal");
+        }
+
+        if (event.target == applicationFormModal) {
+            closeModal("applicationFormModal");
+        }
+
+        if (event.target == applicationAuthPromptModal) {
+            closeModal("applicationAuthPromptModal");
+        }
+
+        if (event.target == applicationConfirmationModal) {
+            closeModal("applicationConfirmationModal");
         }
     }
 
@@ -761,6 +891,99 @@
             <div class="header_actions">
                 <button class="header_action_button" type="button" onclick="openAuthFromPrompt('id01')">Login</button>
                 <button class="header_action_button" type="button" onclick="openAuthFromPrompt('id02')">Create Account</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="applicationAuthPromptModal" class="modal">
+    <div class="modal-panel animate">
+        <span onclick="closeModal('applicationAuthPromptModal')" class="close" title="Close Auth Prompt">&times;</span>
+        <div class="container" style="text-align: center;">
+            <h2>Confirm Your Identity</h2>
+            <p>Thank you for submitting your application! To complete the process, please log in or create an account.</p>
+            <div class="header_actions" style="justify-content: center; margin-top: 20px;">
+                <button class="header_action_button" type="button" onclick="openAuthFromPrompt('id01')">Login</button>
+                <button class="header_action_button" type="button" onclick="openAuthFromPrompt('id02')">Create Account</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Application Form -->
+<div id="applicationFormModal" class="modal">
+    <form class="modal-panel animate" onsubmit="submitApplication(event)">
+        <span onclick="closeModal('applicationFormModal')" class="close" title="Close Application Form">&times;</span>
+        <div class="container">
+            <h2>Apply for <span id="applyJobTitle"></span></h2>
+            <p>Submit your application for this position at <span id="applyCompanyName"></span></p>
+            <hr>
+
+            <label for="coverLetter"><b>Cover Letter</b></label>
+            <textarea id="coverLetter" name="coverLetter" placeholder="Tell us why you're interested in this role and how your experience makes you a great fit..." rows="6" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; margin: 8px 0; resize: vertical;"></textarea>
+
+            <label for="resume"><b>Resume/CV</b></label>
+            <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; margin: 8px 0;">
+
+            <label for="portfolio"><b>Portfolio/LinkedIn (Optional)</b></label>
+            <input type="url" id="portfolio" name="portfolio" placeholder="https://linkedin.com/in/yourprofile or portfolio URL" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; margin: 8px 0;">
+
+            <label for="availability"><b>Availability</b></label>
+            <select id="availability" name="availability" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; margin: 8px 0;">
+                <option value="">Select your availability</option>
+                <option value="immediately">Immediately available</option>
+                <option value="2weeks">Available in 2 weeks</option>
+                <option value="1month">Available in 1 month</option>
+                <option value="3months">Available in 3 months</option>
+                <option value="other">Other (specify in cover letter)</option>
+            </select>
+
+            <label for="salary"><b>Salary Expectations (Optional)</b></label>
+            <input type="text" id="salary" name="salary" placeholder="e.g., $70,000 - $80,000 per annum" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; margin: 8px 0;">
+
+            <div style="margin: 20px 0; padding: 15px; background-color: #f8fbff; border-radius: 8px; border-left: 4px solid dodgerblue;">
+                <p style="margin: 0; font-size: 14px; color: #0b3d75;">
+                    <strong>Privacy Notice:</strong> Your application data will be shared with the hiring company. By submitting, you consent to this sharing and agree to our <a href="#" style="color: dodgerblue;">Terms of Service</a>.
+                </p>
+            </div>
+
+            <div class="clearfix" style="margin-top: 20px;">
+                <button type="button" onclick="closeModal('applicationFormModal')" class="cancelbtn" style="background-color: #f44336; margin-right: 10px;">Cancel</button>
+                <button type="submit" class="signupbtn">Submit Application</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- Confirmation UI -->
+<div id="applicationConfirmationModal" class="modal">
+    <div class="modal-panel animate">
+        <span onclick="closeModal('applicationConfirmationModal')" class="close" title="Close Confirmation">&times;</span>
+        <div class="container" style="text-align: center;">
+            <div style="font-size: 48px; color: #4CAF50; margin: 20px 0;">✓</div>
+            <h2>Application Submitted Successfully!</h2>
+            <p>Your application for <strong><span id="confirmJobTitle"></span></strong> at <strong><span id="confirmCompanyName"></span></strong> has been submitted.</p>
+
+            <div style="background-color: #f8fbff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left;">
+                <h3 style="margin-top: 0; color: #0b3d75;">What happens next?</h3>
+                <ul style="text-align: left; padding-left: 20px; color: #333;">
+                    <li>The hiring team will review your application within 3-5 business days</li>
+                    <li>You'll receive an email notification if you're selected for an interview</li>
+                    <li>You can track your application status in your profile dashboard</li>
+                    <li>Keep an eye on your email for updates from the company</li>
+                </ul>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <p style="color: #666; font-size: 14px;">Application Reference: <strong><span id="applicationRef"></span></strong></p>
+                <p style="color: #666; font-size: 14px;">Submitted on: <strong><span id="submissionDate"></span></strong></p>
+            </div>
+
+            <div class="header_actions" style="justify-content: center;">
+                <button class="header_action_button" type="button" onclick="closeModal('applicationConfirmationModal')" style="margin-right: 10px;">Continue Browsing</button>
+                <button class="header_action_button" type="button" onclick="goToProfile()">View My Applications</button>
             </div>
         </div>
     </div>
