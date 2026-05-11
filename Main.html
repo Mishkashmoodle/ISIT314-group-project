@@ -449,11 +449,6 @@
             <label><b>Re-enter Password</b></label>
             <input type="password" id="registerPasswordRepeat" placeholder="Re-enter Password" name="psw-repeat" required>
 
-            <div id="abnField" class="hidden-field">
-                <label><b>ABN</b></label>
-                <input type="text" id="abnInput" placeholder="Enter ABN" name="abn">
-            </div>
-
             <label>
                 <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
             </label>
@@ -572,20 +567,18 @@
             return false;
         }
         event.preventDefault();
-        alert('Account creation is currently a placeholder in this demo.');
-        
-        // Check if there's a pending application
-        var pendingData = sessionStorage.getItem('pendingApplicationData');
-        if (pendingData) {
-            // Show application confirmation
-            sessionStorage.removeItem('pendingApplicationData');
-            var applicationRef = generateApplicationReference();
-            closeModal('id02');
-            closeModal('applicationAuthPromptModal');
-            showApplicationConfirmation(applicationRef);
-        } else {
-            closeModal('id02');
-        }
+        var registerForm = document.getElementById("registerForm");
+        var formData = new FormData(registerForm);
+        var accountType = formData.get("accountType");
+        var email = formData.get("email");
+
+        sessionStorage.setItem("pendingProfileSetup", JSON.stringify({
+            accountType: accountType,
+            email: email
+        }));
+
+        closeModal('id02');
+        window.location.href = "profile_setup.html";
         return false;
     }
 
@@ -665,8 +658,6 @@
         document.getElementById("accountType").value = type;
         document.getElementById("candidateBtn").classList.toggle("active", !isBusiness);
         document.getElementById("businessBtn").classList.toggle("active", isBusiness);
-        document.getElementById("abnField").classList.toggle("hidden-field", !isBusiness);
-        document.getElementById("abnInput").required = isBusiness;
     }
 
     function validateRegisterForm() {

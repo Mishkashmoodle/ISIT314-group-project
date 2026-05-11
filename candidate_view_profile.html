@@ -337,7 +337,7 @@
     <h1>uMatch - Your Profile</h1>
     </div>
     <div class="header_right">
-      <div>Welcome Alex</div>
+      <div id="candidateWelcomeMessage">Welcome Alex</div>
       <button type="button" class="header_logout_button">Logout</button>
     </div>
   </div>
@@ -354,11 +354,13 @@
       </div>
       <p>Potential employers can view your skills and experience uploaded.</p>
       <div class="profile_highlight">
-        <strong>Example Candidate</strong>
-        <p><b>Name:</b> Alex Tan</p>
-        <p><b>Education:</b> Bachelor's Degree in Information Systems</p>
-        <p><b>Experience:</b> 2 years</p>
-        <p><b>Skills:</b> SQL, Excel, Data Analysis, Communication</p>
+        <strong id="candidateProfileHeading">Example Candidate</strong>
+        <p id="candidateProfileName"><b>Name:</b> Alex Tan</p>
+        <p id="candidateProfileEducation"><b>Education:</b> Bachelor's Degree in Information Systems</p>
+        <p id="candidateProfileMajor"><b>Major:</b> Information Systems</p>
+        <p id="candidateProfileExperience"><b>Experience:</b> 2 years</p>
+        <p id="candidateProfileContact"><b>Contact:</b> alex.tan@example.com</p>
+        <p id="candidateProfileResume"><b>Resume:</b> Not uploaded yet</p>
       </div>
     </div>
 
@@ -624,6 +626,32 @@
       closeJobDetailsModal();
     }
 
+    function loadCandidateProfile() {
+      var storedProfile = sessionStorage.getItem("completedProfileSetup");
+      var profileData;
+      var fullName;
+
+      if (!storedProfile) {
+        return;
+      }
+
+      profileData = JSON.parse(storedProfile);
+      if (profileData.accountType !== "candidate") {
+        return;
+      }
+
+      fullName = profileData.fullName || "Candidate";
+
+      document.getElementById("candidateWelcomeMessage").textContent = "Welcome " + fullName;
+      document.getElementById("candidateProfileHeading").textContent = fullName;
+      document.getElementById("candidateProfileName").innerHTML = "<b>Name:</b> " + fullName;
+      document.getElementById("candidateProfileEducation").innerHTML = "<b>Education:</b> " + (profileData.education || "Not provided");
+      document.getElementById("candidateProfileMajor").innerHTML = "<b>Major:</b> " + (profileData.major || "Not provided");
+      document.getElementById("candidateProfileExperience").innerHTML = "<b>Experience:</b> " + ((profileData.experience || profileData.experience === 0) ? profileData.experience + " years" : "Not provided");
+      document.getElementById("candidateProfileContact").innerHTML = "<b>Contact:</b> " + (profileData.contact || profileData.email || "Not provided");
+      document.getElementById("candidateProfileResume").innerHTML = "<b>Resume:</b> " + (profileData.resumeFileName || "Not uploaded yet");
+    }
+
     document.getElementById("resumeFile").addEventListener("change", function(event) {
       var fileStatus = document.getElementById("fileStatus");
 
@@ -651,6 +679,8 @@
         closeJobDetailsModal();
       }
     }
+
+    loadCandidateProfile();
   </script>
 
 </body>

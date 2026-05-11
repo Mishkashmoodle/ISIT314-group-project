@@ -557,7 +557,7 @@
     <h1>uMatch - Business Profile</h1>
     </div>
     <div class="header_right">
-      <div>Welcome Bright Insights</div>
+      <div id="businessWelcomeMessage">Welcome Bright Insights</div>
       <button type="button" class="header_logout_button">Logout</button>
     </div>
   </div>
@@ -571,12 +571,13 @@
       </div>
       <p>Potential candidates can be matched to the jobs your business creates and manages here.</p>
       <div class="profile_panel">
-        <p><b>Business Name:</b> Bright Insights Pty Ltd</p>
-        <p><b>Industry:</b> Business Intelligence and Analytics Consulting</p>
-        <p><b>Location:</b> Sydney, NSW</p>
-        <p><b>Contact:</b> Sarah Lim, Talent Partner</p>
-        <p><b>Email:</b> careers@brightinsights.example</p>
-        <p><b>About the Business:</b> Bright Insights helps retail and service companies improve decision-making through dashboards, reporting, and data process improvement.</p>
+        <p id="businessProfileName"><b>Business Name:</b> Bright Insights Pty Ltd</p>
+        <p id="businessProfileIndustry"><b>Industry:</b> Business Intelligence and Analytics Consulting</p>
+        <p id="businessProfileLocation"><b>Location:</b> Sydney, NSW</p>
+        <p id="businessProfileContact"><b>Contact:</b> Sarah Lim, Talent Partner</p>
+        <p id="businessProfileNumber"><b>Contact Number:</b> 02 9000 0000</p>
+        <p id="businessProfileEmail"><b>Email:</b> careers@brightinsights.example</p>
+        <p id="businessProfileDescription"><b>About the Business:</b> Bright Insights helps retail and service companies improve decision-making through dashboards, reporting, and data process improvement.</p>
       </div>
     </div>
 
@@ -1060,6 +1061,32 @@
       filterCandidates();
     }
 
+    function loadBusinessProfile() {
+      var storedProfile = sessionStorage.getItem("completedProfileSetup");
+      var profileData;
+      var businessName;
+
+      if (!storedProfile) {
+        return;
+      }
+
+      profileData = JSON.parse(storedProfile);
+      if (profileData.accountType !== "business") {
+        return;
+      }
+
+      businessName = profileData.businessName || "Business";
+
+      document.getElementById("businessWelcomeMessage").textContent = "Welcome " + businessName;
+      document.getElementById("businessProfileName").innerHTML = "<b>Business Name:</b> " + businessName;
+      document.getElementById("businessProfileIndustry").innerHTML = "<b>Industry:</b> " + (profileData.industry || "Not provided");
+      document.getElementById("businessProfileLocation").innerHTML = "<b>Location:</b> " + (profileData.location || "Not provided");
+      document.getElementById("businessProfileContact").innerHTML = "<b>Contact:</b> " + (profileData.contactPerson || "Not provided");
+      document.getElementById("businessProfileNumber").innerHTML = "<b>Contact Number:</b> " + (profileData.contactNumber || "Not provided");
+      document.getElementById("businessProfileEmail").innerHTML = "<b>Email:</b> " + (profileData.email || "Not provided");
+      document.getElementById("businessProfileDescription").innerHTML = "<b>About the Business:</b> " + (profileData.description || "Not provided");
+    }
+
     function renderCandidateSkillSuggestions(matches) {
       var suggestionsBox = document.getElementById("candidateSkillSuggestions");
       suggestionsBox.innerHTML = "";
@@ -1397,6 +1424,7 @@
     }
 
     filterCandidates();
+    loadBusinessProfile();
   </script>
 
 </body>
