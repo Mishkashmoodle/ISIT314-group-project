@@ -683,6 +683,64 @@
         return true;
     }
 
+    function getEditDistance(a, b) {
+        var matrix = [];
+        var i;
+        var j;
+
+        if (a === b) {
+            return 0;
+        }
+
+        for (i = 0; i <= b.length; i += 1) {
+            matrix[i] = [i];
+        }
+
+        for (j = 0; j <= a.length; j += 1) {
+            matrix[0][j] = j;
+        }
+
+        for (i = 1; i <= b.length; i += 1) {
+            for (j = 1; j <= a.length; j += 1) {
+                if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1
+                    );
+                }
+            }
+        }
+
+        return matrix[b.length][a.length];
+    }
+
+    function fuzzyMatches(query, searchableText) {
+        var normalizedQuery = query.trim().toLowerCase();
+        var normalizedText = searchableText.toLowerCase();
+        var words;
+
+        if (!normalizedQuery) {
+            return true;
+        }
+
+        if (normalizedText.indexOf(normalizedQuery) !== -1) {
+            return true;
+        }
+
+        words = normalizedText.split(/[^a-z0-9]+/).filter(Boolean);
+
+        return words.some(function(word) {
+            if (word.indexOf(normalizedQuery) !== -1 || normalizedQuery.indexOf(word) !== -1) {
+                return true;
+            }
+
+            return getEditDistance(normalizedQuery, word) <= Math.max(1, Math.floor(normalizedQuery.length / 4));
+        });
+    }
+
     function filterJobs() {
         var searchValue = document.getElementById("jobSearchInput").value.trim().toLowerCase();
         var educationValue = document.getElementById("jobEducationFilter").value;
@@ -696,7 +754,7 @@
             var educationMatch = !educationValue || card.dataset.education === educationValue;
             var experienceMatch = !experienceValue || card.dataset.experience === experienceValue;
             var skillMatch = !skillValue || card.dataset.skills.indexOf(skillValue) !== -1;
-            var searchMatch = !searchValue || searchableText.indexOf(searchValue) !== -1;
+            var searchMatch = fuzzyMatches(searchValue, searchableText);
             var isVisible = educationMatch && experienceMatch && skillMatch && searchMatch;
 
             card.style.display = isVisible ? "block" : "none";
