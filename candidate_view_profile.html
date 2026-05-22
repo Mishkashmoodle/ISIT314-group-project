@@ -5,7 +5,9 @@
   <title>candidate view profile</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+
   <div class="header">
     <div>
           <button class="blue_button" onclick="window.location.href='main.html'">
@@ -22,7 +24,7 @@
   <div class="main">
 
     <div class="box">
-      <div class="welcome_header">
+      <div class="box_header">
         <h2>Welcome to your Profile</h2>
         <div class="welcome_actions">
           <button class="blue_button" onclick="openEditProfileModal()">Edit Profile</button>
@@ -30,7 +32,7 @@
         </div>
       </div>
       <p>Potential employers can view your skills and experience uploaded.</p>
-      <div class="profile_highlight">
+      <div class="profile_panel">
         <strong>Example Candidate</strong>
         <div class="profile_grid">
           <p><b>Name:</b> <span id="profileName">Alex Tan</span></p>
@@ -425,32 +427,6 @@
       closeJobDetailsModal();
     }
 
-    function loadCandidateProfile() {
-      var storedProfile = sessionStorage.getItem("completedProfileSetup");
-      var profileData;
-      var fullName;
-
-      if (!storedProfile) {
-        return;
-      }
-
-      profileData = JSON.parse(storedProfile);
-      if (profileData.accountType !== "candidate") {
-        return;
-      }
-
-      fullName = profileData.fullName || "Candidate";
-
-      document.getElementById("candidateWelcomeMessage").textContent = "Welcome " + fullName;
-      document.getElementById("candidateProfileHeading").textContent = fullName;
-      document.getElementById("candidateProfileName").innerHTML = "<b>Name:</b> " + fullName;
-      document.getElementById("candidateProfileEducation").innerHTML = "<b>Education:</b> " + (profileData.education || "Not provided");
-      document.getElementById("candidateProfileMajor").innerHTML = "<b>Major:</b> " + (profileData.major || "Not provided");
-      document.getElementById("candidateProfileExperience").innerHTML = "<b>Experience:</b> " + ((profileData.experience || profileData.experience === 0) ? profileData.experience + " years" : "Not provided");
-      document.getElementById("candidateProfileContact").innerHTML = "<b>Contact:</b> " + (profileData.contact || profileData.email || "Not provided");
-      document.getElementById("candidateProfileResume").innerHTML = "<b>Resume:</b> " + (profileData.resumeFileName || "Not uploaded yet");
-    }
-
     document.getElementById("resumeFile").addEventListener("change", function(event) {
       var fileStatus = document.getElementById("fileStatus");
 
@@ -483,9 +459,8 @@
         closeBusinessProfileModal();
       }
     }
-
-    loadCandidateProfile();
   </script>
+
 </body>
 
 </html>
