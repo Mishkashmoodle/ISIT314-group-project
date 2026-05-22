@@ -3,332 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>candidate view profile</title>
-  <style>/*colours and proper spacing tbd*/
-    body 
-    {
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 15px;
-      background-color: #dadada;
-    }
-
-    p
-    {
-      padding: 10px;
-    }
-
-    .header 
-    {
-      background-color: dodgerblue;
-      color: white;
-      padding: 40px 40px;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .header_right
-    {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      font-size: 22px;
-      font-weight: bold;
-      text-align: right;
-      padding: 10px;
-    }
-
-    .header_logout_button
-    {
-      background-color: #d64545;
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 16px;
-      min-width: 120px;
-      transition: transform 0.2s ease;
-    }
-
-    .header_logout_button:hover
-    {
-      opacity: 0.8;
-      transform: scale(1.03);
-    }
-
-    .main 
-    {
-      width: 100%;/*limit the overall width just incase*/
-      margin: 40px auto;/*make same by defaut*/
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .box /*page containters*/
-    {
-      width: 100%;
-      box-sizing: border-box;
-      background-color: white;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-
-    h1, h2 
-    {
-      margin-top: 10px;
-      padding: 10px;
-    }
-
-    .button_row /*buttons margin*/
-    {
-      margin-top: 15px;
-      padding: 10px;
-    }
-
-    .blue_button /*buttons style smoothing out*/
-    {
-      background-color: dodgerblue;
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      font-size: 18px;
-      transition: transform 0.2s ease;
-    }
-
-    .action_button
-    {
-      width: 140px;
-      text-align: center;
-      margin: 0;
-    }
-
-    .blue_button:hover /*just hover opacity of the page buttons*/
-    {
-      opacity: 0.8;
-      transform: scale(1.03);
-    }
-
-    .red_button
-    {
-      background-color: #d64545;
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 18px;
-      transition: transform 0.2s ease;
-    }
-
-    .red_button:hover
-    {
-      opacity: 0.8;
-      transform: scale(1.03);
-    }
-
-    .listing_box /*box that shows a preview of a job*/
-    {
-      margin-top: 20px;
-      max-width: 760px;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-      background-color: #ffffff;
-      padding: 20px;
-      display: block;
-      transition: transform 0.2s ease;
-    }
-
-    .listing_box.clickable
-    {
-      cursor: pointer;
-    }
-
-    .listing_box:hover
-    {
-      opacity: 0.8;
-      transform: scale(1.03);
-    }
-
-    .modal
-    {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.45);
-      padding-top: 60px;
-    }
-
-    .modal_content
-    {
-      background-color: white;
-      margin: 5% auto;
-      padding: 30px;
-      border-radius: 12px;
-      width: min(90%, 560px);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
-      position: relative;
-    }
-
-    .close_button
-    {
-      position: absolute;
-      top: 12px;
-      right: 18px;
-      font-size: 30px;
-      color: #333333;
-      cursor: pointer;
-    }
-
-    .close_button:hover
-    {
-      color: #f44336;
-    }
-
-    .upload_input
-    {
-      width: 100%;
-      box-sizing: border-box;
-      margin: 15px 0;
-      padding: 12px;
-      border: 1px solid #cccccc;
-      border-radius: 8px;
-      background-color: #f8fbff;
-    }
-
-    .helper_text
-    {
-      background-color: #eef6ff;
-      border-left: 4px solid dodgerblue;
-      padding: 14px;
-      border-radius: 8px;
-      margin-top: 16px;
-    }
-
-    .file_status
-    {
-      padding: 0;
-      margin: 10px 0 0;
-      color: #333333;
-      font-size: 16px;
-    }
-
-    .form_input
-    {
-      width: 100%;
-      box-sizing: border-box;
-      margin: 15px 0;
-      padding: 12px;
-      border: 1px solid #cccccc;
-      border-radius: 8px;
-      background-color: #f8fbff;
-      font-size: 16px;
-    }
-
-    .form_label
-    {
-      display: block;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .status_text
-    {
-      padding: 0;
-      margin: 10px 0 0;
-      color: #333333;
-      font-size: 16px;
-    }
-
-    .profile_highlight
-    {
-      background-color: #eef6ff;
-      border-left: 4px solid dodgerblue;
-      border-radius: 10px;
-      padding: 18px;
-      margin-top: 12px;
-    }
-
-    .welcome_header
-    {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .welcome_actions
-    {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .welcome_actions .blue_button
-    {
-      margin-right: 0;
-      margin-bottom: 0;
-    }
-
-    .modal_actions_left
-    {
-      display: flex;
-      justify-content: flex-start;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .job_meta
-    {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 10px 0;
-    }
-
-    .job_tag
-    {
-      background-color: #d9ecff;
-      color: #0b3d75;
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-
-    .match_label
-    {
-      display: inline-block;
-      background-color: #dff5e5;
-      color: #136b2c;
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
-
-
 <body>
-
   <div class="header">
     <div>
           <button class="blue_button" onclick="window.location.href='main.html'">
@@ -337,7 +14,7 @@
     <h1>uMatch - Your Profile</h1>
     </div>
     <div class="header_right">
-      <div id="candidateWelcomeMessage">Welcome Alex</div>
+      <div>Welcome Alex</div>
       <button type="button" class="header_logout_button">Logout</button>
     </div>
   </div>
@@ -354,13 +31,15 @@
       </div>
       <p>Potential employers can view your skills and experience uploaded.</p>
       <div class="profile_highlight">
-        <strong id="candidateProfileHeading">Example Candidate</strong>
-        <p id="candidateProfileName"><b>Name:</b> Alex Tan</p>
-        <p id="candidateProfileEducation"><b>Education:</b> Bachelor's Degree in Information Systems</p>
-        <p id="candidateProfileMajor"><b>Major:</b> Information Systems</p>
-        <p id="candidateProfileExperience"><b>Experience:</b> 2 years</p>
-        <p id="candidateProfileContact"><b>Contact:</b> alex.tan@example.com</p>
-        <p id="candidateProfileResume"><b>Resume:</b> Not uploaded yet</p>
+        <strong>Example Candidate</strong>
+        <div class="profile_grid">
+          <p><b>Name:</b> <span id="profileName">Alex Tan</span></p>
+          <p><b>Education:</b> <span id="profileEducation">Bachelor's Degree in Information Systems</span></p>
+          <p><b>Experience:</b> <span id="profileExperience">2 years</span></p>
+          <p><b>Skills:</b> <span id="profileSkills">SQL, Excel, Data Analysis, Communication</span></p>
+          <p><b>Preferred Location:</b> <span id="profilePreferredLocation">Sydney, NSW</span></p>
+          <p><b>Preferred Work Mode:</b> <span id="profilePreferredWorkMode">Hybrid</span></p>
+        </div>
       </div>
     </div>
 
@@ -423,7 +102,26 @@
         <p id="jobDetailsResponsibilities"></p>
         <div class="modal_actions_left">
           <button type="button" class="blue_button action_button" onclick="applyForJob()">Apply</button>
+          <button type="button" class="blue_button action_button" onclick="openBusinessProfileModal()">View Business</button>
           <button type="button" class="red_button action_button" onclick="removeRecommendedJob()">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="businessProfileModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeBusinessProfileModal()" title="Close Business Profile">&times;</span>
+        <h2 id="businessProfileName">Business Profile</h2>
+        <div class="business_profile_panel">
+          <p id="businessProfileIndustry"></p>
+          <p id="businessProfileLocation"></p>
+          <p id="businessProfileWorkMode"></p>
+          <p id="businessProfileContact"></p>
+          <p id="businessProfileEmail"></p>
+          <p id="businessProfileAbout"></p>
+        </div>
+        <div class="button_row">
+          <button type="button" class="blue_button" onclick="closeBusinessProfileModal()">Back to Job Details</button>
         </div>
       </div>
     </div>
@@ -455,6 +153,28 @@
             <option>Graduate Diploma</option>
             <option>Master's Degree</option>
             <option>Doctorate</option>
+          </select>
+
+          <label class="form_label" for="candidatePreferredLocation"><b>Preferred Working Location</b></label>
+          <select class="form_input" id="candidatePreferredLocation" name="candidatePreferredLocation">
+            <option value="">Select a preferred location</option>
+            <option>Sydney, NSW</option>
+            <option>Melbourne, VIC</option>
+            <option>Brisbane, QLD</option>
+            <option>Perth, WA</option>
+            <option>Adelaide, SA</option>
+            <option>Canberra, ACT</option>
+            <option>Wollongong, NSW</option>
+            <option>Newcastle, NSW</option>
+            <option>Open to multiple locations</option>
+          </select>
+
+          <label class="form_label" for="candidatePreferredWorkMode"><b>Preferred Working Mode</b></label>
+          <select class="form_input" id="candidatePreferredWorkMode" name="candidatePreferredWorkMode">
+            <option value="">Select a preferred working mode</option>
+            <option>Remote</option>
+            <option>On-site</option>
+            <option>Hybrid</option>
           </select>
 
           <label class="form_label" for="candidateSkills"><b>Skills</b></label>
@@ -516,7 +236,8 @@
         description: "Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.",
         meta: ["Bachelor's Degree", "SQL", "Excel", "Data Analysis", "2 Years Experience", "Hybrid", "Sydney, NSW"],
         companyInfo: "Bright Insights is an analytics consulting business that helps growing companies improve reporting, forecasting, and operational visibility.",
-        responsibilities: "Key focus: dashboard support, spreadsheet analysis, SQL reporting, and stakeholder communication."
+        responsibilities: "Key focus: dashboard support, spreadsheet analysis, SQL reporting, and stakeholder communication.",
+        businessId: "brightInsights"
       },
       job2: {
         title: "Retail Store Supervisor",
@@ -524,7 +245,8 @@
         description: "Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.",
         meta: ["Diploma", "Leadership", "Sales", "Customer Service", "4 Years Experience", "On-site", "Melbourne, VIC"],
         companyInfo: "City Style Retail operates high-traffic fashion stores and focuses on customer service and store performance.",
-        responsibilities: "Key focus: shift leadership, retail operations, sales reporting, and team supervision."
+        responsibilities: "Key focus: shift leadership, retail operations, sales reporting, and team supervision.",
+        businessId: "cityStyle"
       },
       job3: {
         title: "Senior Python Engineer",
@@ -532,11 +254,47 @@
         description: "Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.",
         meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Remote", "Brisbane, QLD"],
         companyInfo: "Cloud Forge Systems builds cloud platforms and internal developer tooling for enterprise technology teams.",
-        responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability."
+        responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability.",
+        businessId: "cloudForge"
+      }
+    };
+
+    var businessProfileData = {
+      brightInsights: {
+        name: "Bright Insights Pty Ltd",
+        industry: "Business Intelligence and Analytics Consulting",
+        location: "Sydney, NSW",
+        workMode: "Hybrid",
+        contact: "Sarah Lim, Talent Partner",
+        email: "careers@brightinsights.example",
+        about: "Bright Insights helps retail and service companies improve decision-making through dashboards, reporting, and data process improvement."
+      },
+      cityStyle: {
+        name: "City Style Retail",
+        industry: "Retail and Fashion",
+        location: "Melbourne, VIC",
+        workMode: "On-site",
+        contact: "Marcus Reed, Store Operations Manager",
+        email: "careers@citystyle.example",
+        about: "City Style Retail manages high-traffic fashion stores with a focus on customer service, staff development, and reliable store operations."
+      },
+      cloudForge: {
+        name: "Cloud Forge Systems",
+        industry: "Cloud Software and Platform Engineering",
+        location: "Brisbane, QLD",
+        workMode: "Remote",
+        contact: "Emily Carter, Engineering Recruitment Lead",
+        email: "talent@cloudforge.example",
+        about: "Cloud Forge Systems builds cloud platforms and internal developer tools for enterprise technology teams."
       }
     };
 
     function openEditProfileModal() {
+      document.getElementById("candidateFullName").value = document.getElementById("profileName").textContent;
+      document.getElementById("candidateEducation").value = "Bachelor's Degree";
+      document.getElementById("candidatePreferredLocation").value = document.getElementById("profilePreferredLocation").textContent;
+      document.getElementById("candidatePreferredWorkMode").value = document.getElementById("profilePreferredWorkMode").textContent;
+      document.getElementById("candidateSkills").value = document.getElementById("profileSkills").textContent;
       document.getElementById("editProfileModal").style.display = "block";
     }
 
@@ -547,12 +305,29 @@
     function saveCandidateProfile() {
       var fullName = document.getElementById("candidateFullName").value.trim();
       var email = document.getElementById("candidateEmail").value.trim();
+      var education = document.getElementById("candidateEducation").value;
+      var preferredLocation = document.getElementById("candidatePreferredLocation").value;
+      var preferredWorkMode = document.getElementById("candidatePreferredWorkMode").value;
+      var skills = document.getElementById("candidateSkills").value.trim();
       var editProfileStatus = document.getElementById("editProfileStatus");
 
-      if (!fullName || !email) {
-        editProfileStatus.textContent = "Please enter at least your full name and email before saving.";
+      if (!fullName || !email || !preferredLocation || !preferredWorkMode) {
+        editProfileStatus.textContent = "Please enter your name, email, preferred location, and preferred working mode before saving.";
         return;
       }
+
+      document.getElementById("profileName").textContent = fullName;
+
+      if (education) {
+        document.getElementById("profileEducation").textContent = education;
+      }
+
+      if (skills) {
+        document.getElementById("profileSkills").textContent = skills;
+      }
+
+      document.getElementById("profilePreferredLocation").textContent = preferredLocation;
+      document.getElementById("profilePreferredWorkMode").textContent = preferredWorkMode;
 
       editProfileStatus.textContent = "Profile updated for " + fullName + ".";
     }
@@ -599,8 +374,32 @@
       document.getElementById("jobDetailsModal").style.display = "block";
     }
 
+    function openBusinessProfileModal() {
+      if (!activeJobId) {
+        return;
+      }
+
+      var job = jobDetailsData[activeJobId];
+      var business = businessProfileData[job.businessId];
+
+      document.getElementById("businessProfileName").textContent = business.name;
+      document.getElementById("businessProfileIndustry").innerHTML = "<b>Industry:</b> " + business.industry;
+      document.getElementById("businessProfileLocation").innerHTML = "<b>Business Location:</b> " + business.location;
+      document.getElementById("businessProfileWorkMode").innerHTML = "<b>Work Mode Offered:</b> " + business.workMode;
+      document.getElementById("businessProfileContact").innerHTML = "<b>Contact:</b> " + business.contact;
+      document.getElementById("businessProfileEmail").innerHTML = "<b>Email:</b> " + business.email;
+      document.getElementById("businessProfileAbout").innerHTML = "<b>About:</b> " + business.about;
+
+      document.getElementById("businessProfileModal").style.display = "block";
+    }
+
+    function closeBusinessProfileModal() {
+      document.getElementById("businessProfileModal").style.display = "none";
+    }
+
     function closeJobDetailsModal() {
       document.getElementById("jobDetailsModal").style.display = "none";
+      closeBusinessProfileModal();
     }
 
     function applyForJob() {
@@ -666,6 +465,7 @@
       var editProfileModal = document.getElementById("editProfileModal");
       var resumeModal = document.getElementById("resumeModal");
       var jobDetailsModal = document.getElementById("jobDetailsModal");
+      var businessProfileModal = document.getElementById("businessProfileModal");
 
       if (event.target == editProfileModal) {
         closeEditProfileModal();
@@ -678,11 +478,14 @@
       if (event.target == jobDetailsModal) {
         closeJobDetailsModal();
       }
+
+      if (event.target == businessProfileModal) {
+        closeBusinessProfileModal();
+      }
     }
 
     loadCandidateProfile();
   </script>
-
 </body>
 
 </html>
