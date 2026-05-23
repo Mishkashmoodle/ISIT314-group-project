@@ -17,7 +17,7 @@
     </div>
     <div class="header_right">
       <div id="businessWelcomeMessage">Welcome Bright Insights</div>
-      <button type="button" class="header_logout_button">Logout</button>
+      <button type="button" class="header_logout_button" onclick="logoutDemoUser()">Logout</button>
     </div>
   </div>
 
@@ -884,6 +884,11 @@
 
     filterCandidates();
     loadBusinessProfile();
+    function logoutDemoUser() {
+      localStorage.setItem("isLoggedIn", "false");
+      localStorage.setItem("isPremiumMember", "false");
+      window.location.href = "main.html";
+    }
   </script>
 
 </body>
