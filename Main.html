@@ -17,6 +17,7 @@
         <div class="header_actions">
             <button class="blue_button header_action_button" type="button" onclick="openModal('id01', true)">Login</button>
             <button class="blue_button header_action_button" type="button" onclick="openModal('id02', true)">Create Account</button>
+            <button id="premiumHeaderButton" class="blue_button header_action_button premium_header_button" type="button" onclick="openModal('premiumModal', true)">Become Premium</button>
         </div>
     </div>
 </div>
@@ -35,9 +36,8 @@
 
             <label><b>Password</b></label>
             <input class="form_input" type="password" placeholder="Enter Password" name="psw" required>
-
             <button type="submit" class="blue_button full_width_button">Login</button>
-            <label>
+            <label class="checkbox_line">
                 <input type="checkbox" checked="checked" name="remember"> Remember me
             </label>
         </div>
@@ -77,8 +77,7 @@
                 <label><b>ABN</b></label>
                 <input class="form_input" type="text" id="abnInput" placeholder="Enter ABN" name="abn">
             </div>
-
-            <label>
+            <label class="checkbox_line">
                 <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
             </label>
 
@@ -90,6 +89,24 @@
             </div>
         </div>
     </form>
+</div>
+
+<div id="premiumModal" class="modal">
+    <div class="modal_content animate premium_modal">
+        <span onclick="closeModal('premiumModal')" class="close_button" title="Close Premium Signup">&times;</span>
+        <div class="container">
+            <span class="match_label premium_label">Premium</span>
+            <h2>Become a Premium Member</h2>
+            <p>Sign up to premium to unlock more recommended jobs on uMatch.</p>
+            <div class="helper_text">
+                <b>Premium benefit:</b> premium members see extra job recommendations on the main page and candidate profile page.
+            </div>
+            <div class="button_row">
+                <button type="button" class="blue_button" onclick="signUpToPremium()">Sign Up to Premium</button>
+                <button type="button" class="red_button" onclick="closeModal('premiumModal')">Maybe Later</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var currentJobId = null; // Track the currently viewed job
@@ -117,6 +134,30 @@
             meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Remote", "Brisbane, QLD"],
             companyInfo: "Cloud Forge Systems builds cloud platforms and internal developer tooling for enterprise technology teams.",
             responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability."
+        },
+        job4: {
+            title: "Front End Web Developer",
+            company: "Harbour Digital Studio",
+            description: "Build responsive web pages, improve user interfaces, and work with designers to create accessible online experiences.",
+            meta: ["Bachelor's Degree", "HTML", "CSS", "JavaScript", "1 Year Experience", "Hybrid", "Sydney, NSW"],
+            companyInfo: "Harbour Digital Studio creates websites and online platforms for Australian small businesses.",
+            responsibilities: "Key focus: front-end development, page styling, accessibility improvements, and teamwork with designers."
+        },
+        job5: {
+            title: "Graduate Cyber Security Analyst",
+            company: "SecurePath Consulting",
+            description: "Assist with security monitoring, basic incident triage, and documentation of security controls for client systems.",
+            meta: ["Bachelor's Degree", "Cyber Security", "Documentation", "Problem Solving", "0 Years Experience", "Remote", "Canberra, ACT"],
+            companyInfo: "SecurePath Consulting supports organisations with cyber security reviews, monitoring, and security process improvement.",
+            responsibilities: "Key focus: alert review, security documentation, client support, and learning defensive security practices."
+        },
+        job6: {
+            title: "Junior Project Coordinator",
+            company: "Metro Systems Group",
+            description: "Support project schedules, meeting notes, task tracking, and communication between technical and business teams.",
+            meta: ["Diploma", "Project Management", "Communication", "Excel", "1 Year Experience", "On-site", "Melbourne, VIC"],
+            companyInfo: "Metro Systems Group delivers business technology projects for medium-sized organisations.",
+            responsibilities: "Key focus: project coordination, task tracking, stakeholder communication, and documentation."
         }
     };
 
@@ -173,13 +214,16 @@
     }
 
     function checkUserLoginStatus() {
-        // Placeholder for authentication check
-        // In a real implementation, this would check session/cookies/localStorage
-        return false; // For demo purposes, assume user is not logged in
+        return localStorage.getItem("isLoggedIn") === "true";
+    }
+
+    function checkPremiumMembership() {
+        return localStorage.getItem("isPremiumMember") === "true";
     }
 
     function handleLoginSubmit(event) {
         event.preventDefault();
+        localStorage.setItem("isLoggedIn", "true");
         alert('Login is currently a placeholder in this demo.');
         
         // Check if there's a pending application
@@ -205,6 +249,8 @@
         var formData = new FormData(registerForm);
         var accountType = formData.get("accountType");
         var email = formData.get("email");
+
+        localStorage.setItem("isLoggedIn", "true");
 
         sessionStorage.setItem("pendingProfileSetup", JSON.stringify({
             accountType: accountType,
@@ -369,6 +415,32 @@
         });
     }
 
+    function updatePremiumDisplay() {
+        var premiumHeaderButton = document.getElementById("premiumHeaderButton");
+        var isPremium = checkPremiumMembership();
+
+        if (premiumHeaderButton) {
+            premiumHeaderButton.textContent = isPremium ? "Premium Active" : "Become Premium";
+            premiumHeaderButton.classList.toggle("premium_active_button", isPremium);
+        }
+
+        filterJobs();
+    }
+
+    function signUpToPremium() {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("isPremiumMember", "true");
+        closeModal("premiumModal");
+        updatePremiumDisplay();
+        alert("Premium membership is now active. Extra recommendations are now visible.");
+    }
+
+    function logoutDemoUser() {
+        localStorage.setItem("isLoggedIn", "false");
+        localStorage.setItem("isPremiumMember", "false");
+        updatePremiumDisplay();
+    }
+
     function filterJobs() {
         var searchValue = document.getElementById("jobSearchInput").value.trim().toLowerCase();
         var educationValue = document.getElementById("jobEducationFilter").value;
@@ -378,6 +450,11 @@
         var visibleCount = 0;
 
         jobCards.forEach(function(card) {
+            if (card.classList.contains("premium_job") && !checkPremiumMembership()) {
+                card.style.display = "none";
+                return;
+            }
+
             var searchableText = card.dataset.search.toLowerCase();
             var educationMatch = !educationValue || card.dataset.education === educationValue;
             var experienceMatch = !experienceValue || card.dataset.experience === experienceValue;
@@ -420,6 +497,7 @@
         var applicationFormModal = document.getElementById("applicationFormModal");
         var applicationAuthPromptModal = document.getElementById("applicationAuthPromptModal");
         var applicationConfirmationModal = document.getElementById("applicationConfirmationModal");
+        var premiumModal = document.getElementById("premiumModal");
 
         if (event.target == loginModal) {
             closeModal("id01");
@@ -448,13 +526,15 @@
         if (event.target == applicationConfirmationModal) {
             closeModal("applicationConfirmationModal");
         }
+
+        if (event.target == premiumModal) {
+            closeModal("premiumModal");
+        }
     }
 
     setAccountType("candidate");
-    window.addEventListener("load", filterJobs);
+    window.addEventListener("load", updatePremiumDisplay);
 </script>
-
-
 
     <div class="box">
       <h2>Recent Job Listings</h2>
@@ -480,6 +560,8 @@
               <label for="jobExperienceFilter">Experience</label>
               <select id="jobExperienceFilter" onchange="filterJobs()">
                 <option value="">All experience levels</option>
+                <option value="0">0 years</option>
+                <option value="1">1 year</option>
                 <option value="2">2 years</option>
                 <option value="4">4 years</option>
                 <option value="6">6 years</option>
@@ -497,6 +579,12 @@
                 <option value="Python">Python</option>
                 <option value="Sales">Sales</option>
                 <option value="SQL">SQL</option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Cyber Security">Cyber Security</option>
+                <option value="Project Management">Project Management</option>
+                <option value="Communication">Communication</option>
               </select>
             </div>
             <div class="search_actions">
@@ -549,6 +637,52 @@
           <span class="job_tag">Brisbane, QLD</span>
         </div>
       </div>
+      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Front End Web Developer Harbour Digital Studio HTML CSS JavaScript Bachelor's Degree 1 Year Experience Hybrid Sydney NSW" data-education="Bachelor's Degree" data-experience="1" data-skills="HTML|CSS|JavaScript" onclick="openJobDetailsModal('job4')">
+        <span class="match_label premium_label">Premium Recommendation</span>
+        <h3>Front End Web Developer</h3>
+        <p><b>Company:</b> Harbour Digital Studio</p>
+        <p>Build responsive web pages, improve user interfaces, and work with designers to create accessible online experiences.</p>
+        <div class="job_meta">
+          <span class="job_tag">Bachelor's Degree</span>
+          <span class="job_tag">HTML</span>
+          <span class="job_tag">CSS</span>
+          <span class="job_tag">JavaScript</span>
+          <span class="job_tag">1 Year Experience</span>
+          <span class="job_tag">Hybrid</span>
+          <span class="job_tag">Sydney, NSW</span>
+        </div>
+      </div>
+      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Graduate Cyber Security Analyst SecurePath Consulting Cyber Security Documentation Problem Solving Bachelor's Degree 0 Years Experience Remote Canberra ACT" data-education="Bachelor's Degree" data-experience="0" data-skills="Cyber Security|Documentation|Problem Solving" onclick="openJobDetailsModal('job5')">
+        <span class="match_label premium_label">Premium Recommendation</span>
+        <h3>Graduate Cyber Security Analyst</h3>
+        <p><b>Company:</b> SecurePath Consulting</p>
+        <p>Assist with security monitoring, basic incident triage, and documentation of security controls for client systems.</p>
+        <div class="job_meta">
+          <span class="job_tag">Bachelor's Degree</span>
+          <span class="job_tag">Cyber Security</span>
+          <span class="job_tag">Documentation</span>
+          <span class="job_tag">Problem Solving</span>
+          <span class="job_tag">0 Years Experience</span>
+          <span class="job_tag">Remote</span>
+          <span class="job_tag">Canberra, ACT</span>
+        </div>
+      </div>
+      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Junior Project Coordinator Metro Systems Group Project Management Communication Excel Diploma 1 Year Experience On-site Melbourne VIC" data-education="Diploma" data-experience="1" data-skills="Project Management|Communication|Excel" onclick="openJobDetailsModal('job6')">
+        <span class="match_label premium_label">Premium Recommendation</span>
+        <h3>Junior Project Coordinator</h3>
+        <p><b>Company:</b> Metro Systems Group</p>
+        <p>Support project schedules, meeting notes, task tracking, and communication between technical and business teams.</p>
+        <div class="job_meta">
+          <span class="job_tag">Diploma</span>
+          <span class="job_tag">Project Management</span>
+          <span class="job_tag">Communication</span>
+          <span class="job_tag">Excel</span>
+          <span class="job_tag">1 Year Experience</span>
+          <span class="job_tag">On-site</span>
+          <span class="job_tag">Melbourne, VIC</span>
+        </div>
+      </div>
+
     </div>
 
 <div id="jobDetailsModal" class="modal">
