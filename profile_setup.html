@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="styles.css">
 
 </head>
-<body>
+<body class="setup_page">
   <div class="header">
     <div>
       <h1>uMatch Profile Setup</h1>
@@ -403,7 +403,12 @@
           contactNumber: formData.get("businessContactNumber"),
           location: formData.get("businessLocation"),
           industry: formData.get("businessIndustry"),
-          description: formData.get("businessDescription")
+          description: formData.get("businessDescription"),
+          
+          isPremiumMember: setupContext.isPremiumMember === true
+
+
+          
         };
         targetPage = "business_view_profile.html";
       } else {
@@ -419,11 +424,15 @@
           setupMode: candidateSetupMode,
           resumeFileName: formData.get("candidateResume") && formData.get("candidateResume").name
             ? formData.get("candidateResume").name
-            : ""
+            : "",
+          isPremiumMember: setupContext.isPremiumMember === true
+
         };
         targetPage = "candidate_view_profile.html";
       }
 
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("isPremiumMember", savedProfile.isPremiumMember ? "true" : "false");
       sessionStorage.setItem("completedProfileSetup", JSON.stringify(savedProfile));
       sessionStorage.removeItem("pendingProfileSetup");
       document.getElementById("setupStatus").textContent = "Profile setup complete. Redirecting you now.";
