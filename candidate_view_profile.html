@@ -17,7 +17,8 @@
     </div>
     <div class="header_right">
       <div>Welcome Alex</div>
-      <button type="button" class="header_logout_button">Logout</button>
+      <button id="premiumHeaderButton" type="button" class="blue_button header_action_button premium_header_button" onclick="openPremiumModal()">Become Premium</button>
+      <button type="button" class="header_logout_button" onclick="logoutDemoUser()">Logout</button>
     </div>
   </div>
 
@@ -45,7 +46,6 @@
       </div>
     </div>
 
-    
     <div class="box">
       <h2>Saved Listings</h2>
       <div id="jobCard-job1" class="listing_box clickable" onclick="openJobDetailsModal('job1')">
@@ -91,6 +91,37 @@
           <span class="job_tag">Brisbane, QLD</span>
         </div>
       </div>
+      <div id="jobCard-job4" class="listing_box clickable premium_job hidden-field" onclick="openJobDetailsModal('job4')">
+        <span class="match_label premium_label">Premium Match</span>
+        <h3>Front End Web Developer</h3>
+        <p><b>Company:</b> Harbour Digital Studio</p>
+        <p>Build responsive web pages, improve user interfaces, and work with designers to create accessible online experiences.</p>
+        <div class="job_meta">
+          <span class="job_tag">Bachelor's Degree</span>
+          <span class="job_tag">HTML</span>
+          <span class="job_tag">CSS</span>
+          <span class="job_tag">JavaScript</span>
+          <span class="job_tag">3 Year Experience</span>
+          <span class="job_tag">Hybrid</span>
+          <span class="job_tag">Sydney, NSW</span>
+        </div>
+      </div>
+      <div id="jobCard-job5" class="listing_box clickable premium_job hidden-field" onclick="openJobDetailsModal('job5')">
+        <span class="match_label premium_label">Premium Match</span>
+        <h3>Graduate Cyber Security Analyst</h3>
+        <p><b>Company:</b> SecurePath Consulting</p>
+        <p>Assist with security monitoring, basic incident triage, and documentation of security controls for client systems.</p>
+        <div class="job_meta">
+          <span class="job_tag">Bachelor's Degree</span>
+          <span class="job_tag">Cyber Security</span>
+          <span class="job_tag">Documentation</span>
+          <span class="job_tag">Problem Solving</span>
+          <span class="job_tag">0 Years Experience</span>
+          <span class="job_tag">Remote</span>
+          <span class="job_tag">Canberra, ACT</span>
+        </div>
+      </div>
+
     </div>
 
     <div id="jobDetailsModal" class="modal">
@@ -222,6 +253,23 @@
     </div>
   </div>
 
+
+    <div id="premiumModal" class="modal">
+      <div class="modal_content premium_modal">
+        <span class="close_button" onclick="closePremiumModal()" title="Close Premium Signup">&times;</span>
+        <span class="match_label premium_label">Premium</span>
+        <h2>Become a Premium Member</h2>
+        <p>Sign up to premium to unlock extra recommended jobs in your saved listings.</p>
+        <div class="helper_text">
+          <b>Premium benefit:</b> premium members see more recommendations.
+        </div>
+        <div class="button_row">
+          <button type="button" class="blue_button" onclick="signUpToPremium()">Sign Up to Premium</button>
+          <button type="button" class="red_button" onclick="closePremiumModal()">Maybe Later</button>
+        </div>
+      </div>
+    </div>
+
   <script>
     var activeJobId = null;
     var jobDetailsData = {
@@ -251,6 +299,24 @@
         companyInfo: "Cloud Forge Systems builds cloud platforms and internal developer tooling for enterprise technology teams.",
         responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability.",
         businessId: "cloudForge"
+      },
+      job4: {
+        title: "Front End Web Developer",
+        company: "Harbour Digital Studio",
+        description: "Build responsive web pages, improve user interfaces, and work with designers to create accessible online experiences.",
+        meta: ["Bachelor's Degree", "HTML", "CSS", "JavaScript", "1 Year Experience", "Hybrid", "Sydney, NSW"],
+        companyInfo: "Harbour Digital Studio creates websites and online platforms for Australian small businesses.",
+        responsibilities: "Key focus: front-end development, page styling, accessibility improvements, and teamwork with designers.",
+        businessId: "harbourDigital"
+      },
+      job5: {
+        title: "Graduate Cyber Security Analyst",
+        company: "SecurePath Consulting",
+        description: "Assist with security monitoring, basic incident triage, and documentation of security controls for client systems.",
+        meta: ["Bachelor's Degree", "Cyber Security", "Documentation", "Problem Solving", "0 Years Experience", "Remote", "Canberra, ACT"],
+        companyInfo: "SecurePath Consulting supports organisations with cyber security reviews, monitoring, and security process improvement.",
+        responsibilities: "Key focus: alert review, security documentation, client support, and learning defensive security practices.",
+        businessId: "securePath"
       }
     };
 
@@ -281,6 +347,24 @@
         contact: "Emily Carter, Engineering Recruitment Lead",
         email: "talent@cloudforge.example",
         about: "Cloud Forge Systems builds cloud platforms and internal developer tools for enterprise technology teams."
+      },
+      harbourDigital: {
+        name: "Harbour Digital Studio",
+        industry: "Web Design and Development",
+        location: "Sydney, NSW",
+        workMode: "Hybrid",
+        contact: "Mia Brooks, Hiring Coordinator",
+        email: "careers@harbourdigital.example",
+        about: "Harbour Digital Studio creates websites and online platforms for Australian small businesses."
+      },
+      securePath: {
+        name: "SecurePath Consulting",
+        industry: "Cyber Security Consulting",
+        location: "Canberra, ACT",
+        workMode: "Remote",
+        contact: "Noah Evans, Security Recruitment Lead",
+        email: "careers@securepath.example",
+        about: "SecurePath Consulting supports organisations with cyber security reviews, monitoring, and security process improvement."
       }
     };
 
@@ -430,11 +514,54 @@
       }
     });
 
+
+    function checkPremiumMembership() {
+      return localStorage.getItem("isPremiumMember") === "true";
+    }
+
+    function updatePremiumDisplay() {
+      var isPremium = checkPremiumMembership();
+      var premiumHeaderButton = document.getElementById("premiumHeaderButton");
+      var premiumJobs = document.querySelectorAll(".premium_job");
+
+      premiumJobs.forEach(function(card) {
+        card.style.display = isPremium ? "block" : "none";
+      });
+
+      if (premiumHeaderButton) {
+        premiumHeaderButton.textContent = isPremium ? "Premium Active" : "Become Premium";
+        premiumHeaderButton.classList.toggle("premium_active_button", isPremium);
+      }
+    }
+
+    function openPremiumModal() {
+      document.getElementById("premiumModal").style.display = "block";
+    }
+
+    function closePremiumModal() {
+      document.getElementById("premiumModal").style.display = "none";
+    }
+
+    function signUpToPremium() {
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("isPremiumMember", "true");
+      closePremiumModal();
+      updatePremiumDisplay();
+      alert("Premium membership is now active. Extra recommendations are now visible.");
+    }
+
+    function logoutDemoUser() {
+      localStorage.setItem("isLoggedIn", "false");
+      localStorage.setItem("isPremiumMember", "false");
+      updatePremiumDisplay();
+    }
+
     window.onclick = function(event) {
       var editProfileModal = document.getElementById("editProfileModal");
       var resumeModal = document.getElementById("resumeModal");
       var jobDetailsModal = document.getElementById("jobDetailsModal");
       var businessProfileModal = document.getElementById("businessProfileModal");
+      var premiumModal = document.getElementById("premiumModal");
 
       if (event.target == editProfileModal) {
         closeEditProfileModal();
@@ -451,7 +578,12 @@
       if (event.target == businessProfileModal) {
         closeBusinessProfileModal();
       }
+
+      if (event.target == premiumModal) {
+        closePremiumModal();
+      }
     }
+    window.addEventListener("load", updatePremiumDisplay);
   </script>
 
 </body>
