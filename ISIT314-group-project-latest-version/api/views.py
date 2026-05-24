@@ -5,58 +5,154 @@ from rest_framework import status
 from .models import Candidate, Job
 from .serializers import CandidateSerializer, JobSerializer
 from .services import MatchingService
+from difflib import SequenceMatcher
+
+def fuzzy_match(keyword, text):
+    if not keyword or not text:
+        return False
+
+    keyword = keyword.lower().strip()
+    text = text.lower().strip()
+
+    if keyword in text:
+        return True
+
+    words = text.split()
+
+    for word in words:
+        similarity = SequenceMatcher(None, keyword, word).ratio()
+        if similarity >= 0.75:
+            return True
+
+    return False
 
 # Candidate Views
 class CandidateListCreateView(APIView):
 
-    def get(self, request):
-        skill = request.GET.get('skill')
-        education = request.GET.get('education')
+        def get(self, request):
+            keyword = request.GET.get('keyword')
+            skill = request.GET.get('skill')
+            education = request.GET.get('education')
+            experience = request.GET.get('experience')
+            location = request.GET.get('location')
+            mode = request.GET.get('mode')
 
-        candidates = Candidate.objects.all()
+            candidates = Candidate.objects.all()
 
-        if skill:
-            candidates = candidates.filter(skills__contains=[skill])
-        if education:
-            candidates = candidates.filter(education=education)
+            if keyword:
+                candidates = candidates.filter(
+                    name__icontains=keyword
+                ) | candidates.filter(
+                    contact__icontains=keyword
+                ) | candidates.filter(
+                    education__icontains=keyword
+                ) | candidates.filter(
+                    major__icontains=keyword
+                ) | candidates.filter(
+                    preferred_location__icontains=keyword
+                )
 
-        serializer = CandidateSerializer(candidates, many=True)
-        return Response(serializer.data)
+            if skill:
+                candidates = candidates.filter(skills__contains=[skill])
 
-    def post(self, request):
-        serializer = CandidateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if education:
+                candidates = candidates.filter(education__iexact=education)
+
+            if experience:
+                candidates = candidates.filter(experience__gte=experience)
+
+            if location:
+                candidates = candidates.filter(preferred_location__icontains=location)
+
+            if mode:
+                candidates = candidates.filter(preferred_working_mode__iexact=mode)
+
+            if keyword:
+                candidates = [
+                    candidate for candidate in candidates
+                    if fuzzy_match(keyword, candidate.name)
+                    or fuzzy_match(keyword, candidate.contact)
+                    or fuzzy_match(keyword, candidate.education)
+                    or fuzzy_match(keyword, candidate.major)
+                    or fuzzy_match(keyword, candidate.preferred_location)
+                    or any(fuzzy_match(keyword, skill) for skill in candidate.skills)
+                ]
+
+            serializer = CandidateSerializer(candidates, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        def post(self, request):
+            serializer = CandidateSerializer(data=request.data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class JobListCreateView(APIView):
 
-    def get(self, request):
-        keyword = request.GET.get('keyword')
-        mode = request.GET.get('mode')
-        location = request.GET.get('location')
+        def get(self, request):
+            keyword = request.GET.get('keyword')
+            mode = request.GET.get('mode')
+            location = request.GET.get('location')
+            education = request.GET.get('education')
+            experience = request.GET.get('experience')
+            skill = request.GET.get('skill')
 
-        jobs = Job.objects.all()
+            jobs = Job.objects.all()
 
-        if keyword:
-            jobs = jobs.filter(description__icontains=keyword)
-        if mode:
-            jobs = jobs.filter(mode__iexact=mode)
-        if location:
-            jobs = jobs.filter(location__iexact=location)
+            if keyword:
+                jobs = jobs.filter(
+                    title__icontains=keyword
+                ) | jobs.filter(
+                    company__icontains=keyword
+                ) | jobs.filter(
+                    description__icontains=keyword
+                ) | jobs.filter(
+                    education__icontains=keyword
+                ) | jobs.filter(
+                    location__icontains=keyword
+                )
 
-        serializer = JobSerializer(jobs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            if mode:
+                jobs = jobs.filter(mode__iexact=mode)
 
-    def post(self, request):
-        serializer = JobSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if location:
+                jobs = jobs.filter(location__icontains=location)
 
+            if education:
+                jobs = jobs.filter(education__iexact=education)
+
+            if experience:
+                jobs = jobs.filter(experience__lte=experience)
+
+            if skill:
+                jobs = jobs.filter(skills__contains=[skill])
+
+            if keyword:
+                jobs = [
+                    job for job in jobs
+                    if fuzzy_match(keyword, job.title)
+                    or fuzzy_match(keyword, job.company)
+                    or fuzzy_match(keyword, job.description)
+                    or fuzzy_match(keyword, job.education)
+                    or fuzzy_match(keyword, job.location)
+                    or any(fuzzy_match(keyword, skill) for skill in job.skills)
+                ]
+
+            serializer = JobSerializer(jobs, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        def post(self, request):
+            serializer = JobSerializer(data=request.data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Job Views
 class JobRecommendationView(APIView):
@@ -107,5 +203,5 @@ class CandidateRecommendationView(APIView):
                 "score": item['score']
             })
 
-        return Response(response_data, status)
+        return Response(response_data, status=status.HTTP_200_OK)
     
