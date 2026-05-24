@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>uMatch Profile Setup</title>
   <link rel="stylesheet" href="styles.css">
-
 </head>
 <body class="setup_page">
   <div class="header">
@@ -12,7 +11,7 @@
       <h1>uMatch Profile Setup</h1>
       <p>Finish your account so the platform can personalise your experience.</p>
     </div>
-    <button class="back_button" type="button" onclick="window.location.href='Main.html'">Back to Home</button>
+    <button class="back_button" type="button" onclick="window.location.href='main.html'">Back to Home</button>
   </div>
 
   <div class="main">
@@ -156,7 +155,7 @@
           </div>
 
           <div class="button_row">
-            <button class="secondary_button" type="button" onclick="window.location.href='Main.html'">Finish Later</button>
+            <button class="secondary_button" type="button" onclick="window.location.href='main.html'">Finish Later</button>
             <button class="primary_button" type="submit">Complete Setup</button>
           </div>
 
@@ -404,13 +403,9 @@
           location: formData.get("businessLocation"),
           industry: formData.get("businessIndustry"),
           description: formData.get("businessDescription"),
-          
           isPremiumMember: setupContext.isPremiumMember === true
-
-
-          
         };
-        targetPage = "business_view_profile.html";
+        targetPage = "business.html";
       } else {
         savedProfile = {
           accountType: "candidate",
@@ -426,9 +421,8 @@
             ? formData.get("candidateResume").name
             : "",
           isPremiumMember: setupContext.isPremiumMember === true
-
         };
-        targetPage = "candidate_view_profile.html";
+        targetPage = "candidate.html";
       }
 
       localStorage.setItem("isLoggedIn", "true");
