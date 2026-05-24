@@ -15,20 +15,32 @@ class MatchingService:
 
         score += max(0, 5 - abs(candidate.experience - job.experience))
 
+        if candidate.preferred_working_mode == job.mode:
+            score += 1
+
+        if candidate.preferred_location.lower() == job.location.lower():
+            score += 1
+
         return score
 
-    def recommend_jobs(self, candidate, jobs, top_k=10):
+    def recommend_jobs(self, candidate, jobs):
         ranked = sorted([
             {"job": job, "score": self.calculate_score(candidate, job)}
             for job in jobs
-        ], key=lambda x: x['score'], reverse=True)
+        ], key=lambda x: x["score"], reverse=True)
 
-        return ranked[:top_k]
+        if candidate.membership:
+            return ranked
 
-    def recommend_candidates(self, job, candidates, top_k=10):
+        return ranked[:10]
+
+    def recommend_candidates(self, job, candidates):
         ranked = sorted([
-            {"candidate": c, "score": self.calculate_score(c, job)}
-            for c in candidates
-        ], key=lambda x: x['score'], reverse=True)
+            {"candidate": candidate, "score": self.calculate_score(candidate, job)}
+            for candidate in candidates
+        ], key=lambda x: x["score"], reverse=True)
 
-        return ranked[:top_k]
+        if job.membership:
+            return ranked
+
+        return ranked[:10]
