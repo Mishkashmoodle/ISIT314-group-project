@@ -10,7 +10,7 @@
 
   <div class="header">
     <div>
-          <button class="blue_button" onclick="window.location.href='main.html'">
+          <button class="blue_button" onclick="window.location.href='Main.html'">
       < back to home
     </button>
     <h1>uMatch - Your Profile</h1>
@@ -407,6 +407,9 @@
 
       document.getElementById("profilePreferredLocation").textContent = preferredLocation;
       document.getElementById("profilePreferredWorkMode").textContent = preferredWorkMode;
+      localStorage.setItem("currentUserRole", "candidate");
+      localStorage.setItem("currentUserProfilePage", "candidate_view_profile.html");
+      localStorage.setItem("currentUserDisplayName", fullName);
 
       editProfileStatus.textContent = "Profile updated for " + fullName + ".";
     }
@@ -519,6 +522,16 @@
       return localStorage.getItem("isPremiumMember") === "true";
     }
 
+    function syncCandidateAuthState() {
+      var profileName = document.getElementById("profileName").textContent;
+
+      sessionStorage.setItem("authSessionActive", "true");
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("currentUserRole", "candidate");
+      localStorage.setItem("currentUserProfilePage", "candidate_view_profile.html");
+      localStorage.setItem("currentUserDisplayName", profileName);
+    }
+
     function updatePremiumDisplay() {
       var isPremium = checkPremiumMembership();
       var premiumHeaderButton = document.getElementById("premiumHeaderButton");
@@ -545,6 +558,8 @@
     function signUpToPremium() {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("isPremiumMember", "true");
+      sessionStorage.setItem("authSessionActive", "true");
+      syncCandidateAuthState();
       closePremiumModal();
       updatePremiumDisplay();
       alert("Premium membership is now active. Extra recommendations are now visible.");
@@ -553,6 +568,7 @@
     function logoutDemoUser() {
       localStorage.setItem("isLoggedIn", "false");
       localStorage.setItem("isPremiumMember", "false");
+      sessionStorage.removeItem("authSessionActive");
       updatePremiumDisplay();
     }
 
@@ -583,7 +599,10 @@
         closePremiumModal();
       }
     }
-    window.addEventListener("load", updatePremiumDisplay);
+    window.addEventListener("load", function() {
+      syncCandidateAuthState();
+      updatePremiumDisplay();
+    });
   </script>
 
 </body>

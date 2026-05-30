@@ -14,9 +14,8 @@
     </div>
     <div class="header_auth">
         <p>For personalised listings</p>
+        <div id="mainAuthActions" class="header_actions"></div>
         <div class="header_actions">
-            <button class="blue_button header_action_button" type="button" onclick="openModal('id01', true)">Login</button>
-            <button class="blue_button header_action_button" type="button" onclick="openModal('id02', true)">Create Account</button>
             <button id="premiumHeaderButton" class="blue_button header_action_button premium_header_button" type="button" onclick="openModal('premiumModal', true)">Become Premium</button>
         </div>
     </div>
@@ -42,7 +41,7 @@
             </label>
         </div>
 
-        <div class="container modal_footer">
+        <div class="container modal_footer login_footer">
             <button type="button" class="blue_button full_width_button" onclick="swapModal('id01', 'id02')">Create Account</button>
             <button type="button" onclick="closeModal('id01')" class="cancelbtn red_button">Cancel</button>
         </div>
@@ -83,7 +82,7 @@
 
             <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
 
-            <div class="clearfix">
+            <div class="container modal_footer signup_footer">
                 <button type="button" onclick="swapModal('id02', 'id01')" class="cancelbtn blue_button full_width_button">Already have an account?</button>
                 <button type="submit" class="signupbtn blue_button full_width_button">Sign Up</button>
             </div>
@@ -181,6 +180,141 @@
         openModal(toModalId, false);
     }
 
+    function getStoredProfileData() {
+        var storedProfile = sessionStorage.getItem("completedProfileSetup");
+
+        if (!storedProfile) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(storedProfile);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getCurrentAccountRole() {
+        var storedRole = localStorage.getItem("currentUserRole");
+
+        if (storedRole) {
+            return storedRole;
+        }
+
+        var storedProfile = getStoredProfileData();
+
+        if (storedProfile && storedProfile.accountType) {
+            return storedProfile.accountType;
+        }
+
+        return "";
+    }
+
+    function getProfilePageForRole(accountRole) {
+        if (accountRole === "business") {
+            return "business_view_profile.html";
+        }
+
+        if (accountRole === "candidate") {
+            return "candidate_view_profile.html";
+        }
+
+        return "profile_setup.html";
+    }
+
+    function getCurrentProfilePage() {
+        return localStorage.getItem("currentUserProfilePage") || getProfilePageForRole(getCurrentAccountRole());
+    }
+
+    function isAuthSessionActive() {
+        return sessionStorage.getItem("authSessionActive") === "true";
+    }
+
+    function markAuthSessionActive() {
+        sessionStorage.setItem("authSessionActive", "true");
+    }
+
+    function clearAuthSession() {
+        sessionStorage.removeItem("authSessionActive");
+    }
+
+    function renderMainHeaderActions() {
+        var authActions = document.getElementById("mainAuthActions");
+        var isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        var profilePage = getCurrentProfilePage();
+
+        if (!authActions) {
+            return;
+        }
+
+        authActions.innerHTML = "";
+
+        if (isLoggedIn) {
+            var goToProfileButton = document.createElement("button");
+            var logoutButton = document.createElement("button");
+
+            goToProfileButton.className = "blue_button header_action_button";
+            goToProfileButton.type = "button";
+            goToProfileButton.textContent = "Go to profile";
+            goToProfileButton.onclick = function() {
+                window.location.href = profilePage;
+            };
+
+            logoutButton.className = "header_logout_button";
+            logoutButton.type = "button";
+            logoutButton.textContent = "Logout";
+            logoutButton.onclick = function() {
+                logoutCurrentUser();
+            };
+
+            authActions.appendChild(goToProfileButton);
+            authActions.appendChild(logoutButton);
+            return;
+        }
+
+        var loginButton = document.createElement("button");
+        var registerButton = document.createElement("button");
+
+        loginButton.className = "blue_button header_action_button";
+        loginButton.type = "button";
+        loginButton.textContent = "Login";
+        loginButton.onclick = function() {
+            openModal("id01", true);
+        };
+
+        registerButton.className = "blue_button header_action_button";
+        registerButton.type = "button";
+        registerButton.textContent = "Create Account";
+        registerButton.onclick = function() {
+            openModal("id02", true);
+        };
+
+        authActions.appendChild(loginButton);
+        authActions.appendChild(registerButton);
+    }
+
+    function syncCurrentUserRole(accountRole, displayName) {
+        if (accountRole) {
+            localStorage.setItem("currentUserRole", accountRole);
+            localStorage.setItem("currentUserProfilePage", getProfilePageForRole(accountRole));
+        }
+
+        if (displayName) {
+            localStorage.setItem("currentUserDisplayName", displayName);
+        }
+    }
+
+    function logoutCurrentUser() {
+        localStorage.setItem("isLoggedIn", "false");
+        localStorage.setItem("isPremiumMember", "false");
+        localStorage.removeItem("currentUserRole");
+        localStorage.removeItem("currentUserProfilePage");
+        localStorage.removeItem("currentUserDisplayName");
+        clearAuthSession();
+        renderMainHeaderActions();
+        updatePremiumDisplay();
+    }
+
     function openJobDetailsModal(jobId) {
         currentJobId = jobId; // Set current job ID
         var job = jobDetailsData[jobId];
@@ -221,9 +355,28 @@
         return localStorage.getItem("isPremiumMember") === "true";
     }
 
+    function updatePremiumDisplay() {
+        var isPremium = checkPremiumMembership();
+        var premiumHeaderButton = document.getElementById("premiumHeaderButton");
+
+        if (premiumHeaderButton) {
+            premiumHeaderButton.textContent = isPremium ? "Premium Active" : "Become Premium";
+            premiumHeaderButton.classList.toggle("premium_active_button", isPremium);
+        }
+
+        filterJobs();
+    }
+
     function handleLoginSubmit(event) {
+        var formData = new FormData(event.target);
+        var username = formData.get("uname");
+        var storedRole = getCurrentAccountRole() || "candidate";
+
         event.preventDefault();
         localStorage.setItem("isLoggedIn", "true");
+        markAuthSessionActive();
+        syncCurrentUserRole(storedRole, username);
+        renderMainHeaderActions();
         alert('Login is currently a placeholder in this demo.');
         
         // Check if there's a pending application
@@ -251,12 +404,16 @@
         var email = formData.get("email");
 
         localStorage.setItem("isLoggedIn", "true");
+        markAuthSessionActive();
+        syncCurrentUserRole(accountType, email);
+        localStorage.setItem("currentUserProfilePage", "profile_setup.html");
 
         sessionStorage.setItem("pendingProfileSetup", JSON.stringify({
             accountType: accountType,
             email: email
         }));
 
+        renderMainHeaderActions();
         closeModal('id02');
         window.location.href = "profile_setup.html";
         return false;
@@ -415,30 +572,19 @@
         });
     }
 
-    function updatePremiumDisplay() {
-        var premiumHeaderButton = document.getElementById("premiumHeaderButton");
-        var isPremium = checkPremiumMembership();
-
-        if (premiumHeaderButton) {
-            premiumHeaderButton.textContent = isPremium ? "Premium Active" : "Become Premium";
-            premiumHeaderButton.classList.toggle("premium_active_button", isPremium);
-        }
-
-        filterJobs();
-    }
-
     function signUpToPremium() {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("isPremiumMember", "true");
+        markAuthSessionActive();
+        syncCurrentUserRole(getCurrentAccountRole() || "candidate");
         closeModal("premiumModal");
+        renderMainHeaderActions();
         updatePremiumDisplay();
         alert("Premium membership is now active. Extra recommendations are now visible.");
     }
 
     function logoutDemoUser() {
-        localStorage.setItem("isLoggedIn", "false");
-        localStorage.setItem("isPremiumMember", "false");
-        updatePremiumDisplay();
+        logoutCurrentUser();
     }
 
     function filterJobs() {
@@ -533,7 +679,14 @@
     }
 
     setAccountType("candidate");
-    window.addEventListener("load", updatePremiumDisplay);
+    window.addEventListener("load", function() {
+        if (!isAuthSessionActive()) {
+            logoutCurrentUser();
+        }
+        renderMainHeaderActions();
+        updatePremiumDisplay();
+        filterJobs();
+    });
 </script>
 
     <div class="box">

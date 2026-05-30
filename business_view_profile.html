@@ -10,13 +10,14 @@
 
   <div class="header">
     <div>
-    <button class="blue_button" onclick="window.location.href='main.html'">
+    <button class="blue_button" onclick="window.location.href='Main.html'">
       < back to home
     </button>
     <h1>uMatch - Business Profile</h1>
     </div>
     <div class="header_right">
       <div id="businessWelcomeMessage">Welcome Bright Insights</div>
+      <button id="premiumHeaderButton" type="button" class="blue_button header_action_button premium_header_button" onclick="openPremiumModal()">Become a Member</button>
       <button type="button" class="header_logout_button" onclick="logoutDemoUser()">Logout</button>
     </div>
   </div>
@@ -266,6 +267,24 @@
       </div>
     </div>
 
+    </div>
+
+  <div id="premiumModal" class="modal">
+    <div class="modal_content animate premium_modal">
+      <span onclick="closePremiumModal()" class="close_button" title="Close Member Signup">&times;</span>
+      <div class="container">
+        <span class="match_label premium_label">Member</span>
+        <h2>Become a Member</h2>
+        <p>Unlock premium visibility and keep your business account connected across the platform.</p>
+        <div class="helper_text">
+          <b>Member benefit:</b> access premium profile actions and keep your logged-in state consistent when returning to the main page.
+        </div>
+        <div class="button_row">
+          <button type="button" class="blue_button" onclick="signUpToPremium()">Become a Member</button>
+          <button type="button" class="red_button" onclick="closePremiumModal()">Maybe Later</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -535,6 +554,11 @@
       }
 
       businessName = profileData.businessName || "Business";
+      sessionStorage.setItem("authSessionActive", "true");
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("currentUserRole", "business");
+      localStorage.setItem("currentUserProfilePage", "business_view_profile.html");
+      localStorage.setItem("currentUserDisplayName", businessName);
 
       document.getElementById("businessWelcomeMessage").textContent = "Welcome " + businessName;
       document.getElementById("businessProfileName").innerHTML = "<b>Business Name:</b> " + businessName;
@@ -544,6 +568,37 @@
       document.getElementById("businessProfileNumber").innerHTML = "<b>Contact Number:</b> " + (profileData.contactNumber || "Not provided");
       document.getElementById("businessProfileEmail").innerHTML = "<b>Email:</b> " + (profileData.email || "Not provided");
       document.getElementById("businessProfileDescription").innerHTML = "<b>About the Business:</b> " + (profileData.description || "Not provided");
+    }
+
+    function checkPremiumMembership() {
+      return localStorage.getItem("isPremiumMember") === "true";
+    }
+
+    function updatePremiumDisplay() {
+      var premiumHeaderButton = document.getElementById("premiumHeaderButton");
+      var isPremium = checkPremiumMembership();
+
+      if (premiumHeaderButton) {
+        premiumHeaderButton.textContent = isPremium ? "Member Active" : "Become a Member";
+        premiumHeaderButton.classList.toggle("premium_active_button", isPremium);
+      }
+    }
+
+    function openPremiumModal() {
+      document.getElementById("premiumModal").style.display = "block";
+    }
+
+    function closePremiumModal() {
+      document.getElementById("premiumModal").style.display = "none";
+    }
+
+    function signUpToPremium() {
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("isPremiumMember", "true");
+      sessionStorage.setItem("authSessionActive", "true");
+      closePremiumModal();
+      updatePremiumDisplay();
+      alert("Business membership is now active.");
     }
 
     function renderCandidateSkillSuggestions(matches) {
@@ -585,6 +640,9 @@
         return;
       }
 
+      localStorage.setItem("currentUserRole", "business");
+      localStorage.setItem("currentUserProfilePage", "business_view_profile.html");
+      localStorage.setItem("currentUserDisplayName", businessName);
       businessProfileStatus.textContent = "Profile updated for " + businessName + ".";
     }
 
@@ -856,6 +914,7 @@
       var jobPostModal = document.getElementById("jobPostModal");
       var editBusinessProfileModal = document.getElementById("editBusinessProfileModal");
       var candidateDetailsModal = document.getElementById("candidateDetailsModal");
+      var premiumModal = document.getElementById("premiumModal");
 
       if (event.target == jobPostModal) {
         closeJobPostModal();
@@ -867,6 +926,10 @@
 
       if (event.target == candidateDetailsModal) {
         closeCandidateDetailsModal();
+      }
+
+      if (event.target == premiumModal) {
+        closePremiumModal();
       }
 
       if (!document.getElementById("skillSuggestions").contains(event.target) && event.target.id !== "skillRequirement") {
@@ -884,10 +947,12 @@
 
     filterCandidates();
     loadBusinessProfile();
+    updatePremiumDisplay();
     function logoutDemoUser() {
       localStorage.setItem("isLoggedIn", "false");
       localStorage.setItem("isPremiumMember", "false");
-      window.location.href = "main.html";
+      sessionStorage.removeItem("authSessionActive");
+      window.location.href = "Main.html";
     }
   </script>
 

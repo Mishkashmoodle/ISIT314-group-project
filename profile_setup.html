@@ -11,7 +11,7 @@
       <h1>uMatch Profile Setup</h1>
       <p>Finish your account so the platform can personalise your experience.</p>
     </div>
-    <button class="back_button" type="button" onclick="window.location.href='main.html'">Back to Home</button>
+    <button class="back_button" type="button" onclick="window.location.href='Main.html'">Back to Home</button>
   </div>
 
   <div class="main">
@@ -155,7 +155,7 @@
           </div>
 
           <div class="button_row">
-            <button class="secondary_button" type="button" onclick="window.location.href='main.html'">Finish Later</button>
+            <button class="secondary_button" type="button" onclick="window.location.href='Main.html'">Finish Later</button>
             <button class="primary_button" type="submit">Complete Setup</button>
           </div>
 
@@ -393,6 +393,8 @@
       formData = new FormData(event.target);
 
       if (setupContext.accountType === "business") {
+        var businessDisplayName = formData.get("businessName") || setupContext.email || "Business";
+
         savedProfile = {
           accountType: "business",
           email: setupContext.email,
@@ -405,8 +407,13 @@
           description: formData.get("businessDescription"),
           isPremiumMember: setupContext.isPremiumMember === true
         };
-        targetPage = "business.html";
+        targetPage = "business_view_profile.html";
+        localStorage.setItem("currentUserRole", "business");
+        localStorage.setItem("currentUserProfilePage", "business_view_profile.html");
+        localStorage.setItem("currentUserDisplayName", businessDisplayName);
       } else {
+        var candidateDisplayName = formData.get("candidateFullName") || setupContext.email || "Candidate";
+
         savedProfile = {
           accountType: "candidate",
           email: setupContext.email,
@@ -422,10 +429,14 @@
             : "",
           isPremiumMember: setupContext.isPremiumMember === true
         };
-        targetPage = "candidate.html";
+        targetPage = "candidate_view_profile.html";
+        localStorage.setItem("currentUserRole", "candidate");
+        localStorage.setItem("currentUserProfilePage", "candidate_view_profile.html");
+        localStorage.setItem("currentUserDisplayName", candidateDisplayName);
       }
 
       localStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("authSessionActive", "true");
       localStorage.setItem("isPremiumMember", savedProfile.isPremiumMember ? "true" : "false");
       sessionStorage.setItem("completedProfileSetup", JSON.stringify(savedProfile));
       sessionStorage.removeItem("pendingProfileSetup");
