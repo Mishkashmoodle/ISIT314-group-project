@@ -79,6 +79,27 @@
                 <div id="candidateSkillSuggestions" class="skill_suggestions"></div>
               </div>
             </div>
+            <div class="search_field">
+              <label for="candidateLocationFilter">Location</label>
+              <select id="candidateLocationFilter" onchange="filterCandidates()">
+                <option value="">All locations</option>
+                <option value="Sydney, NSW">Sydney, NSW</option>
+                <option value="Melbourne, VIC">Melbourne, VIC</option>
+                <option value="Brisbane, QLD">Brisbane, QLD</option>
+                <option value="Perth, WA">Perth, WA</option>
+                <option value="Adelaide, SA">Adelaide, SA</option>
+                <option value="Canberra, ACT">Canberra, ACT</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="candidateWorkModeFilter">Preferred Work Mode</label>
+              <select id="candidateWorkModeFilter" onchange="filterCandidates()">
+                <option value="">All work modes</option>
+                <option value="Remote">Remote</option>
+                <option value="On-site">On-site</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
             <div class="search_actions">
               <button type="button" class="blue_button" onclick="resetCandidateFilters()">Reset Filters</button>
             </div>
@@ -86,7 +107,7 @@
         </details>
       </div>
       <p id="candidateResultsStatus" class="results_status">3 candidates found.</p>
-      <div id="candidateCard-alex" class="listing_box clickable candidate_listing_card" data-candidate-id="alex" data-search="Alex Tan Bachelor's Degree Information Systems SQL Excel Data Analysis Communication 2 years" data-education="Bachelor's Degree" data-experience="2" data-skills="SQL|Excel|Data Analysis|Communication" onclick="openCandidateDetailsModal('alex')">
+      <div id="candidateCard-alex" class="listing_box clickable candidate_listing_card" data-candidate-id="alex" data-search="Alex Tan Bachelor's Degree Information Systems SQL Excel Data Analysis Communication 2 years Sydney NSW Hybrid" data-education="Bachelor's Degree" data-experience="2" data-skills="SQL|Excel|Data Analysis|Communication" data-location="Sydney, NSW" data-workmode="Hybrid" onclick="openCandidateDetailsModal('alex')">
         <span class="match_label">Strong Match</span>
         <h3>Alex Tan</h3>
         <p><b>Education:</b> Bachelor's Degree in Information Systems</p>
@@ -94,7 +115,7 @@
         <p><b>Skills:</b> SQL, Excel, Data Analysis, Communication</p>
         <p><b>Why this candidate fits:</b> Alex matches the required education, has the requested 2 years of experience, and already has the core analytical skills needed for the role.</p>
       </div>
-      <div id="candidateCard-priya" class="listing_box clickable candidate_listing_card" data-candidate-id="priya" data-search="Priya Nair Master's Degree Data Science Python SQL Stakeholder Management 5 years" data-education="Master's Degree" data-experience="5" data-skills="Python|SQL|Stakeholder Management" onclick="openCandidateDetailsModal('priya')">
+      <div id="candidateCard-priya" class="listing_box clickable candidate_listing_card" data-candidate-id="priya" data-search="Priya Nair Master's Degree Data Science Python SQL Stakeholder Management 5 years Brisbane QLD Remote" data-education="Master's Degree" data-experience="5" data-skills="Python|SQL|Stakeholder Management" data-location="Brisbane, QLD" data-workmode="Remote" onclick="openCandidateDetailsModal('priya')">
         <span class="match_label">Experienced Match</span>
         <h3>Priya Nair</h3>
         <p><b>Education:</b> Master's Degree in Data Science</p>
@@ -102,12 +123,36 @@
         <p><b>Skills:</b> Python, SQL, Stakeholder Management</p>
         <p><b>Why this candidate fits:</b> Priya can step into analytics projects quickly and has strong delivery experience across reporting and technical coordination.</p>
       </div>
-      <div id="candidateCard-jordan" class="listing_box clickable candidate_listing_card" data-candidate-id="jordan" data-search="Jordan Lee Diploma Retail Operations Leadership Communication Customer Service 1 year" data-education="Diploma" data-experience="1" data-skills="Leadership|Communication|Customer Service" onclick="openCandidateDetailsModal('jordan')">
+      <div id="candidateCard-jordan" class="listing_box clickable candidate_listing_card" data-candidate-id="jordan" data-search="Jordan Lee Diploma Retail Operations Leadership Communication Customer Service 1 year Melbourne VIC On-site" data-education="Diploma" data-experience="1" data-skills="Leadership|Communication|Customer Service" data-location="Melbourne, VIC" data-workmode="On-site" onclick="openCandidateDetailsModal('jordan')">
         <h3>Jordan Lee</h3>
         <p><b>Education:</b> Diploma in Retail Operations</p>
         <p><b>Experience:</b> 1 year</p>
         <p><b>Skills:</b> Leadership, Communication, Customer Service</p>
         <p><b>Why this candidate fits:</b> Jordan is better suited to customer-facing and supervision roles and may be useful for future operational openings.</p>
+      </div>
+      <div id="candidateCard-taylor" class="listing_box clickable candidate_listing_card member_candidate hidden-field" data-candidate-id="taylor" data-search="Taylor Chen Bachelor's Degree Visual Communication Figma UI UX Design Communication 3 years Sydney NSW Hybrid" data-education="Bachelor's Degree" data-experience="3" data-skills="Figma|UI/UX Design|Communication" data-location="Sydney, NSW" data-workmode="Hybrid" onclick="openCandidateDetailsModal('taylor')">
+        <span class="match_label premium_label">Member Candidate</span>
+        <h3>Taylor Chen</h3>
+        <p><b>Education:</b> Bachelor's Degree in Visual Communication</p>
+        <p><b>Experience:</b> 3 years</p>
+        <p><b>Skills:</b> Figma, UI/UX Design, Communication</p>
+        <p><b>Why this candidate fits:</b> Taylor is a strong fit for design-led roles and can support collaboration across product and creative teams.</p>
+      </div>
+      <div id="candidateCard-morgan" class="listing_box clickable candidate_listing_card member_candidate hidden-field" data-candidate-id="morgan" data-search="Morgan Patel Diploma Project Management Excel Leadership 4 years Melbourne VIC On-site" data-education="Diploma" data-experience="4" data-skills="Project Management|Excel|Leadership" data-location="Melbourne, VIC" data-workmode="On-site" onclick="openCandidateDetailsModal('morgan')">
+        <span class="match_label premium_label">Member Candidate</span>
+        <h3>Morgan Patel</h3>
+        <p><b>Education:</b> Diploma in Project Management</p>
+        <p><b>Experience:</b> 4 years</p>
+        <p><b>Skills:</b> Project Management, Excel, Leadership</p>
+        <p><b>Why this candidate fits:</b> Morgan is a practical operational match for coordination and delivery-focused roles.</p>
+      </div>
+      <div id="candidateCard-sam" class="listing_box clickable candidate_listing_card member_candidate hidden-field" data-candidate-id="sam" data-search="Sam O'Connor Master's Degree Data Science Python SQL Data Analysis 6 years Brisbane QLD Remote" data-education="Master's Degree" data-experience="6" data-skills="Python|SQL|Data Analysis" data-location="Brisbane, QLD" data-workmode="Remote" onclick="openCandidateDetailsModal('sam')">
+        <span class="match_label premium_label">Member Candidate</span>
+        <h3>Sam O'Connor</h3>
+        <p><b>Education:</b> Master's Degree in Data Science</p>
+        <p><b>Experience:</b> 6 years</p>
+        <p><b>Skills:</b> Python, SQL, Data Analysis</p>
+        <p><b>Why this candidate fits:</b> Sam brings senior analytics experience for businesses needing deeper technical support.</p>
       </div>
     </div>
 
@@ -180,6 +225,18 @@
 
           <label class="form_label" for="yearsExperience"><b>Years of Experience</b></label>
           <input class="form_input" id="yearsExperience" type="number" name="yearsExperience" min="0" step="1" placeholder="Enter minimum years of experience" required>
+
+          <label class="form_label" for="jobSalary"><b>Salary</b></label>
+          <div class="salary_slider_wrapper">
+            <input class="salary_slider" id="jobSalary" type="range" name="jobSalary" min="0" max="3" step="1" value="1" oninput="updateJobSalaryDisplay()">
+            <div class="salary_slider_labels">
+              <span>$0–60k</span>
+              <span>$60–90k</span>
+              <span>$90–120k</span>
+              <span>$120k+</span>
+            </div>
+            <p id="jobSalaryDisplay" class="status_text">Selected salary: $60–90k</p>
+          </div>
 
           <label class="form_label" for="workMode"><b>Work Mode</b></label>
           <select class="form_input" id="workMode" name="workMode" required>
@@ -320,6 +377,36 @@
         reason: "Jordan is not the closest fit for analytics work, but remains a possible match for future service or supervision openings.",
         email: "jordan.lee@example.com",
         phone: "0434 567 890"
+      },
+      taylor: {
+        name: "Taylor Chen",
+        education: "Bachelor's Degree in Visual Communication",
+        experience: "3 years",
+        skills: "Figma, UI/UX Design, Communication",
+        summary: "Taylor has strong design fundamentals and has supported product teams with wireframes, prototyping, and presentation-ready mockups.",
+        reason: "Taylor is a strong member-only candidate for digital and design-adjacent roles that need presentation and interface skills.",
+        email: "taylor.chen@example.com",
+        phone: "0445 678 901"
+      },
+      morgan: {
+        name: "Morgan Patel",
+        education: "Diploma in Project Management",
+        experience: "4 years",
+        skills: "Project Management, Excel, Leadership",
+        summary: "Morgan has delivered coordination support across operations teams and is comfortable balancing schedules, reporting, and stakeholder follow-up.",
+        reason: "Morgan is a member-only candidate suited to coordination and operations support roles.",
+        email: "morgan.patel@example.com",
+        phone: "0456 789 012"
+      },
+      sam: {
+        name: "Sam O'Connor",
+        education: "Master's Degree in Data Science",
+        experience: "6 years",
+        skills: "Python, SQL, Data Analysis",
+        summary: "Sam has advanced analytics experience and has worked across reporting, dashboarding, and data automation tasks.",
+        reason: "Sam is a member-only candidate with strong technical depth for analytics and data-led business roles.",
+        email: "sam.oconnor@example.com",
+        phone: "0467 890 123"
       }
     };
     var availableSkills = [
@@ -383,6 +470,7 @@
 
     function openJobPostModal() {
       document.getElementById("jobPostModal").style.display = "block";
+      updateJobSalaryDisplay();
     }
 
     function openEditBusinessProfileModal() {
@@ -474,27 +562,95 @@
       return matrix[b.length][a.length];
     }
 
-    function fuzzyMatches(query, searchableText) {
-      var normalizedQuery = query.trim().toLowerCase();
-      var normalizedText = searchableText.toLowerCase();
-      var words;
+    var searchSynonymMap = {
+      "software engineer": ["programmer", "coder", "developer", "swe", "software developer"],
+      "programmer": ["software engineer", "developer", "coder", "swe"],
+      "coder": ["software engineer", "developer", "programmer", "swe"],
+      "developer": ["software engineer", "programmer", "coder", "swe"],
+      "swe": ["software engineer", "developer", "programmer", "coder"],
+      "data analyst": ["data analysis", "data analytics", "analytics", "business analyst"],
+      "data analysis": ["data analyst", "data analytics", "analytics"],
+      "data analytics": ["data analyst", "data analysis", "analytics"],
+      "customer service": ["customer support", "support", "client service"],
+      "project coordinator": ["project management", "project administrator", "project assistant"]
+    };
+
+    function normalizeSearchText(value) {
+      return value.toLowerCase().replace(/[^a-z0-9\s+]/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    function addSearchTerm(targetTerms, term) {
+      var normalizedTerm = normalizeSearchText(term);
+
+      if (normalizedTerm && targetTerms.indexOf(normalizedTerm) === -1) {
+        targetTerms.push(normalizedTerm);
+      }
+    }
+
+    function expandSearchQuery(query) {
+      var normalizedQuery = normalizeSearchText(query);
+      var terms = [];
+      var queryTokens;
+      var synonymKey;
 
       if (!normalizedQuery) {
-        return true;
+        return terms;
       }
 
-      if (normalizedText.indexOf(normalizedQuery) !== -1) {
+      addSearchTerm(terms, normalizedQuery);
+
+      Object.keys(searchSynonymMap).forEach(function(key) {
+        var normalizedKey = normalizeSearchText(key);
+
+        if (normalizedQuery === normalizedKey || normalizedQuery.indexOf(normalizedKey) !== -1 || normalizedKey.indexOf(normalizedQuery) !== -1) {
+          addSearchTerm(terms, normalizedKey);
+          searchSynonymMap[key].forEach(function(alias) {
+            addSearchTerm(terms, alias);
+          });
+        }
+      });
+
+      queryTokens = normalizedQuery.split(" ").filter(Boolean);
+      queryTokens.forEach(function(token) {
+        addSearchTerm(terms, token);
+        Object.keys(searchSynonymMap).forEach(function(key) {
+          synonymKey = normalizeSearchText(key);
+
+          if (synonymKey === token || synonymKey.indexOf(token) !== -1 || token.indexOf(synonymKey) !== -1) {
+            addSearchTerm(terms, synonymKey);
+            searchSynonymMap[key].forEach(function(alias) {
+              addSearchTerm(terms, alias);
+            });
+          }
+        });
+      });
+
+      return terms;
+    }
+
+    function fuzzyMatches(query, searchableText) {
+      var normalizedText = normalizeSearchText(searchableText);
+      var expandedQueries = expandSearchQuery(query);
+      var words;
+
+      if (!expandedQueries.length) {
         return true;
       }
 
       words = normalizedText.split(/[^a-z0-9]+/).filter(Boolean);
 
-      return words.some(function(word) {
-        if (word.indexOf(normalizedQuery) !== -1 || normalizedQuery.indexOf(word) !== -1) {
+      return expandedQueries.some(function(normalizedQuery) {
+        if (normalizedText.indexOf(normalizedQuery) !== -1) {
           return true;
         }
 
-        return getEditDistance(normalizedQuery, word) <= Math.max(1, Math.floor(normalizedQuery.length / 4));
+        return words.some(function(word) {
+          if (word.indexOf(normalizedQuery) !== -1 || normalizedQuery.indexOf(word) !== -1) {
+            return true;
+          }
+
+          return getEditDistance(normalizedQuery, word) <= Math.max(1, Math.floor(normalizedQuery.length / 4));
+        });
       });
     }
 
@@ -503,10 +659,17 @@
       var educationValue = document.getElementById("candidateEducationFilter").value;
       var experienceValue = document.getElementById("candidateExperienceFilter").value;
       var skillValue = document.getElementById("candidateSkillFilter").value.trim().toLowerCase();
+      var locationValue = document.getElementById("candidateLocationFilter").value;
+      var workModeValue = document.getElementById("candidateWorkModeFilter").value;
       var candidateCards = document.querySelectorAll(".candidate_listing_card");
       var visibleCount = 0;
 
       candidateCards.forEach(function(card) {
+        if (card.classList.contains("member_candidate") && !checkPremiumMembership()) {
+          card.style.display = "none";
+          return;
+        }
+
         if (card.dataset.removed === "true") {
           card.style.display = "none";
           return;
@@ -516,8 +679,10 @@
         var educationMatch = !educationValue || card.dataset.education === educationValue;
         var experienceMatch = !experienceValue || card.dataset.experience === experienceValue;
         var skillMatch = !skillValue || card.dataset.skills.toLowerCase().indexOf(skillValue) !== -1;
+        var locationMatch = !locationValue || card.dataset.location === locationValue;
+        var workModeMatch = !workModeValue || card.dataset.workmode === workModeValue;
         var searchMatch = fuzzyMatches(searchValue, searchableText);
-        var isVisible = educationMatch && experienceMatch && skillMatch && searchMatch;
+        var isVisible = educationMatch && experienceMatch && skillMatch && locationMatch && workModeMatch && searchMatch;
 
         card.style.display = isVisible ? "inline-block" : "none";
         if (isVisible) {
@@ -535,6 +700,8 @@
       document.getElementById("candidateEducationFilter").value = "";
       document.getElementById("candidateExperienceFilter").value = "";
       document.getElementById("candidateSkillFilter").value = "";
+      document.getElementById("candidateLocationFilter").value = "";
+      document.getElementById("candidateWorkModeFilter").value = "";
       hideCandidateSkillSuggestions();
       filterCandidates();
     }
@@ -577,11 +744,18 @@
     function updatePremiumDisplay() {
       var premiumHeaderButton = document.getElementById("premiumHeaderButton");
       var isPremium = checkPremiumMembership();
+      var memberCandidates = document.querySelectorAll(".member_candidate");
 
       if (premiumHeaderButton) {
         premiumHeaderButton.textContent = isPremium ? "Member Active" : "Become a Member";
         premiumHeaderButton.classList.toggle("premium_active_button", isPremium);
       }
+
+      memberCandidates.forEach(function(card) {
+        card.style.display = isPremium ? "inline-block" : "none";
+      });
+
+      filterCandidates();
     }
 
     function openPremiumModal() {
@@ -627,6 +801,26 @@
 
     function hideCandidateSkillSuggestions() {
       document.getElementById("candidateSkillSuggestions").style.display = "none";
+    }
+
+    function getJobSalaryBand() {
+      var salaryBands = ["$0-$60k", "$60k-$90k", "$90k-$120k", "$120k+"];
+      var salarySlider = document.getElementById("jobSalary");
+      var salaryIndex = parseInt(salarySlider.value, 10);
+
+      if (isNaN(salaryIndex) || salaryIndex < 0 || salaryIndex >= salaryBands.length) {
+        salaryIndex = 1;
+      }
+
+      return salaryBands[salaryIndex];
+    }
+
+    function updateJobSalaryDisplay() {
+      var jobSalaryDisplay = document.getElementById("jobSalaryDisplay");
+
+      if (jobSalaryDisplay) {
+        jobSalaryDisplay.textContent = "Selected salary: " + getJobSalaryBand();
+      }
     }
 
     function saveBusinessProfile() {
@@ -724,6 +918,7 @@
       var jobDescription = document.getElementById("jobDescription").value.trim();
       var educationRequirement = document.getElementById("educationRequirement").value;
       var yearsExperience = document.getElementById("yearsExperience").value.trim();
+      var jobSalary = getJobSalaryBand();
       var workMode = document.getElementById("workMode").value;
       var jobLocation = document.getElementById("jobLocation").value.trim();
 
@@ -767,7 +962,7 @@
         return;
       }
 
-      setJobPostSuccess("Job post created for " + jobTitle + " in " + jobLocation + " as a " + workMode + " role requiring " + yearsExperience + " years of experience.");
+      setJobPostSuccess("Job post created for " + jobTitle + " in " + jobLocation + " as a " + workMode + " role requiring " + yearsExperience + " years of experience with a salary of " + jobSalary + ".");
     }
 
     function renderSkillSuggestions(matches) {

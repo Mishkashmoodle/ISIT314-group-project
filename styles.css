@@ -601,6 +601,72 @@ span.psw {
   padding: 0;
 }
 
+.form_section_inline {
+  margin-top: 18px;
+}
+
+.work_experience_container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.work_experience_entry {
+  background-color: #f8fbff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-medium);
+  padding: 16px;
+}
+
+.work_experience_entry_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-weight: bold;
+  color: var(--primary-dark);
+  margin-bottom: 12px;
+}
+
+.work_experience_remove_button {
+  background-color: transparent;
+  border: 1px solid var(--soft-blue-border);
+  color: var(--primary-dark);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.work_experience_remove_button:hover {
+  background-color: var(--soft-blue);
+}
+
+.work_experience_grid {
+  margin-top: 0;
+}
+
+.salary_slider_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.salary_slider {
+  width: 100%;
+  margin: 6px 0 0;
+}
+
+.salary_slider_labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted-text);
+  font-size: 13px;
+}
+
 /*CONTACT, BUSINESS, CANDIDATE PANEL */
 .contact_panel {
   display: none;

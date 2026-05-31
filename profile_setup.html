@@ -102,6 +102,25 @@
                   </div>
                 </div>
                 <div class="field">
+                  <label for="candidateSkills">Skills</label>
+                  <input id="candidateSkills" name="candidateSkills" type="text" placeholder="Example: JavaScript, Customer Service, SQL">
+                </div>
+                <div class="field">
+                  <label for="candidatePreferredLocation">Preferred Location</label>
+                  <select id="candidatePreferredLocation" name="candidatePreferredLocation">
+                    <option value="">Select a preferred location</option>
+                    <option>Sydney, NSW</option>
+                    <option>Melbourne, VIC</option>
+                    <option>Brisbane, QLD</option>
+                    <option>Perth, WA</option>
+                    <option>Adelaide, SA</option>
+                    <option>Canberra, ACT</option>
+                    <option>Wollongong, NSW</option>
+                    <option>Newcastle, NSW</option>
+                    <option>Open to multiple locations</option>
+                  </select>
+                </div>
+                <div class="field">
                   <label for="candidateExperience">Years of Experience</label>
                   <input id="candidateExperience" name="candidateExperience" type="number" min="0" step="1" placeholder="0">
                 </div>
@@ -113,6 +132,13 @@
                     <option>On-site</option>
                     <option>Hybrid</option>
                   </select>
+                </div>
+                <div class="field field_full">
+                  <div class="box_header" style="align-items: center;">
+                    <label for="candidateWorkExperienceContainer"><b>Work Experience</b></label>
+                    <button type="button" class="blue_button" onclick="addCandidateWorkExperienceEntry()">Add Work Experience</button>
+                  </div>
+                  <div id="candidateWorkExperienceContainer" class="work_experience_container"></div>
                 </div>
               </div>
             </div>
@@ -279,9 +305,16 @@
       document.getElementById("candidateContact").required = manualMode;
       document.getElementById("candidateEducation").required = manualMode;
       document.getElementById("candidateMajor").required = manualMode;
+      document.getElementById("candidateSkills").required = manualMode;
+      document.getElementById("candidatePreferredLocation").required = manualMode;
       document.getElementById("candidateExperience").required = manualMode;
       document.getElementById("candidatePreferredMode").required = manualMode;
       document.getElementById("candidateResume").required = !manualMode;
+
+      if (manualMode && !document.getElementById("candidateWorkExperienceContainer").querySelector(".work_experience_entry")) {
+        renderCandidateWorkExperienceEntries([{}]);
+      }
+
       updateSetupProgress();
     }
 
@@ -291,6 +324,8 @@
         document.getElementById("candidateContact").value.trim() &&
         document.getElementById("candidateEducation").value &&
         document.getElementById("candidateMajor").value.trim() &&
+        document.getElementById("candidateSkills").value.trim() &&
+        document.getElementById("candidatePreferredLocation").value &&
         document.getElementById("candidateExperience").value.trim() &&
         document.getElementById("candidatePreferredMode").value
       );
@@ -384,6 +419,109 @@
       document.getElementById("candidateMajorSuggestions").style.display = "none";
     }
 
+    function renderCandidateWorkExperienceEntry(entryData) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+      var entry = document.createElement("div");
+      var header = document.createElement("div");
+      var removeButton = document.createElement("button");
+      var grid = document.createElement("div");
+      var fields = [
+        { field: "jobTitle", label: "Job Title", placeholder: "Enter job title" },
+        { field: "company", label: "Company", placeholder: "Enter company" },
+        { field: "duration", label: "Duration", placeholder: "e.g. 2021-2024 or 2 years" }
+      ];
+
+      entry.className = "work_experience_entry";
+
+      header.className = "work_experience_entry_header";
+      header.textContent = "Experience Entry";
+
+      removeButton.type = "button";
+      removeButton.className = "work_experience_remove_button";
+      removeButton.textContent = "Remove";
+      removeButton.onclick = function() {
+        entry.remove();
+        if (!container.querySelector(".work_experience_entry")) {
+          renderCandidateWorkExperienceEntries([{}]);
+        }
+        updateSetupProgress();
+      };
+
+      header.appendChild(removeButton);
+      grid.className = "field_grid work_experience_grid";
+
+      fields.forEach(function(fieldConfig) {
+        var field = document.createElement("div");
+        var label = document.createElement("label");
+        var input = document.createElement("input");
+
+        field.className = "field";
+        label.textContent = fieldConfig.label;
+        input.type = "text";
+        input.placeholder = fieldConfig.placeholder;
+        input.setAttribute("data-work-field", fieldConfig.field);
+        input.value = entryData && entryData[fieldConfig.field] ? entryData[fieldConfig.field] : "";
+        input.addEventListener("input", updateSetupProgress);
+
+        field.appendChild(label);
+        field.appendChild(input);
+        grid.appendChild(field);
+      });
+
+      entry.appendChild(header);
+      entry.appendChild(grid);
+      container.appendChild(entry);
+    }
+
+    function renderCandidateWorkExperienceEntries(entries) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+      var workExperienceEntries = entries && entries.length ? entries : [{}];
+
+      container.innerHTML = "";
+      workExperienceEntries.forEach(function(entryData) {
+        renderCandidateWorkExperienceEntry(entryData);
+      });
+    }
+
+    function addCandidateWorkExperienceEntry(entryData) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+
+      if (!container.querySelector(".work_experience_entry")) {
+        renderCandidateWorkExperienceEntries([entryData || {}]);
+        updateSetupProgress();
+        return;
+      }
+
+      renderCandidateWorkExperienceEntry(entryData || {});
+      updateSetupProgress();
+    }
+
+    function collectCandidateWorkExperienceEntries() {
+      var entries = [];
+
+      document.querySelectorAll("#candidateWorkExperienceContainer .work_experience_entry").forEach(function(entry) {
+        var jobTitleInput = entry.querySelector("[data-work-field='jobTitle']");
+        var companyInput = entry.querySelector("[data-work-field='company']");
+        var durationInput = entry.querySelector("[data-work-field='duration']");
+
+        if (!jobTitleInput || !companyInput || !durationInput) {
+          return;
+        }
+
+        if (!jobTitleInput.value.trim() && !companyInput.value.trim() && !durationInput.value.trim()) {
+          return;
+        }
+
+        entries.push({
+          jobTitle: jobTitleInput.value.trim(),
+          company: companyInput.value.trim(),
+          duration: durationInput.value.trim()
+        });
+      });
+
+      return entries;
+    }
+
     function submitProfileSetup(event) {
       var formData;
       var savedProfile;
@@ -413,6 +551,7 @@
         localStorage.setItem("currentUserDisplayName", businessDisplayName);
       } else {
         var candidateDisplayName = formData.get("candidateFullName") || setupContext.email || "Candidate";
+        var candidateWorkExperience = collectCandidateWorkExperienceEntries();
 
         savedProfile = {
           accountType: "candidate",
@@ -421,8 +560,12 @@
           contact: formData.get("candidateContact"),
           education: formData.get("candidateEducation"),
           major: formData.get("candidateMajor"),
+          skills: formData.get("candidateSkills"),
           experience: formData.get("candidateExperience"),
+          preferredLocation: formData.get("candidatePreferredLocation"),
           preferredMode: formData.get("candidatePreferredMode"),
+          preferredWorkMode: formData.get("candidatePreferredMode"),
+          workExperience: candidateWorkExperience,
           setupMode: candidateSetupMode,
           resumeFileName: formData.get("candidateResume") && formData.get("candidateResume").name
             ? formData.get("candidateResume").name
@@ -496,6 +639,8 @@
       "candidateFullName",
       "candidateEducation",
       "candidateMajor",
+      "candidateSkills",
+      "candidatePreferredLocation",
       "candidateExperience",
       "candidatePreferredMode",
       "businessName",

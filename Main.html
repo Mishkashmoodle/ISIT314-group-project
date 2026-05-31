@@ -114,7 +114,9 @@
             title: "Junior Data Analyst",
             company: "Bright Insights Pty Ltd",
             description: "Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.",
-            meta: ["Bachelor's Degree", "SQL", "Excel", "Data Analysis", "2 Years Experience", "Hybrid", "Sydney, NSW"],
+            salary: "$60k-$90k",
+            jobType: "Full-time",
+            meta: ["Bachelor's Degree", "SQL", "Excel", "Data Analysis", "2 Years Experience", "Full-time", "$60k-$90k", "Hybrid", "Sydney, NSW"],
             companyInfo: "Bright Insights is an analytics consulting business that helps growing companies improve reporting, forecasting, and operational visibility.",
             responsibilities: "Key focus: dashboard support, spreadsheet analysis, SQL reporting, and stakeholder communication."
         },
@@ -122,7 +124,9 @@
             title: "Retail Store Supervisor",
             company: "City Style Retail",
             description: "Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.",
-            meta: ["Diploma", "Leadership", "Sales", "Customer Service", "4 Years Experience", "On-site", "Melbourne, VIC"],
+            salary: "$60k-$90k",
+            jobType: "Full-time",
+            meta: ["Diploma", "Leadership", "Sales", "Customer Service", "4 Years Experience", "Full-time", "$60k-$90k", "On-site", "Melbourne, VIC"],
             companyInfo: "City Style Retail operates high-traffic fashion stores and focuses on customer service and store performance.",
             responsibilities: "Key focus: shift leadership, retail operations, sales reporting, and team supervision."
         },
@@ -130,7 +134,9 @@
             title: "Senior Python Engineer",
             company: "Cloud Forge Systems",
             description: "Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.",
-            meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Remote", "Brisbane, QLD"],
+            salary: "$120k+",
+            jobType: "Full-time",
+            meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Full-time", "$120k+", "Remote", "Brisbane, QLD"],
             companyInfo: "Cloud Forge Systems builds cloud platforms and internal developer tooling for enterprise technology teams.",
             responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability."
         },
@@ -138,7 +144,9 @@
             title: "Front End Web Developer",
             company: "Harbour Digital Studio",
             description: "Build responsive web pages, improve user interfaces, and work with designers to create accessible online experiences.",
-            meta: ["Bachelor's Degree", "HTML", "CSS", "JavaScript", "1 Year Experience", "Hybrid", "Sydney, NSW"],
+            salary: "$90k-$120k",
+            jobType: "Contract",
+            meta: ["Bachelor's Degree", "HTML", "CSS", "JavaScript", "1 Year Experience", "Contract", "$90k-$120k", "Hybrid", "Sydney, NSW"],
             companyInfo: "Harbour Digital Studio creates websites and online platforms for Australian small businesses.",
             responsibilities: "Key focus: front-end development, page styling, accessibility improvements, and teamwork with designers."
         },
@@ -146,7 +154,9 @@
             title: "Graduate Cyber Security Analyst",
             company: "SecurePath Consulting",
             description: "Assist with security monitoring, basic incident triage, and documentation of security controls for client systems.",
-            meta: ["Bachelor's Degree", "Cyber Security", "Documentation", "Problem Solving", "0 Years Experience", "Remote", "Canberra, ACT"],
+            salary: "$0-$60k",
+            jobType: "Casual",
+            meta: ["Bachelor's Degree", "Cyber Security", "Documentation", "Problem Solving", "0 Years Experience", "Casual", "$0-$60k", "Remote", "Canberra, ACT"],
             companyInfo: "SecurePath Consulting supports organisations with cyber security reviews, monitoring, and security process improvement.",
             responsibilities: "Key focus: alert review, security documentation, client support, and learning defensive security practices."
         },
@@ -154,7 +164,9 @@
             title: "Junior Project Coordinator",
             company: "Metro Systems Group",
             description: "Support project schedules, meeting notes, task tracking, and communication between technical and business teams.",
-            meta: ["Diploma", "Project Management", "Communication", "Excel", "1 Year Experience", "On-site", "Melbourne, VIC"],
+            salary: "$60k-$90k",
+            jobType: "Part-time",
+            meta: ["Diploma", "Project Management", "Communication", "Excel", "1 Year Experience", "Part-time", "$60k-$90k", "On-site", "Melbourne, VIC"],
             companyInfo: "Metro Systems Group delivers business technology projects for medium-sized organisations.",
             responsibilities: "Key focus: project coordination, task tracking, stakeholder communication, and documentation."
         }
@@ -548,27 +560,95 @@
         return matrix[b.length][a.length];
     }
 
-    function fuzzyMatches(query, searchableText) {
-        var normalizedQuery = query.trim().toLowerCase();
-        var normalizedText = searchableText.toLowerCase();
-        var words;
+    var searchSynonymMap = {
+        "software engineer": ["programmer", "coder", "developer", "swe", "software developer"],
+        "programmer": ["software engineer", "developer", "coder", "swe"],
+        "coder": ["software engineer", "developer", "programmer", "swe"],
+        "developer": ["software engineer", "programmer", "coder", "swe"],
+        "swe": ["software engineer", "developer", "programmer", "coder"],
+        "data analyst": ["data analysis", "data analytics", "analytics", "business analyst"],
+        "data analysis": ["data analyst", "data analytics", "analytics"],
+        "data analytics": ["data analyst", "data analysis", "analytics"],
+        "customer service": ["customer support", "support", "client service"],
+        "project coordinator": ["project management", "project administrator", "project assistant"]
+    };
+
+    function normalizeSearchText(value) {
+        return value.toLowerCase().replace(/[^a-z0-9\s+]/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    function addSearchTerm(targetTerms, term) {
+        var normalizedTerm = normalizeSearchText(term);
+
+        if (normalizedTerm && targetTerms.indexOf(normalizedTerm) === -1) {
+            targetTerms.push(normalizedTerm);
+        }
+    }
+
+    function expandSearchQuery(query) {
+        var normalizedQuery = normalizeSearchText(query);
+        var terms = [];
+        var queryTokens;
+        var synonymKey;
 
         if (!normalizedQuery) {
-            return true;
+            return terms;
         }
 
-        if (normalizedText.indexOf(normalizedQuery) !== -1) {
+        addSearchTerm(terms, normalizedQuery);
+
+        Object.keys(searchSynonymMap).forEach(function(key) {
+            var normalizedKey = normalizeSearchText(key);
+
+            if (normalizedQuery === normalizedKey || normalizedQuery.indexOf(normalizedKey) !== -1 || normalizedKey.indexOf(normalizedQuery) !== -1) {
+                addSearchTerm(terms, normalizedKey);
+                searchSynonymMap[key].forEach(function(alias) {
+                    addSearchTerm(terms, alias);
+                });
+            }
+        });
+
+        queryTokens = normalizedQuery.split(" ").filter(Boolean);
+        queryTokens.forEach(function(token) {
+            addSearchTerm(terms, token);
+            Object.keys(searchSynonymMap).forEach(function(key) {
+                synonymKey = normalizeSearchText(key);
+
+                if (synonymKey === token || synonymKey.indexOf(token) !== -1 || token.indexOf(synonymKey) !== -1) {
+                    addSearchTerm(terms, synonymKey);
+                    searchSynonymMap[key].forEach(function(alias) {
+                        addSearchTerm(terms, alias);
+                    });
+                }
+            });
+        });
+
+        return terms;
+    }
+
+    function fuzzyMatches(query, searchableText) {
+        var normalizedText = normalizeSearchText(searchableText);
+        var expandedQueries = expandSearchQuery(query);
+        var words;
+
+        if (!expandedQueries.length) {
             return true;
         }
 
         words = normalizedText.split(/[^a-z0-9]+/).filter(Boolean);
 
-        return words.some(function(word) {
-            if (word.indexOf(normalizedQuery) !== -1 || normalizedQuery.indexOf(word) !== -1) {
+        return expandedQueries.some(function(normalizedQuery) {
+            if (normalizedText.indexOf(normalizedQuery) !== -1) {
                 return true;
             }
 
-            return getEditDistance(normalizedQuery, word) <= Math.max(1, Math.floor(normalizedQuery.length / 4));
+            return words.some(function(word) {
+                if (word.indexOf(normalizedQuery) !== -1 || normalizedQuery.indexOf(word) !== -1) {
+                    return true;
+                }
+
+                return getEditDistance(normalizedQuery, word) <= Math.max(1, Math.floor(normalizedQuery.length / 4));
+            });
         });
     }
 
@@ -592,6 +672,9 @@
         var educationValue = document.getElementById("jobEducationFilter").value;
         var experienceValue = document.getElementById("jobExperienceFilter").value;
         var skillValue = document.getElementById("jobSkillFilter").value;
+        var locationValue = document.getElementById("jobLocationFilter").value;
+        var salaryValue = document.getElementById("jobSalaryFilter").value;
+        var jobTypeValue = document.getElementById("jobTypeFilter").value;
         var jobCards = document.querySelectorAll(".job_listing_card");
         var visibleCount = 0;
 
@@ -605,8 +688,11 @@
             var educationMatch = !educationValue || card.dataset.education === educationValue;
             var experienceMatch = !experienceValue || card.dataset.experience === experienceValue;
             var skillMatch = !skillValue || card.dataset.skills.indexOf(skillValue) !== -1;
+            var locationMatch = !locationValue || card.dataset.location === locationValue;
+            var salaryMatch = !salaryValue || card.dataset.salary === salaryValue;
+            var jobTypeMatch = !jobTypeValue || card.dataset.jobtype === jobTypeValue;
             var searchMatch = fuzzyMatches(searchValue, searchableText);
-            var isVisible = educationMatch && experienceMatch && skillMatch && searchMatch;
+            var isVisible = educationMatch && experienceMatch && skillMatch && locationMatch && salaryMatch && jobTypeMatch && searchMatch;
 
             card.style.display = isVisible ? "block" : "none";
             if (isVisible) {
@@ -624,6 +710,9 @@
         document.getElementById("jobEducationFilter").value = "";
         document.getElementById("jobExperienceFilter").value = "";
         document.getElementById("jobSkillFilter").value = "";
+        document.getElementById("jobLocationFilter").value = "";
+        document.getElementById("jobSalaryFilter").value = "";
+        document.getElementById("jobTypeFilter").value = "";
         filterJobs();
     }
 
@@ -740,6 +829,38 @@
                 <option value="Communication">Communication</option>
               </select>
             </div>
+            <div class="search_field">
+              <label for="jobLocationFilter">Location</label>
+              <select id="jobLocationFilter" onchange="filterJobs()">
+                <option value="">All locations</option>
+                <option value="Sydney, NSW">Sydney, NSW</option>
+                <option value="Melbourne, VIC">Melbourne, VIC</option>
+                <option value="Brisbane, QLD">Brisbane, QLD</option>
+                <option value="Perth, WA">Perth, WA</option>
+                <option value="Adelaide, SA">Adelaide, SA</option>
+                <option value="Canberra, ACT">Canberra, ACT</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="jobSalaryFilter">Salary Range</label>
+              <select id="jobSalaryFilter" onchange="filterJobs()">
+                <option value="">All salary ranges</option>
+                <option value="$0-$60k">$0–60k</option>
+                <option value="$60k-$90k">$60–90k</option>
+                <option value="$90k-$120k">$90–120k</option>
+                <option value="$120k+">$120k+</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="jobTypeFilter">Job Type</label>
+              <select id="jobTypeFilter" onchange="filterJobs()">
+                <option value="">All job types</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Casual">Casual</option>
+              </select>
+            </div>
             <div class="search_actions">
               <button type="button" onclick="resetJobFilters()">Reset Filters</button>
             </div>
@@ -747,7 +868,7 @@
         </details>
       </div>
       <p id="jobResultsStatus" class="results_status">3 job listings found.</p>
-      <div class="listing_box clickable job_listing_card" data-search="Junior Data Analyst Bright Insights Pty Ltd SQL Excel Data Analysis Bachelor's Degree 2 Years Experience Hybrid Sydney NSW" data-education="Bachelor's Degree" data-experience="2" data-skills="SQL|Excel|Data Analysis" onclick="openJobDetailsModal('job1')">
+      <div class="listing_box clickable job_listing_card" data-search="Junior Data Analyst Bright Insights Pty Ltd SQL Excel Data Analysis Bachelor's Degree 2 Years Experience Full-time $60k-$90k Hybrid Sydney NSW" data-education="Bachelor's Degree" data-experience="2" data-skills="SQL|Excel|Data Analysis" data-location="Sydney, NSW" data-salary="$60k-$90k" data-jobtype="Full-time" onclick="openJobDetailsModal('job1')">
         <span class="match_label">Featured Listing</span>
         <h3>Junior Data Analyst</h3>
         <p><b>Company:</b> Bright Insights Pty Ltd</p>
@@ -758,11 +879,13 @@
           <span class="job_tag">Excel</span>
           <span class="job_tag">Data Analysis</span>
           <span class="job_tag">2 Years Experience</span>
+          <span class="job_tag">Full-time</span>
+          <span class="job_tag">$60k-$90k</span>
           <span class="job_tag">Hybrid</span>
           <span class="job_tag">Sydney, NSW</span>
         </div>
       </div>
-      <div class="listing_box clickable job_listing_card" data-search="Retail Store Supervisor City Style Retail Leadership Sales Customer Service Diploma 4 Years Experience On-site Melbourne VIC" data-education="Diploma" data-experience="4" data-skills="Leadership|Sales|Customer Service" onclick="openJobDetailsModal('job2')">
+      <div class="listing_box clickable job_listing_card" data-search="Retail Store Supervisor City Style Retail Leadership Sales Customer Service Diploma 4 Years Experience Full-time $60k-$90k On-site Melbourne VIC" data-education="Diploma" data-experience="4" data-skills="Leadership|Sales|Customer Service" data-location="Melbourne, VIC" data-salary="$60k-$90k" data-jobtype="Full-time" onclick="openJobDetailsModal('job2')">
         <h3>Retail Store Supervisor</h3>
         <p><b>Company:</b> City Style Retail</p>
         <p>Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.</p>
@@ -772,11 +895,13 @@
           <span class="job_tag">Sales</span>
           <span class="job_tag">Customer Service</span>
           <span class="job_tag">4 Years Experience</span>
+          <span class="job_tag">Full-time</span>
+          <span class="job_tag">$60k-$90k</span>
           <span class="job_tag">On-site</span>
           <span class="job_tag">Melbourne, VIC</span>
         </div>
       </div>
-      <div class="listing_box clickable job_listing_card" data-search="Senior Python Engineer Cloud Forge Systems Python API Design Leadership Master's Degree 6 Years Experience Remote Brisbane QLD" data-education="Master's Degree" data-experience="6" data-skills="Python|API Design|Leadership" onclick="openJobDetailsModal('job3')">
+      <div class="listing_box clickable job_listing_card" data-search="Senior Python Engineer Cloud Forge Systems Python API Design Leadership Master's Degree 6 Years Experience Full-time $120k+ Remote Brisbane QLD" data-education="Master's Degree" data-experience="6" data-skills="Python|API Design|Leadership" data-location="Brisbane, QLD" data-salary="$120k+" data-jobtype="Full-time" onclick="openJobDetailsModal('job3')">
         <h3>Senior Python Engineer</h3>
         <p><b>Company:</b> Cloud Forge Systems</p>
         <p>Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.</p>
@@ -786,11 +911,13 @@
           <span class="job_tag">API Design</span>
           <span class="job_tag">Leadership</span>
           <span class="job_tag">6 Years Experience</span>
+          <span class="job_tag">Full-time</span>
+          <span class="job_tag">$120k+</span>
           <span class="job_tag">Remote</span>
           <span class="job_tag">Brisbane, QLD</span>
         </div>
       </div>
-      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Front End Web Developer Harbour Digital Studio HTML CSS JavaScript Bachelor's Degree 1 Year Experience Hybrid Sydney NSW" data-education="Bachelor's Degree" data-experience="1" data-skills="HTML|CSS|JavaScript" onclick="openJobDetailsModal('job4')">
+      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Front End Web Developer Harbour Digital Studio HTML CSS JavaScript Bachelor's Degree 1 Year Experience Contract $90k-$120k Hybrid Sydney NSW" data-education="Bachelor's Degree" data-experience="1" data-skills="HTML|CSS|JavaScript" data-location="Sydney, NSW" data-salary="$90k-$120k" data-jobtype="Contract" onclick="openJobDetailsModal('job4')">
         <span class="match_label premium_label">Premium Recommendation</span>
         <h3>Front End Web Developer</h3>
         <p><b>Company:</b> Harbour Digital Studio</p>
@@ -801,11 +928,13 @@
           <span class="job_tag">CSS</span>
           <span class="job_tag">JavaScript</span>
           <span class="job_tag">1 Year Experience</span>
+          <span class="job_tag">Contract</span>
+          <span class="job_tag">$90k-$120k</span>
           <span class="job_tag">Hybrid</span>
           <span class="job_tag">Sydney, NSW</span>
         </div>
       </div>
-      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Graduate Cyber Security Analyst SecurePath Consulting Cyber Security Documentation Problem Solving Bachelor's Degree 0 Years Experience Remote Canberra ACT" data-education="Bachelor's Degree" data-experience="0" data-skills="Cyber Security|Documentation|Problem Solving" onclick="openJobDetailsModal('job5')">
+      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Graduate Cyber Security Analyst SecurePath Consulting Cyber Security Documentation Problem Solving Bachelor's Degree 0 Years Experience Casual $0-$60k Remote Canberra ACT" data-education="Bachelor's Degree" data-experience="0" data-skills="Cyber Security|Documentation|Problem Solving" data-location="Canberra, ACT" data-salary="$0-$60k" data-jobtype="Casual" onclick="openJobDetailsModal('job5')">
         <span class="match_label premium_label">Premium Recommendation</span>
         <h3>Graduate Cyber Security Analyst</h3>
         <p><b>Company:</b> SecurePath Consulting</p>
@@ -816,11 +945,13 @@
           <span class="job_tag">Documentation</span>
           <span class="job_tag">Problem Solving</span>
           <span class="job_tag">0 Years Experience</span>
+          <span class="job_tag">Casual</span>
+          <span class="job_tag">$0-$60k</span>
           <span class="job_tag">Remote</span>
           <span class="job_tag">Canberra, ACT</span>
         </div>
       </div>
-      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Junior Project Coordinator Metro Systems Group Project Management Communication Excel Diploma 1 Year Experience On-site Melbourne VIC" data-education="Diploma" data-experience="1" data-skills="Project Management|Communication|Excel" onclick="openJobDetailsModal('job6')">
+      <div class="listing_box clickable job_listing_card premium_job hidden-field" data-search="Junior Project Coordinator Metro Systems Group Project Management Communication Excel Diploma 1 Year Experience Part-time $60k-$90k On-site Melbourne VIC" data-education="Diploma" data-experience="1" data-skills="Project Management|Communication|Excel" data-location="Melbourne, VIC" data-salary="$60k-$90k" data-jobtype="Part-time" onclick="openJobDetailsModal('job6')">
         <span class="match_label premium_label">Premium Recommendation</span>
         <h3>Junior Project Coordinator</h3>
         <p><b>Company:</b> Metro Systems Group</p>
@@ -831,6 +962,8 @@
           <span class="job_tag">Communication</span>
           <span class="job_tag">Excel</span>
           <span class="job_tag">1 Year Experience</span>
+          <span class="job_tag">Part-time</span>
+          <span class="job_tag">$60k-$90k</span>
           <span class="job_tag">On-site</span>
           <span class="job_tag">Melbourne, VIC</span>
         </div>

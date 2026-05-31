@@ -42,6 +42,7 @@
           <p><b>Skills:</b> <span id="profileSkills">SQL, Excel, Data Analysis, Communication</span></p>
           <p><b>Preferred Location:</b> <span id="profilePreferredLocation">Sydney, NSW</span></p>
           <p><b>Preferred Work Mode:</b> <span id="profilePreferredWorkMode">Hybrid</span></p>
+          <p><b>Work Experience:</b> <span id="profileWorkExperience">No work experience added yet.</span></p>
         </div>
       </div>
     </div>
@@ -59,6 +60,8 @@
           <span class="job_tag">Excel</span>
           <span class="job_tag">Data Analysis</span>
           <span class="job_tag">2 Years Experience</span>
+          <span class="job_tag">Full-time</span>
+          <span class="job_tag">$60k-$90k</span>
           <span class="job_tag">Hybrid</span>
           <span class="job_tag">Sydney, NSW</span>
         </div>
@@ -73,6 +76,8 @@
           <span class="job_tag">Sales</span>
           <span class="job_tag">Customer Service</span>
           <span class="job_tag">4 Years Experience</span>
+          <span class="job_tag">Full-time</span>
+          <span class="job_tag">$60k-$90k</span>
           <span class="job_tag">On-site</span>
           <span class="job_tag">Melbourne, VIC</span>
         </div>
@@ -87,6 +92,8 @@
           <span class="job_tag">API Design</span>
           <span class="job_tag">Leadership</span>
           <span class="job_tag">6 Years Experience</span>
+          <span class="job_tag">Full-time</span>
+          <span class="job_tag">$120k+</span>
           <span class="job_tag">Remote</span>
           <span class="job_tag">Brisbane, QLD</span>
         </div>
@@ -102,6 +109,8 @@
           <span class="job_tag">CSS</span>
           <span class="job_tag">JavaScript</span>
           <span class="job_tag">3 Year Experience</span>
+          <span class="job_tag">Contract</span>
+          <span class="job_tag">$90k-$120k</span>
           <span class="job_tag">Hybrid</span>
           <span class="job_tag">Sydney, NSW</span>
         </div>
@@ -117,6 +126,8 @@
           <span class="job_tag">Documentation</span>
           <span class="job_tag">Problem Solving</span>
           <span class="job_tag">0 Years Experience</span>
+          <span class="job_tag">Casual</span>
+          <span class="job_tag">$0-$60k</span>
           <span class="job_tag">Remote</span>
           <span class="job_tag">Canberra, ACT</span>
         </div>
@@ -213,6 +224,14 @@
           <label class="form_label" for="candidateSkills"><b>Skills</b></label>
           <input class="form_input" id="candidateSkills" type="text" name="candidateSkills" placeholder="Example: JavaScript, Customer Service, SQL">
 
+          <div class="form_section_inline">
+            <div class="box_header">
+              <label class="form_label" style="margin-bottom: 0;"><b>Work Experience</b></label>
+              <button type="button" class="blue_button" onclick="addWorkExperienceEntry()">Add Work Experience</button>
+            </div>
+            <div id="candidateWorkExperienceContainer" class="work_experience_container"></div>
+          </div>
+
           <label class="form_label" for="candidateSummary"><b>Profile Summary</b></label>
           <textarea class="form_input" id="candidateSummary" name="candidateSummary" rows="5" placeholder="Write a short summary about your experience and goals"></textarea>
 
@@ -277,7 +296,9 @@
         title: "Junior Data Analyst",
         company: "Bright Insights Pty Ltd",
         description: "Support reporting, dashboards, and data-cleaning tasks for client projects. Work closely with analysts and stakeholders to turn raw data into useful business insights.",
-        meta: ["Bachelor's Degree", "SQL", "Excel", "Data Analysis", "2 Years Experience", "Hybrid", "Sydney, NSW"],
+        salary: "$60k-$90k",
+        jobType: "Full-time",
+        meta: ["Bachelor's Degree", "SQL", "Excel", "Data Analysis", "2 Years Experience", "Full-time", "$60k-$90k", "Hybrid", "Sydney, NSW"],
         companyInfo: "Bright Insights is an analytics consulting business that helps growing companies improve reporting, forecasting, and operational visibility.",
         responsibilities: "Key focus: dashboard support, spreadsheet analysis, SQL reporting, and stakeholder communication.",
         businessId: "brightInsights"
@@ -286,7 +307,9 @@
         title: "Retail Store Supervisor",
         company: "City Style Retail",
         description: "Lead floor staff, manage rosters, handle escalations, and maintain daily sales operations across a busy retail location.",
-        meta: ["Diploma", "Leadership", "Sales", "Customer Service", "4 Years Experience", "On-site", "Melbourne, VIC"],
+        salary: "$60k-$90k",
+        jobType: "Full-time",
+        meta: ["Diploma", "Leadership", "Sales", "Customer Service", "4 Years Experience", "Full-time", "$60k-$90k", "On-site", "Melbourne, VIC"],
         companyInfo: "City Style Retail operates high-traffic fashion stores and focuses on customer service and store performance.",
         responsibilities: "Key focus: shift leadership, retail operations, sales reporting, and team supervision.",
         businessId: "cityStyle"
@@ -295,7 +318,9 @@
         title: "Senior Python Engineer",
         company: "Cloud Forge Systems",
         description: "Design backend services, own production deployments, and mentor engineers building high-scale internal platforms.",
-        meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Remote", "Brisbane, QLD"],
+        salary: "$120k+",
+        jobType: "Full-time",
+        meta: ["Master's Degree", "Python", "API Design", "Leadership", "6 Years Experience", "Full-time", "$120k+", "Remote", "Brisbane, QLD"],
         companyInfo: "Cloud Forge Systems builds cloud platforms and internal developer tooling for enterprise technology teams.",
         responsibilities: "Key focus: backend architecture, service ownership, mentoring, and production reliability.",
         businessId: "cloudForge"
@@ -304,7 +329,9 @@
         title: "Front End Web Developer",
         company: "Harbour Digital Studio",
         description: "Build responsive web pages, improve user interfaces, and work with designers to create accessible online experiences.",
-        meta: ["Bachelor's Degree", "HTML", "CSS", "JavaScript", "1 Year Experience", "Hybrid", "Sydney, NSW"],
+        salary: "$90k-$120k",
+        jobType: "Contract",
+        meta: ["Bachelor's Degree", "HTML", "CSS", "JavaScript", "1 Year Experience", "Contract", "$90k-$120k", "Hybrid", "Sydney, NSW"],
         companyInfo: "Harbour Digital Studio creates websites and online platforms for Australian small businesses.",
         responsibilities: "Key focus: front-end development, page styling, accessibility improvements, and teamwork with designers.",
         businessId: "harbourDigital"
@@ -313,7 +340,9 @@
         title: "Graduate Cyber Security Analyst",
         company: "SecurePath Consulting",
         description: "Assist with security monitoring, basic incident triage, and documentation of security controls for client systems.",
-        meta: ["Bachelor's Degree", "Cyber Security", "Documentation", "Problem Solving", "0 Years Experience", "Remote", "Canberra, ACT"],
+        salary: "$0-$60k",
+        jobType: "Casual",
+        meta: ["Bachelor's Degree", "Cyber Security", "Documentation", "Problem Solving", "0 Years Experience", "Casual", "$0-$60k", "Remote", "Canberra, ACT"],
         companyInfo: "SecurePath Consulting supports organisations with cyber security reviews, monitoring, and security process improvement.",
         responsibilities: "Key focus: alert review, security documentation, client support, and learning defensive security practices.",
         businessId: "securePath"
@@ -368,12 +397,181 @@
       }
     };
 
+    function getStoredCandidateProfile() {
+      var storedProfile = sessionStorage.getItem("completedProfileSetup");
+
+      if (!storedProfile) {
+        return {};
+      }
+
+      try {
+        return JSON.parse(storedProfile) || {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function formatExperienceText(value) {
+      var text = String(value || "").trim();
+
+      if (!text) {
+        return "";
+      }
+
+      if (text.toLowerCase().indexOf("year") !== -1) {
+        return text;
+      }
+
+      return text + (text === "1" ? " year" : " years");
+    }
+
+    function updateProfileWorkExperienceDisplay(workExperience) {
+      var workExperienceDisplay = document.getElementById("profileWorkExperience");
+
+      if (!workExperienceDisplay) {
+        return;
+      }
+
+      if (!workExperience || !workExperience.length) {
+        workExperienceDisplay.textContent = "No work experience added yet.";
+        return;
+      }
+
+      workExperienceDisplay.textContent = workExperience.map(function(entry) {
+        var title = entry.jobTitle || "Untitled role";
+        var company = entry.company || "Unknown company";
+        var duration = entry.duration || "Duration not provided";
+
+        return title + " at " + company + " (" + duration + ")";
+      }).join("; ");
+    }
+
+    function getWorkExperienceEntries() {
+      var entries = [];
+
+      document.querySelectorAll("#candidateWorkExperienceContainer .work_experience_entry").forEach(function(entry) {
+        var jobTitleInput = entry.querySelector("[data-work-field='jobTitle']");
+        var companyInput = entry.querySelector("[data-work-field='company']");
+        var durationInput = entry.querySelector("[data-work-field='duration']");
+
+        if (!jobTitleInput || !companyInput || !durationInput) {
+          return;
+        }
+
+        if (!jobTitleInput.value.trim() && !companyInput.value.trim() && !durationInput.value.trim()) {
+          return;
+        }
+
+        entries.push({
+          jobTitle: jobTitleInput.value.trim(),
+          company: companyInput.value.trim(),
+          duration: durationInput.value.trim()
+        });
+      });
+
+      return entries;
+    }
+
+    function renderWorkExperienceEntry(entryData) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+      var entry = document.createElement("div");
+      var removeButton = document.createElement("button");
+      var entryHeader = document.createElement("div");
+      var fieldGrid = document.createElement("div");
+      var jobTitleField = document.createElement("div");
+      var companyField = document.createElement("div");
+      var durationField = document.createElement("div");
+      var jobTitleLabel = document.createElement("label");
+      var companyLabel = document.createElement("label");
+      var durationLabel = document.createElement("label");
+      var jobTitleInput = document.createElement("input");
+      var companyInput = document.createElement("input");
+      var durationInput = document.createElement("input");
+      var fallbackEntry = entryData || {};
+
+      entry.className = "work_experience_entry";
+
+      entryHeader.className = "work_experience_entry_header";
+      entryHeader.textContent = "Experience Entry";
+
+      removeButton.type = "button";
+      removeButton.className = "work_experience_remove_button";
+      removeButton.textContent = "Remove";
+      removeButton.onclick = function() {
+        entry.remove();
+        if (!container.querySelector(".work_experience_entry")) {
+          renderWorkExperienceEntry({});
+        }
+      };
+
+      entryHeader.appendChild(removeButton);
+
+      fieldGrid.className = "field_grid work_experience_grid";
+
+      jobTitleField.className = "field";
+      companyField.className = "field";
+      durationField.className = "field";
+
+      jobTitleLabel.textContent = "Job Title";
+      companyLabel.textContent = "Company";
+      durationLabel.textContent = "Duration";
+
+      jobTitleInput.type = "text";
+      jobTitleInput.className = "form_input";
+      jobTitleInput.placeholder = "Enter job title";
+      jobTitleInput.setAttribute("data-work-field", "jobTitle");
+      jobTitleInput.value = fallbackEntry.jobTitle || "";
+
+      companyInput.type = "text";
+      companyInput.className = "form_input";
+      companyInput.placeholder = "Enter company";
+      companyInput.setAttribute("data-work-field", "company");
+      companyInput.value = fallbackEntry.company || "";
+
+      durationInput.type = "text";
+      durationInput.className = "form_input";
+      durationInput.placeholder = "e.g. 2021-2024 or 2 years";
+      durationInput.setAttribute("data-work-field", "duration");
+      durationInput.value = fallbackEntry.duration || "";
+
+      jobTitleField.appendChild(jobTitleLabel);
+      jobTitleField.appendChild(jobTitleInput);
+      companyField.appendChild(companyLabel);
+      companyField.appendChild(companyInput);
+      durationField.appendChild(durationLabel);
+      durationField.appendChild(durationInput);
+
+      fieldGrid.appendChild(jobTitleField);
+      fieldGrid.appendChild(companyField);
+      fieldGrid.appendChild(durationField);
+
+      entry.appendChild(entryHeader);
+      entry.appendChild(fieldGrid);
+      container.appendChild(entry);
+    }
+
+    function renderWorkExperienceEntries(entries) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+      var workExperienceEntries = entries && entries.length ? entries : [{}];
+
+      container.innerHTML = "";
+      workExperienceEntries.forEach(function(entryData) {
+        renderWorkExperienceEntry(entryData);
+      });
+    }
+
     function openEditProfileModal() {
-      document.getElementById("candidateFullName").value = document.getElementById("profileName").textContent;
-      document.getElementById("candidateEducation").value = "Bachelor's Degree";
-      document.getElementById("candidatePreferredLocation").value = document.getElementById("profilePreferredLocation").textContent;
-      document.getElementById("candidatePreferredWorkMode").value = document.getElementById("profilePreferredWorkMode").textContent;
-      document.getElementById("candidateSkills").value = document.getElementById("profileSkills").textContent;
+      var storedProfile = getStoredCandidateProfile();
+      var candidateProfile = storedProfile.accountType === "candidate" ? storedProfile : {};
+
+      document.getElementById("candidateFullName").value = candidateProfile.fullName || document.getElementById("profileName").textContent;
+      document.getElementById("candidateEmail").value = candidateProfile.email || "";
+      document.getElementById("candidateEducation").value = candidateProfile.education || "Bachelor's Degree";
+      document.getElementById("candidatePreferredLocation").value = candidateProfile.preferredLocation || document.getElementById("profilePreferredLocation").textContent;
+      document.getElementById("candidatePreferredWorkMode").value = candidateProfile.preferredWorkMode || candidateProfile.preferredMode || document.getElementById("profilePreferredWorkMode").textContent;
+      document.getElementById("candidateSkills").value = candidateProfile.skills || document.getElementById("profileSkills").textContent;
+      document.getElementById("candidateSummary").value = candidateProfile.summary || "";
+      renderWorkExperienceEntries(candidateProfile.workExperience || []);
       document.getElementById("editProfileModal").style.display = "block";
     }
 
@@ -388,10 +586,14 @@
       var preferredLocation = document.getElementById("candidatePreferredLocation").value;
       var preferredWorkMode = document.getElementById("candidatePreferredWorkMode").value;
       var skills = document.getElementById("candidateSkills").value.trim();
+      var summary = document.getElementById("candidateSummary").value.trim();
       var editProfileStatus = document.getElementById("editProfileStatus");
+      var storedProfile = getStoredCandidateProfile();
+      var candidateProfile = storedProfile.accountType === "candidate" ? storedProfile : {};
+      var workExperience = getWorkExperienceEntries();
 
-      if (!fullName || !email || !preferredLocation || !preferredWorkMode) {
-        editProfileStatus.textContent = "Please enter your name, email, preferred location, and preferred working mode before saving.";
+      if (!fullName || !preferredLocation || !preferredWorkMode) {
+        editProfileStatus.textContent = "Please enter your name, preferred location, and preferred working mode before saving.";
         return;
       }
 
@@ -407,11 +609,53 @@
 
       document.getElementById("profilePreferredLocation").textContent = preferredLocation;
       document.getElementById("profilePreferredWorkMode").textContent = preferredWorkMode;
+      updateProfileWorkExperienceDisplay(workExperience);
       localStorage.setItem("currentUserRole", "candidate");
       localStorage.setItem("currentUserProfilePage", "candidate_view_profile.html");
       localStorage.setItem("currentUserDisplayName", fullName);
+      sessionStorage.setItem("completedProfileSetup", JSON.stringify({
+        accountType: "candidate",
+        email: email || candidateProfile.email || "",
+        fullName: fullName,
+        contact: candidateProfile.contact || "",
+        education: education || candidateProfile.education || "",
+        major: candidateProfile.major || "",
+        experience: formatExperienceText(candidateProfile.experience || document.getElementById("profileExperience").textContent),
+        preferredLocation: preferredLocation,
+        preferredMode: preferredWorkMode,
+        preferredWorkMode: preferredWorkMode,
+        skills: skills,
+        summary: summary,
+        workExperience: workExperience,
+        setupMode: candidateProfile.setupMode || "",
+        resumeFileName: candidateProfile.resumeFileName || "",
+        isPremiumMember: candidateProfile.isPremiumMember === true
+      }));
 
       editProfileStatus.textContent = "Profile updated for " + fullName + ".";
+    }
+
+    function addWorkExperienceEntry(entryData) {
+      renderWorkExperienceEntry(entryData || {});
+    }
+
+    function loadCandidateProfile() {
+      var storedProfile = getStoredCandidateProfile();
+      var candidateProfile = storedProfile.accountType === "candidate" ? storedProfile : {};
+      var fullName = candidateProfile.fullName || document.getElementById("profileName").textContent;
+      var education = candidateProfile.education || document.getElementById("profileEducation").textContent;
+      var experience = formatExperienceText(candidateProfile.experience || document.getElementById("profileExperience").textContent);
+      var skills = candidateProfile.skills || document.getElementById("profileSkills").textContent;
+      var preferredLocation = candidateProfile.preferredLocation || document.getElementById("profilePreferredLocation").textContent;
+      var preferredWorkMode = candidateProfile.preferredWorkMode || candidateProfile.preferredMode || document.getElementById("profilePreferredWorkMode").textContent;
+
+      document.getElementById("profileName").textContent = fullName;
+      document.getElementById("profileEducation").textContent = education;
+      document.getElementById("profileExperience").textContent = experience;
+      document.getElementById("profileSkills").textContent = skills;
+      document.getElementById("profilePreferredLocation").textContent = preferredLocation;
+      document.getElementById("profilePreferredWorkMode").textContent = preferredWorkMode;
+      updateProfileWorkExperienceDisplay(candidateProfile.workExperience || []);
     }
 
     function openResumeModal() {
@@ -600,6 +844,7 @@
       }
     }
     window.addEventListener("load", function() {
+      loadCandidateProfile();
       syncCandidateAuthState();
       updatePremiumDisplay();
     });
