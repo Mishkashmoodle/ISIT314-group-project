@@ -27,4 +27,5 @@ jobs:
         pip install -r "CSIT314 Group Project Final Version/requirements.txt"
     - name: Run Tests
       run: |
+        cd "CSIT314 Group Project Final Version"
         python manage.py test
