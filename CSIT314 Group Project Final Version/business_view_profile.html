@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>business view profile</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <div class="header">
+    <div>
+    <button class="blue_button" onclick="window.location.href='Main.html'">
+      < back to home
+    </button>
+    <h1>uMatch - Business Profile</h1>
+    </div>
+    <div class="header_right">
+      <div id="businessWelcomeMessage">Welcome Bright Insights</div>
+      <button id="premiumHeaderButton" type="button" class="blue_button header_action_button premium_header_button" onclick="openPremiumModal()">Become a Member</button>
+      <button type="button" class="header_logout_button" onclick="logoutDemoUser()">Logout</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="box">
+      <div class="box_header">
+        <h2>Welcome to your Profile</h2>
+        <button class="blue_button" onclick="openEditBusinessProfileModal()">Edit Profile</button>
+      </div>
+      <p>Potential candidates can be matched to the jobs your business creates and manages here.</p>
+      <div class="profile_panel">
+        <p id="businessProfileName"><b>Business Name:</b> Bright Insights Pty Ltd</p>
+        <p id="businessProfileIndustry"><b>Industry:</b> Business Intelligence and Analytics Consulting</p>
+        <p id="businessProfileLocation"><b>Location:</b> Sydney, NSW</p>
+        <p id="businessProfileContact"><b>Contact:</b> Sarah Lim, Talent Partner</p>
+        <p id="businessProfileNumber"><b>Contact Number:</b> 02 9000 0000</p>
+        <p id="businessProfileEmail"><b>Email:</b> careers@brightinsights.example</p>
+        <p id="businessProfileDescription"><b>About the Business:</b> Bright Insights helps retail and service companies improve decision-making through dashboards, reporting, and data process improvement.</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box_header">
+        <h2>Candidate That Fit Your Job Postings</h2>
+        <button type="button" class="blue_button" onclick="openManageMatchesModal()">Manage Matches</button>
+      </div>
+      <div class="search_panel">
+        <div class="search_field">
+          <label for="candidateSearchInput">Search Candidates</label>
+          <div class="candidate_search_row">
+              <input id="candidateSearchInput"
+                    type="text"
+                    placeholder="Search by name or keyword">
+
+              <button type="button"
+                      class="blue_button"
+                      onclick="filterCandidates()">
+                  Search
+              </button>
+
+              <button type="button"
+                      class="blue_button"
+                      onclick="resetCandidateFilters()">
+                  Reset
+              </button>
+          </div>
+        </div>
+        <details class="filter_dropdown">
+          <summary>Filters</summary>
+          <div class="filter_dropdown_content">
+            <div class="search_field">
+              <label for="candidateEducationFilter">Education Level</label>
+              <select id="candidateEducationFilter" onchange="filterCandidates()">
+                <option value="">All education levels</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="Master's Degree">Master's Degree</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="candidateExperienceFilter">Experience</label>
+              <select id="candidateExperienceFilter" onchange="filterCandidates()">
+                <option value="">All experience levels</option>
+                <option value="1">1 year</option>
+                <option value="2">2 years</option>
+                <option value="5">5 years</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="candidateSkillFilter">Skill</label>
+              <div class="skill_input_wrapper">
+                <input id="candidateSkillFilter" type="text" autocomplete="off" placeholder="Start typing a skill">
+                <div id="candidateSkillSuggestions" class="skill_suggestions"></div>
+              </div>
+            </div>
+            <div class="search_field">
+              <label for="candidateLocationFilter">Location</label>
+              <select id="candidateLocationFilter" onchange="filterCandidates()">
+                <option value="">All locations</option>
+                <option value="Sydney, NSW">Sydney, NSW</option>
+                <option value="Melbourne, VIC">Melbourne, VIC</option>
+                <option value="Brisbane, QLD">Brisbane, QLD</option>
+                <option value="Perth, WA">Perth, WA</option>
+                <option value="Adelaide, SA">Adelaide, SA</option>
+                <option value="Canberra, ACT">Canberra, ACT</option>
+              </select>
+            </div>
+            <div class="search_field">
+              <label for="candidateWorkModeFilter">Preferred Work Mode</label>
+              <select id="candidateWorkModeFilter" onchange="filterCandidates()">
+                <option value="">All work modes</option>
+                <option value="Remote">Remote</option>
+                <option value="On-site">On-site</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+            <div class="search_actions">
+              <button type="button" class="blue_button" onclick="resetCandidateFilters()">Reset Filters</button>
+            </div>
+          </div>
+        </details>
+      </div>
+      <p id="candidateResultsStatus" class="results_status">
+        Loading candidates...
+      </p>
+      <div id="recommendedCandidatesContainer">
+        <p>Loading candidate recommendations...</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box_header">
+        <h2>Current Listings</h2>
+        <button class="blue_button" onclick="openJobPostModal()">Create Job Post</button>
+      </div>
+        <div id="currentJobsContainer">
+          <p>Loading current job listings...</p>
+        </div>
+
+    </div>
+
+    <div id="jobPostModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeJobPostModal()" title="Close Create Job Post">&times;</span>
+        <h2>Create Job Post</h2>
+        <p>Enter the details for the role you want to advertise and match with suitable candidates.</p>
+        <form>
+          <label class="form_label" for="jobTitle"><b>Job Title</b></label>
+          <input class="form_input" id="jobTitle" type="text" name="jobTitle" placeholder="Enter job title" required>
+
+          <label class="form_label" for="companyInformation"><b>Company Information</b></label>
+          <textarea class="form_input form_input_large" id="companyInformation" name="companyInformation" placeholder="Describe your company, team, and what candidates should know" required></textarea>
+
+          <label class="form_label" for="jobDescription"><b>Job Description</b></label>
+          <textarea class="form_input form_input_large" id="jobDescription" name="jobDescription" placeholder="Describe the responsibilities, outcomes, and expectations for this role" required></textarea>
+
+          <label class="form_label" for="educationRequirement"><b>Required Education Level</b></label>
+          <select class="form_input" id="educationRequirement" name="educationRequirement">
+            <option value="">Select an education level</option>
+            <option>None</option>
+            <option>High School</option>
+            <option>Certificate I</option>
+            <option>Certificate II</option>
+            <option>Certificate III</option>
+            <option>Certificate IV</option>
+            <option>Diploma</option>
+            <option>Advanced Diploma</option>
+            <option>Associate Degree</option>
+            <option>Bachelor's Degree</option>
+            <option>Graduate Certificate</option>
+            <option>Graduate Diploma</option>
+            <option>Master's Degree</option>
+            <option>Doctorate</option>
+          </select>
+
+          <label class="form_label" for="skillRequirement"><b>Required Skills</b></label>
+          <div class="skill_input_wrapper">
+            <input class="form_input" id="skillRequirement" type="text" name="skillRequirement" autocomplete="off" placeholder="Start typing a skill">
+            <div id="skillSuggestions" class="skill_suggestions"></div>
+          </div>
+
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="addSkillRequirement()">Add Skill</button>
+          </div>
+
+          <label class="form_label" for="yearsExperience"><b>Years of Experience</b></label>
+          <input class="form_input" id="yearsExperience" type="number" name="yearsExperience" min="0" step="1" placeholder="Enter minimum years of experience" required>
+
+          <label class="form_label" for="jobSalary"><b>Salary</b></label>
+          <div class="salary_slider_wrapper">
+            <input class="salary_slider" id="jobSalary" type="range" name="jobSalary" min="0" max="3" step="1" value="1" oninput="updateJobSalaryDisplay()">
+            <div class="salary_slider_labels">
+              <span>$0–60k</span>
+              <span>$60–90k</span>
+              <span>$90–120k</span>
+              <span>$120k+</span>
+            </div>
+            <p id="jobSalaryDisplay" class="status_text">Selected salary: $60–90k</p>
+          </div>
+
+          <label class="form_label" for="jobType"><b>Job Type</b></label>
+          <select class="form_input" id="jobType" name="jobType" required>
+            <option value="">Select a job type</option>
+            <option>Full-time</option>
+            <option>Part-time</option>
+            <option>Contract</option>
+            <option>Casual</option>
+          </select>
+
+
+          <label class="form_label" for="workMode"><b>Work Mode</b></label>
+          <select class="form_input" id="workMode" name="workMode" required>
+            <option value="">Select a work mode</option>
+            <option>Remote</option>
+            <option>On-site</option>
+            <option>Hybrid</option>
+          </select>
+
+          <label class="form_label" for="jobLocation"><b>Job Location</b></label>
+          <div class="autocomplete_wrapper">
+            <input class="form_input" id="jobLocation" type="text" name="jobLocation" autocomplete="off" placeholder="Enter suburb, city, or office location" required>
+            <div id="locationSuggestions" class="location_suggestions"></div>
+          </div>
+
+          <div id="skillsContainer" class="skills_container"></div>
+          <p id="jobPostStatus" class="status_text">Complete every required field and add one or more skills before creating the post.</p>
+
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="submitJobPost()">Create Job Post</button>
+            <button type="button" class="blue_button" onclick="closeJobPostModal()">Cancel</button>
+          </div>
+        </form>
+        <div class="helper_text">
+          <strong>Future workflow:</strong>
+          In a later step this job post can be matched against candidate education, experience, and skills to recommend the strongest applicants for your business.
+        </div>
+      </div>
+    </div>
+
+    <div id="editBusinessProfileModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeEditBusinessProfileModal()" title="Close Edit Profile">&times;</span>
+        <h2>Edit Business Profile</h2>
+        <p>Update the company information candidates will see when they view your jobs and business profile.</p>
+        <form>
+          <label class="form_label" for="businessName"><b>Business Name</b></label>
+          <input class="form_input" id="businessName" type="text" name="businessName" placeholder="Enter business name">
+
+          <label class="form_label" for="businessAbn"><b>ABN</b></label>
+          <input class="form_input" id="businessAbn" type="text" name="businessAbn" placeholder="Enter ABN">
+
+          <label class="form_label" for="businessIndustry"><b>Industry</b></label>
+          <input class="form_input" id="businessIndustry" type="text" name="businessIndustry" placeholder="Enter industry">
+
+          <label class="form_label" for="businessContactName"><b>Contact Name</b></label>
+          <input class="form_input" id="businessContactName" type="text" name="businessContactName" placeholder="Enter contact name">
+
+          <label class="form_label" for="businessEmail"><b>Business Email</b></label>
+          <input class="form_input" id="businessEmail" type="email" name="businessEmail" placeholder="Enter business email">
+
+          <label class="form_label" for="businessPhone"><b>Phone Number</b></label>
+          <input class="form_input" id="businessPhone" type="tel" name="businessPhone" placeholder="Enter phone number">
+
+          <label class="form_label" for="businessDescription"><b>Business Description</b></label>
+          <textarea class="form_input" id="businessDescription" name="businessDescription" rows="5" placeholder="Describe your company, team, and what candidates can expect"></textarea>
+
+          <p id="businessProfileStatus" class="status_text">Keep your company details current so candidates trust the jobs you post.</p>
+
+          <div class="button_row">
+            <button type="button" class="blue_button" onclick="saveBusinessProfile()">Save Changes</button>
+            <button type="button" class="blue_button" onclick="closeEditBusinessProfileModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="candidateDetailsModal" class="modal">
+      <div class="modal_content">
+        <span class="close_button" onclick="closeCandidateDetailsModal()" title="Close Candidate Details">&times;</span>
+        <h2 id="candidateDetailsName">Alex Tan</h2>
+        <p id="candidateDetailsEducation"></p>
+        <p id="candidateDetailsExperience"></p>
+        <p id="candidateDetailsSkills"></p>
+        <p id="candidateDetailsSummary"></p>
+        <p id="candidateDetailsReason"></p>
+        <div class="modal_actions_left">
+          <button type="button" class="blue_button action_button" onclick="showCandidateContact()">Reach Out</button>
+          <button type="button" class="red_button action_button" onclick="removeRecommendedCandidate()">Remove</button>
+        </div>
+        <div id="candidateContactPanel" class="contact_panel">
+          <p id="candidateDetailsEmail"></p>
+          <p id="candidateDetailsPhone"></p>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+  <div id="premiumModal" class="modal">
+    <div class="modal_content animate premium_modal">
+      <span onclick="closePremiumModal()" class="close_button" title="Close Member Signup">&times;</span>
+      <div class="container">
+        <span class="match_label premium_label">Member</span>
+        <h2 id="premiumModalTitle">Become a Member</h2>
+          <p id="premiumModalDescription">
+            Unlock premium visibility and keep your business account connected across the platform.
+          </p>
+        <div class="helper_text">
+          <b>Member benefit:</b> access premium profile actions and keep your logged-in state consistent when returning to the main page.
+        </div>
+        <div class="button_row">
+          <button id="premiumModalButton" type="button" class="blue_button" onclick="signUpToPremium()"> Become a Member </button>
+          <button type="button" class="red_button" onclick="closePremiumModal()">Maybe Later</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="manageMatchesModal" class="modal">
+    <div class="modal_content">
+      <span
+        class="close_button"
+        onclick="closeManageMatchesModal()"
+        title="Close Manage Matches">
+        &times;
+      </span>
+
+      <h2>Manage Matches</h2>
+
+      <p>
+        Review candidates you have saved and track their status.
+      </p>
+
+      <div id="matchesContainer">
+        <p>Loading matches...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var activeCandidateId = null;
+    var selectedSkills = [];
+    var allRecommendedCandidates = [];
+    var showingAllCandidates = false;
+    var candidateDetailsData = {
+      alex: {
+        name: "Alex Tan",
+        education: "Bachelor's Degree in Information Systems",
+        experience: "2 years",
+        skills: "SQL, Excel, Data Analysis, Communication",
+        summary: "Alex has hands-on experience supporting reporting and spreadsheet analysis tasks and is looking for an early-career analyst role with room to grow.",
+        reason: "Alex aligns with the Junior Data Analyst posting on education, experience level, and core analytical skill requirements.",
+        email: "alex.tan@example.com",
+        phone: "0412 345 678"
+      },
+      priya: {
+        name: "Priya Nair",
+        education: "Master's Degree in Data Science",
+        experience: "5 years",
+        skills: "Python, SQL, Stakeholder Management",
+        summary: "Priya has delivered analytics and automation initiatives for cross-functional teams and is comfortable balancing technical work with business communication.",
+        reason: "Priya meets advanced technical skill requirements and brings stronger experience for data-heavy and senior analytical roles.",
+        email: "priya.nair@example.com",
+        phone: "0423 456 789"
+      },
+      jordan: {
+        name: "Jordan Lee",
+        education: "Diploma in Retail Operations",
+        experience: "1 year",
+        skills: "Leadership, Communication, Customer Service",
+        summary: "Jordan is building early leadership experience in customer-facing environments and is interested in team-based operational roles.",
+        reason: "Jordan is not the closest fit for analytics work, but remains a possible match for future service or supervision openings.",
+        email: "jordan.lee@example.com",
+        phone: "0434 567 890"
+      },
+      taylor: {
+        name: "Taylor Chen",
+        education: "Bachelor's Degree in Visual Communication",
+        experience: "3 years",
+        skills: "Figma, UI/UX Design, Communication",
+        summary: "Taylor has strong design fundamentals and has supported product teams with wireframes, prototyping, and presentation-ready mockups.",
+        reason: "Taylor is a strong member-only candidate for digital and design-adjacent roles that need presentation and interface skills.",
+        email: "taylor.chen@example.com",
+        phone: "0445 678 901"
+      },
+      morgan: {
+        name: "Morgan Patel",
+        education: "Diploma in Project Management",
+        experience: "4 years",
+        skills: "Project Management, Excel, Leadership",
+        summary: "Morgan has delivered coordination support across operations teams and is comfortable balancing schedules, reporting, and stakeholder follow-up.",
+        reason: "Morgan is a member-only candidate suited to coordination and operations support roles.",
+        email: "morgan.patel@example.com",
+        phone: "0456 789 012"
+      },
+      sam: {
+        name: "Sam O'Connor",
+        education: "Master's Degree in Data Science",
+        experience: "6 years",
+        skills: "Python, SQL, Data Analysis",
+        summary: "Sam has advanced analytics experience and has worked across reporting, dashboarding, and data automation tasks.",
+        reason: "Sam is a member-only candidate with strong technical depth for analytics and data-led business roles.",
+        email: "sam.oconnor@example.com",
+        phone: "0467 890 123"
+      }
+    };
+    var availableSkills = [
+      "Communication",
+      "Customer Service",
+      "Data Analysis",
+      "Excel",
+      "Figma",
+      "HTML",
+      "Java",
+      "JavaScript",
+      "Leadership",
+      "Marketing",
+      "Project Management",
+      "Python",
+      "Sales",
+      "SQL",
+      "UI/UX Design",
+      "Verbal Communication",
+      "Written Communication",
+      "Active Listening",
+      "Interpersonal Skills",
+      "Teamwork",
+      "Collaboration",
+      "Problem Solving",
+      "Critical Thinking",
+      "Decision Making",
+      "Time Management",
+      "Prioritization",
+      "Adaptability",
+      "Flexibility",
+      "Work Ethic",
+      "Reliability",
+      "Accountability",
+      "Resilience",
+      "Emotional Intelligence",
+      "Conflict Resolution",
+      "Stress Management",
+      "Creativity",
+      "Initiative",
+      "Motivation",
+      "Attention to Detail",
+      "Organization"
+    ];
+    var availableLocations = [
+      "Sydney, NSW",
+      "Melbourne, VIC",
+      "Brisbane, QLD",
+      "Perth, WA",
+      "Adelaide, SA",
+      "Canberra, ACT",
+      "Hobart, TAS",
+      "Darwin, NT",
+      "Parramatta, NSW",
+      "Newcastle, NSW",
+      "Wollongong, NSW",
+      "Geelong, VIC",
+      "Gold Coast, QLD",
+      "Sunshine Coast, QLD"
+    ];
+
+    function openJobPostModal() {
+      document.getElementById("jobPostModal").style.display = "block";
+      updateJobSalaryDisplay();
+    }
+
+    async function openEditBusinessProfileModal() {
+      const businessId = sessionStorage.getItem("businessId");
+
+      if (!businessId) {
+        return;
+      }
+
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/businesses/${businessId}/`
+      );
+
+      const business = await response.json();
+
+      document.getElementById("businessName").value = business.business_name || "";
+      document.getElementById("businessAbn").value = business.abn || "";
+      document.getElementById("businessIndustry").value = business.industry || "";
+      document.getElementById("businessContactName").value = business.contact_person || "";
+      document.getElementById("businessEmail").value = business.email || "";
+      document.getElementById("businessPhone").value = business.contact_number || "";
+      document.getElementById("businessDescription").value = business.description || "";
+
+      document.getElementById("editBusinessProfileModal").style.display = "block";
+    }
+
+    function closeJobPostModal() {
+      document.getElementById("jobPostModal").style.display = "none";
+    }
+
+    function closeEditBusinessProfileModal() {
+      document.getElementById("editBusinessProfileModal").style.display = "none";
+    }
+
+    function openCandidateDetailsModal(candidateId) {
+      var candidate = candidateDetailsData[candidateId];
+      activeCandidateId = candidateId;
+      document.getElementById("candidateContactPanel").style.display = "none";
+      document.getElementById("candidateDetailsName").textContent = candidate.name;
+      document.getElementById("candidateDetailsEducation").innerHTML = "<b>Education:</b> " + candidate.education;
+      document.getElementById("candidateDetailsExperience").innerHTML = "<b>Experience:</b> " + candidate.experience;
+      document.getElementById("candidateDetailsSkills").innerHTML = "<b>Skills:</b> " + candidate.skills;
+      document.getElementById("candidateDetailsSummary").innerHTML = "<b>Profile Summary:</b> " + candidate.summary;
+      document.getElementById("candidateDetailsReason").innerHTML = "<b>Why this candidate fits:</b> " + candidate.reason;
+      document.getElementById("candidateDetailsEmail").innerHTML = "<b>Email:</b> " + candidate.email;
+      document.getElementById("candidateDetailsPhone").innerHTML = "<b>Phone:</b> " + candidate.phone;
+      document.getElementById("candidateDetailsModal").style.display = "block";
+    }
+
+    function closeCandidateDetailsModal() {
+      document.getElementById("candidateDetailsModal").style.display = "none";
+    }
+
+    function showCandidateContact() {
+      document.getElementById("candidateContactPanel").style.display = "block";
+    }
+
+    function removeRecommendedCandidate() {
+      if (!activeCandidateId) {
+        return;
+      }
+
+      var shouldRemove = confirm("Do you want uMatch to stop recommending this candidate?");
+      if (!shouldRemove) {
+        return;
+      }
+
+      var candidateCard = document.getElementById("candidateCard-" + activeCandidateId);
+      if (candidateCard) {
+        candidateCard.dataset.removed = "true";
+        candidateCard.style.display = "none";
+      }
+
+      closeCandidateDetailsModal();
+      filterCandidates();
+    }
+
+
+
+    function getEditDistance(a, b) {
+      var matrix = [];
+      var i;
+      var j;
+
+      if (a === b) {
+        return 0;
+      }
+
+      for (i = 0; i <= b.length; i += 1) {
+        matrix[i] = [i];
+      }
+
+      for (j = 0; j <= a.length; j += 1) {
+        matrix[0][j] = j;
+      }
+
+      for (i = 1; i <= b.length; i += 1) {
+        for (j = 1; j <= a.length; j += 1) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1
+            );
+          }
+        }
+      }
+
+      return matrix[b.length][a.length];
+    }
+
+    var searchSynonymMap = {
+      "software engineer": ["programmer", "coder", "developer", "swe", "software developer"],
+      "programmer": ["software engineer", "developer", "coder", "swe"],
+      "coder": ["software engineer", "developer", "programmer", "swe"],
+      "developer": ["software engineer", "programmer", "coder", "swe"],
+      "swe": ["software engineer", "developer", "programmer", "coder"],
+      "data analyst": ["data analysis", "data analytics", "analytics", "business analyst"],
+      "data analysis": ["data analyst", "data analytics", "analytics"],
+      "data analytics": ["data analyst", "data analysis", "analytics"],
+      "customer service": ["customer support", "support", "client service"],
+      "project coordinator": ["project management", "project administrator", "project assistant"]
+    };
+
+    function normalizeSearchText(value) {
+      return value.toLowerCase().replace(/[^a-z0-9\s+]/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    function addSearchTerm(targetTerms, term) {
+      var normalizedTerm = normalizeSearchText(term);
+
+      if (normalizedTerm && targetTerms.indexOf(normalizedTerm) === -1) {
+        targetTerms.push(normalizedTerm);
+      }
+    }
+
+    function expandSearchQuery(query) {
+      var normalizedQuery = normalizeSearchText(query);
+      var terms = [];
+      var queryTokens;
+      var synonymKey;
+
+      if (!normalizedQuery) {
+        return terms;
+      }
+
+      addSearchTerm(terms, normalizedQuery);
+
+      Object.keys(searchSynonymMap).forEach(function(key) {
+        var normalizedKey = normalizeSearchText(key);
+
+        if (normalizedQuery === normalizedKey || normalizedQuery.indexOf(normalizedKey) !== -1 || normalizedKey.indexOf(normalizedQuery) !== -1) {
+          addSearchTerm(terms, normalizedKey);
+          searchSynonymMap[key].forEach(function(alias) {
+            addSearchTerm(terms, alias);
+          });
+        }
+      });
+
+      queryTokens = normalizedQuery.split(" ").filter(Boolean);
+      queryTokens.forEach(function(token) {
+        addSearchTerm(terms, token);
+        Object.keys(searchSynonymMap).forEach(function(key) {
+          synonymKey = normalizeSearchText(key);
+
+          if (synonymKey === token || synonymKey.indexOf(token) !== -1 || token.indexOf(synonymKey) !== -1) {
+            addSearchTerm(terms, synonymKey);
+            searchSynonymMap[key].forEach(function(alias) {
+              addSearchTerm(terms, alias);
+            });
+          }
+        });
+      });
+
+      return terms;
+    }
+
+    function fuzzyMatches(query, searchableText) {
+      var normalizedText = normalizeSearchText(searchableText);
+      var expandedQueries = expandSearchQuery(query);
+      var words;
+
+      if (!expandedQueries.length) {
+        return true;
+      }
+
+      words = normalizedText.split(/[^a-z0-9]+/).filter(Boolean);
+
+      return expandedQueries.some(function(normalizedQuery) {
+        if (normalizedText.indexOf(normalizedQuery) !== -1) {
+          return true;
+        }
+
+        return words.some(function(word) {
+          if (word.indexOf(normalizedQuery) !== -1 || normalizedQuery.indexOf(word) !== -1) {
+            return true;
+          }
+
+          return getEditDistance(normalizedQuery, word) <= Math.max(1, Math.floor(normalizedQuery.length / 4));
+        });
+      });
+    }
+
+    function filterCandidates() {
+      var searchValue = document.getElementById("candidateSearchInput").value.trim().toLowerCase();
+      var educationValue = document.getElementById("candidateEducationFilter").value;
+      var experienceValue = document.getElementById("candidateExperienceFilter").value;
+      var skillValue = document.getElementById("candidateSkillFilter").value.trim().toLowerCase();
+      var locationValue = document.getElementById("candidateLocationFilter").value;
+      var workModeValue = document.getElementById("candidateWorkModeFilter").value;
+      var candidateCards = document.querySelectorAll(".candidate_listing_card");
+      var visibleCount = 0;
+
+      candidateCards.forEach(function(card) {
+        if (card.classList.contains("member_candidate") && !checkPremiumMembership()) {
+          card.style.display = "none";
+          return;
+        }
+
+        if (card.dataset.removed === "true") {
+          card.style.display = "none";
+          return;
+        }
+
+        var searchableText = card.dataset.search.toLowerCase();
+        var educationMatch = !educationValue || card.dataset.education === educationValue;
+        var experienceMatch = !experienceValue || card.dataset.experience === experienceValue;
+        var skillMatch = !skillValue || card.dataset.skills.toLowerCase().indexOf(skillValue) !== -1;
+        var locationMatch = !locationValue || card.dataset.location === locationValue;
+        var workModeMatch = !workModeValue || card.dataset.workmode === workModeValue;
+        var searchMatch = fuzzyMatches(searchValue, searchableText);
+        var isVisible = educationMatch && experienceMatch && skillMatch && locationMatch && workModeMatch && searchMatch;
+
+        card.style.display = isVisible ? "inline-block" : "none";
+        if (isVisible) {
+          visibleCount += 1;
+        }
+      });
+
+      document.getElementById("candidateResultsStatus").textContent = visibleCount === 0
+        ? "No candidates match the current search and filters."
+        : visibleCount + " candidate" + (visibleCount === 1 ? "" : "s") + " found.";
+    }
+
+    function resetCandidateFilters() {
+      document.getElementById("candidateSearchInput").value = "";
+      document.getElementById("candidateEducationFilter").value = "";
+      document.getElementById("candidateExperienceFilter").value = "";
+      document.getElementById("candidateSkillFilter").value = "";
+      document.getElementById("candidateLocationFilter").value = "";
+      document.getElementById("candidateWorkModeFilter").value = "";
+      hideCandidateSkillSuggestions();
+      filterCandidates();
+    }
+
+    async function loadBusinessProfile() {
+      const businessId = sessionStorage.getItem("businessId");
+
+      if (!businessId) {
+          return;
+      }
+
+      try {
+          const response = await fetch(
+              "http://127.0.0.1:8000/api/businesses/"
+          );
+
+          const businesses = await response.json();
+
+          const business = businesses.find(function(item) {
+              return String(item.id) === String(businessId);
+          });
+
+          if (!business) {
+              return;
+          }
+
+          sessionStorage.setItem("authSessionActive", "true");
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("currentUserRole", "business");
+          localStorage.setItem("currentUserProfilePage", "business_view_profile.html");
+
+          localStorage.setItem(
+              "currentUserDisplayName",
+              business.business_name
+          );
+
+          localStorage.setItem(
+              "isPremiumMember",
+              business.membership ? "true" : "false"
+          );
+
+          document.getElementById("businessWelcomeMessage").textContent =
+              "Welcome " + business.business_name;
+
+          document.getElementById("businessProfileName").innerHTML =
+              "<b>Business Name:</b> " + business.business_name;
+
+          document.getElementById("businessProfileIndustry").innerHTML =
+              "<b>Industry:</b> " + business.industry;
+
+          document.getElementById("businessProfileLocation").innerHTML =
+              "<b>Location:</b> " + business.location;
+
+          document.getElementById("businessProfileContact").innerHTML =
+              "<b>Contact:</b> " + business.contact_person;
+
+          document.getElementById("businessProfileNumber").innerHTML =
+              "<b>Contact Number:</b> " + business.contact_number;
+
+          document.getElementById("businessProfileEmail").innerHTML =
+              "<b>Email:</b> " + business.email;
+
+          document.getElementById("businessProfileDescription").innerHTML =
+              "<b>About the Business:</b> " + business.description;
+      }
+      catch (error) {
+          console.error("Could not load business profile:", error);
+      }
+  }
+
+    function checkPremiumMembership() {
+      return localStorage.getItem("isPremiumMember") === "true";
+    }
+
+    function updatePremiumDisplay() {
+      var premiumHeaderButton = document.getElementById("premiumHeaderButton");
+      var isPremium = checkPremiumMembership();
+      var memberCandidates = document.querySelectorAll(".member_candidate");
+
+      if (premiumHeaderButton) {
+        premiumHeaderButton.textContent = isPremium ? "Member Active" : "Become a Member";
+        premiumHeaderButton.classList.toggle("premium_active_button", isPremium);
+      }
+
+      memberCandidates.forEach(function(card) {
+        card.style.display = isPremium ? "inline-block" : "none";
+      });
+
+      filterCandidates();
+    }
+
+    function openPremiumModal() {
+      const isPremium = checkPremiumMembership();
+
+      if (isPremium) {
+        document.getElementById("premiumModalTitle").textContent =
+          "Manage Membership";
+
+        document.getElementById("premiumModalDescription").textContent =
+          "Your business membership is currently active. You can cancel your membership below.";
+
+        document.getElementById("premiumModalButton").textContent =
+          "Cancel Membership";
+      } else {
+        document.getElementById("premiumModalTitle").textContent =
+          "Become a Member";
+
+        document.getElementById("premiumModalDescription").textContent =
+          "Unlock premium visibility and keep your business account connected across the platform.";
+
+        document.getElementById("premiumModalButton").textContent =
+          "Become a Member";
+      }
+
+      document.getElementById("premiumModal").style.display = "block";
+    }
+
+    function closePremiumModal() {
+      document.getElementById("premiumModal").style.display = "none";
+    }
+
+    function closeManageMatchesModal() {
+      document.getElementById("manageMatchesModal").style.display = "none";
+    }
+
+    async function openManageMatchesModal() {
+      document.getElementById("manageMatchesModal").style.display = "block";
+      await loadSavedMatches();
+    }
+
+    async function signUpToPremium() {
+      const businessId = sessionStorage.getItem("businessId");
+      const isCurrentlyPremium = localStorage.getItem("isPremiumMember") === "true";
+      const newMembershipStatus = !isCurrentlyPremium;
+
+      if (!businessId) {
+        alert("Could not find the logged-in business.");
+        return;
+      }
+
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/businesses/${businessId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            membership: newMembershipStatus
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log(data);
+        alert("Membership could not be updated.");
+        return;
+      }
+
+      localStorage.setItem("isPremiumMember", data.membership ? "true" : "false");
+
+      closePremiumModal();
+      updatePremiumDisplay();
+
+      alert(data.membership ? "Business membership is now active." : "Business membership has been cancelled.");
+    }
+
+    function renderCandidateSkillSuggestions(matches) {
+      var suggestionsBox = document.getElementById("candidateSkillSuggestions");
+      suggestionsBox.innerHTML = "";
+
+      if (!matches.length) {
+        hideCandidateSkillSuggestions();
+        return;
+      }
+
+      matches.forEach(function(skill) {
+        var suggestionItem = document.createElement("div");
+        suggestionItem.className = "skill_suggestion_item";
+        suggestionItem.textContent = skill;
+        suggestionItem.onmousedown = function() {
+          document.getElementById("candidateSkillFilter").value = skill;
+          hideCandidateSkillSuggestions();
+          filterCandidates();
+        };
+        suggestionsBox.appendChild(suggestionItem);
+      });
+
+      suggestionsBox.style.display = "block";
+    }
+
+    function hideCandidateSkillSuggestions() {
+      document.getElementById("candidateSkillSuggestions").style.display = "none";
+    }
+
+    function getJobSalaryBand() {
+      var salaryBands = ["$0-$60k", "$60k-$90k", "$90k-$120k", "$120k+"];
+      var salarySlider = document.getElementById("jobSalary");
+      var salaryIndex = parseInt(salarySlider.value, 10);
+
+      if (isNaN(salaryIndex) || salaryIndex < 0 || salaryIndex >= salaryBands.length) {
+        salaryIndex = 1;
+      }
+
+      return salaryBands[salaryIndex];
+    }
+
+    function updateJobSalaryDisplay() {
+      var jobSalaryDisplay = document.getElementById("jobSalaryDisplay");
+
+      if (jobSalaryDisplay) {
+        jobSalaryDisplay.textContent = "Selected salary: " + getJobSalaryBand();
+      }
+    }
+
+    async function saveBusinessProfile() {
+
+      const businessId = sessionStorage.getItem("businessId");
+
+      const businessName =
+        document.getElementById("businessName").value.trim();
+
+      const businessAbn =
+        document.getElementById("businessAbn").value.trim();
+
+      const industry =
+        document.getElementById("businessIndustry").value.trim();
+
+      const contactPerson =
+        document.getElementById("businessContactName").value.trim();
+
+      const contactNumber =
+        document.getElementById("businessPhone").value.trim();
+
+      const description =
+        document.getElementById("businessDescription").value.trim();
+
+      const status =
+        document.getElementById("businessProfileStatus");
+
+      if (!businessId) {
+        status.textContent = "Business account not found.";
+        return;
+      }
+
+      if (!businessName || !businessAbn) {
+        status.textContent =
+          "Please enter your business name and ABN.";
+        return;
+      }
+
+      const payload = {
+        business_name: businessName,
+        abn: businessAbn,
+        industry: industry,
+        contact_person: contactPerson,
+        contact_number: contactNumber,
+        description: description
+      };
+
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/businesses/${businessId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log(data);
+        status.textContent =
+          "Profile could not be saved.";
+        return;
+      }
+
+      document.getElementById("businessWelcomeMessage").textContent =
+        "Welcome " + data.business_name;
+
+      document.getElementById("businessProfileName").innerHTML =
+        "<b>Business Name:</b> " + data.business_name;
+
+      document.getElementById("businessProfileIndustry").innerHTML =
+        "<b>Industry:</b> " + data.industry;
+
+      document.getElementById("businessProfileContact").innerHTML =
+        "<b>Contact:</b> " + data.contact_person;
+
+      document.getElementById("businessProfileNumber").innerHTML =
+        "<b>Contact Number:</b> " + data.contact_number;
+
+      document.getElementById("businessProfileDescription").innerHTML =
+        "<b>About the Business:</b> " + data.description;
+
+      localStorage.setItem(
+        "currentUserDisplayName",
+        data.business_name
+      );
+
+      status.textContent =
+        "Profile updated for " + data.business_name + ".";
+    }
+
+    function setJobPostError(message) {
+      var jobPostStatus = document.getElementById("jobPostStatus");
+      jobPostStatus.classList.remove("success");
+      jobPostStatus.classList.add("error");
+      jobPostStatus.textContent = message;
+    }
+
+    function setJobPostSuccess(message) {
+      var jobPostStatus = document.getElementById("jobPostStatus");
+      jobPostStatus.classList.remove("error");
+      jobPostStatus.classList.add("success");
+      jobPostStatus.textContent = message;
+    }
+
+    function addSkillRequirement() {
+      var skillInput = document.getElementById("skillRequirement");
+      var skillValue = skillInput.value.trim();
+
+      if (!skillValue) {
+        setJobPostError("Missing field: Required skills. Enter a skill before adding it.");
+        return;
+      }
+
+      if (selectedSkills.indexOf(skillValue) !== -1) {
+        setJobPostError("Required skills already include " + skillValue + ".");
+        return;
+      }
+
+      selectedSkills.push(skillValue);
+      skillInput.value = "";
+      hideSkillSuggestions();
+      renderSelectedSkills();
+      setJobPostSuccess("Current skills: " + selectedSkills.join(", "));
+    }
+
+    function removeSkillRequirement(skillValue) {
+      selectedSkills = selectedSkills.filter(function(skill) {
+        return skill !== skillValue;
+      });
+
+      renderSelectedSkills();
+
+      if (selectedSkills.length) {
+        setJobPostSuccess("Current skills: " + selectedSkills.join(", "));
+      } else {
+        document.getElementById("jobPostStatus").classList.remove("error", "success");
+        document.getElementById("jobPostStatus").textContent = "Add one or more skill requirements for better matching.";
+      }
+    }
+
+    function renderSelectedSkills() {
+      var skillsContainer = document.getElementById("skillsContainer");
+      skillsContainer.innerHTML = "";
+
+      selectedSkills.forEach(function(skill) {
+        var chip = document.createElement("span");
+        chip.className = "skill_chip";
+        chip.textContent = skill;
+
+        var removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.innerHTML = "&times;";
+        removeButton.title = "Remove " + skill;
+        removeButton.onclick = function() {
+          removeSkillRequirement(skill);
+        };
+
+        chip.appendChild(removeButton);
+        skillsContainer.appendChild(chip);
+      });
+    }
+
+    async function submitJobPost() {
+      var jobTitle = document.getElementById("jobTitle").value.trim();
+      var companyInformation = document.getElementById("companyInformation").value.trim();
+      var jobDescription = document.getElementById("jobDescription").value.trim();
+      var educationRequirement = document.getElementById("educationRequirement").value;
+      var yearsExperience = document.getElementById("yearsExperience").value.trim();
+      var jobSalary = getJobSalaryBand();
+      var jobType = document.getElementById("jobType").value;
+      var workMode = document.getElementById("workMode").value;
+      var jobLocation = document.getElementById("jobLocation").value.trim();
+
+      if (!jobTitle) {
+        setJobPostError("Missing field: Job title.");
+        return;
+      }
+
+      if (!companyInformation) {
+        setJobPostError("Missing field: Company information.");
+        return;
+      }
+
+      if (!jobDescription) {
+        setJobPostError("Missing field: Job description.");
+        return;
+      }
+
+      if (!educationRequirement) {
+        setJobPostError("Missing field: Required education level.");
+        return;
+      }
+
+      if (!selectedSkills.length) {
+        setJobPostError("Missing field: Required skills.");
+        return;
+      }
+
+      if (!yearsExperience) {
+        setJobPostError("Missing field: Years of experience.");
+        return;
+      }
+
+      if (!jobType) {
+        setJobPostError("Missing field: Job type.");
+        return;
+      }
+
+      if (!workMode) {
+        setJobPostError("Missing field: Work mode.");
+        return;
+      }
+
+      if (!jobLocation) {
+        setJobPostError("Missing field: Job location.");
+        return;
+      }
+
+      const jobPayload = {
+        business: sessionStorage.getItem("businessId"),
+        title: jobTitle,
+        company: localStorage.getItem("currentUserDisplayName") || "Business",
+        description: jobDescription,
+        education: educationRequirement,
+        skills: selectedSkills,
+        experience: parseInt(yearsExperience || "0"),
+        salary: jobSalary,
+        job_type: jobType,
+        mode: workMode,
+        location: jobLocation,
+        membership: localStorage.getItem("isPremiumMember") === "true",
+      };
+
+    const response = await fetch("http://127.0.0.1:8000/api/jobs/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(jobPayload)
+    });
+
+    console.log("Job save status:", response.status);
+
+    const responseData = await response.json();
+    console.log("Job save response:", responseData);
+
+    if (!response.ok) {
+      setJobPostError("Job post could not be saved to backend.");
+      return;
+    }
+
+    sessionStorage.setItem("jobId", responseData.id);
+
+    setJobPostSuccess("Job post created and saved for " + jobTitle + ".");
+    loadRecommendedCandidates();
+    loadCurrentJobs();
+  }
+
+    function renderSkillSuggestions(matches) {
+      var suggestionsBox = document.getElementById("skillSuggestions");
+      suggestionsBox.innerHTML = "";
+
+      if (!matches.length) {
+        hideSkillSuggestions();
+        return;
+      }
+
+      matches.forEach(function(skill) {
+        var suggestionItem = document.createElement("div");
+        suggestionItem.className = "skill_suggestion_item";
+        suggestionItem.textContent = skill;
+        suggestionItem.onmousedown = function() {
+          document.getElementById("skillRequirement").value = skill;
+          hideSkillSuggestions();
+        };
+        suggestionsBox.appendChild(suggestionItem);
+      });
+
+      suggestionsBox.style.display = "block";
+    }
+
+    function hideSkillSuggestions() {
+      document.getElementById("skillSuggestions").style.display = "none";
+    }
+
+    function renderLocationSuggestions(matches) {
+      var suggestionsBox = document.getElementById("locationSuggestions");
+      suggestionsBox.innerHTML = "";
+
+      if (!matches.length) {
+        hideLocationSuggestions();
+        return;
+      }
+
+      matches.forEach(function(location) {
+        var suggestionItem = document.createElement("div");
+        suggestionItem.className = "location_suggestion_item";
+        suggestionItem.textContent = location;
+        suggestionItem.onmousedown = function() {
+          document.getElementById("jobLocation").value = location;
+          hideLocationSuggestions();
+        };
+        suggestionsBox.appendChild(suggestionItem);
+      });
+
+      suggestionsBox.style.display = "block";
+    }
+
+    function hideLocationSuggestions() {
+      document.getElementById("locationSuggestions").style.display = "none";
+    }
+
+    document.getElementById("skillRequirement").addEventListener("input", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      if (!query) {
+        hideSkillSuggestions();
+        return;
+      }
+
+      var matches = availableSkills.filter(function(skill) {
+        return skill.toLowerCase().indexOf(query) !== -1;
+      });
+
+      renderSkillSuggestions(matches);
+    });
+
+    document.getElementById("candidateSkillFilter").addEventListener("input", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      filterCandidates();
+
+      if (!query) {
+        hideCandidateSkillSuggestions();
+        return;
+      }
+
+      var matches = availableSkills.filter(function(skill) {
+        return skill.toLowerCase().indexOf(query) !== -1;
+      });
+
+      renderCandidateSkillSuggestions(matches);
+    });
+
+    document.getElementById("candidateSkillFilter").addEventListener("focus", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      if (!query) {
+        return;
+      }
+
+      var matches = availableSkills.filter(function(skill) {
+        return skill.toLowerCase().indexOf(query) !== -1;
+      });
+
+      renderCandidateSkillSuggestions(matches);
+    });
+
+    document.getElementById("candidateSkillFilter").addEventListener("blur", function() {
+      setTimeout(hideCandidateSkillSuggestions, 100);
+    });
+
+    document.getElementById("skillRequirement").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addSkillRequirement();
+      }
+    });
+
+    document.getElementById("skillRequirement").addEventListener("blur", function() {
+      setTimeout(hideSkillSuggestions, 100);
+    });
+
+    document.getElementById("jobLocation").addEventListener("input", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      if (!query) {
+        hideLocationSuggestions();
+        return;
+      }
+
+      var matches = availableLocations.filter(function(location) {
+        return location.toLowerCase().indexOf(query) !== -1;
+      });
+
+      renderLocationSuggestions(matches);
+    });
+
+    document.getElementById("jobLocation").addEventListener("focus", function(event) {
+      if (!event.target.value.trim()) {
+        hideLocationSuggestions();
+      }
+    });
+
+    document.getElementById("jobLocation").addEventListener("blur", function() {
+      setTimeout(hideLocationSuggestions, 100);
+    });
+
+    window.onclick = function(event) {
+      var jobPostModal = document.getElementById("jobPostModal");
+      var editBusinessProfileModal = document.getElementById("editBusinessProfileModal");
+      var candidateDetailsModal = document.getElementById("candidateDetailsModal");
+      var premiumModal = document.getElementById("premiumModal");
+
+      if (event.target == jobPostModal) {
+        closeJobPostModal();
+      }
+
+      if (event.target == editBusinessProfileModal) {
+        closeEditBusinessProfileModal();
+      }
+
+      if (event.target == candidateDetailsModal) {
+        closeCandidateDetailsModal();
+      }
+
+      if (event.target == premiumModal) {
+        closePremiumModal();
+      }
+
+      if (!document.getElementById("skillSuggestions").contains(event.target) && event.target.id !== "skillRequirement") {
+        hideSkillSuggestions();
+      }
+
+      if (!document.getElementById("candidateSkillSuggestions").contains(event.target) && event.target.id !== "candidateSkillFilter") {
+        hideCandidateSkillSuggestions();
+      }
+
+      if (!document.getElementById("locationSuggestions").contains(event.target) && event.target.id !== "jobLocation") {
+        hideLocationSuggestions();
+      }
+    }
+
+    async function loadCurrentJobs() {
+      const container = document.getElementById("currentJobsContainer");
+
+      try {
+          const response = await fetch(
+              "http://127.0.0.1:8000/api/jobs/"
+          );
+
+          const jobs = await response.json();
+
+          const businessId = sessionStorage.getItem("businessId");
+
+          const businessJobs = jobs.filter(function(job) {
+              return String(job.business) === String(businessId);
+          });
+
+          container.innerHTML = "";
+
+          if (!businessJobs.length) {
+              container.innerHTML = "<p>No jobs created yet.</p>";
+              return;
+          }
+
+          businessJobs.forEach(function(job) {
+
+              const card = document.createElement("div");
+              card.className = "listing_box";
+
+              card.innerHTML = `
+                <span class="match_label">Active Posting</span>
+                <div class="candidate_header">
+                    <h3>${job.title}</h3>
+
+                    <div class="button_row">
+                        <button
+                            type="button"
+                            class="blue_button"
+                            onclick="loadRecommendedCandidatesForJob(${job.id}, '${job.title.replace(/'/g, "\\'")}')">
+                            View Matches
+                        </button>
+
+                        <button
+                            type="button"
+                            class="red_button"
+                            onclick="removeJobListing(${job.id})">
+                            Remove Job 
+                        </button>
+                    </div>
+                </div>
+                <p><b>Company:</b> ${job.company}</p>
+                <p>${job.description}</p>
+                <div class="job_meta">
+                    <span class="job_tag">${job.education}</span>
+                    <span class="job_tag">${job.experience} Years Experience</span>
+                    <span class="job_tag">${job.mode}</span>
+                    <span class="job_tag">${job.location}</span>
+                </div>
+
+                <p><b>Skills:</b> ${job.skills.join(", ")}</p>
+            `;
+
+              container.appendChild(card);
+          });
+
+      } catch(error) {
+          console.error("Could not load jobs:", error);
+          container.innerHTML = "<p>Could not load jobs.</p>";
+      }
+  }
+    async function loadRecommendedCandidates() {
+      const container = document.getElementById("recommendedCandidatesContainer");
+      const status = document.getElementById("candidateResultsStatus");
+
+      try {
+        const businessId = sessionStorage.getItem("businessId");
+
+        const jobsResponse = await fetch(
+          "http://127.0.0.1:8000/api/jobs/"
+        );
+
+        const allJobs = await jobsResponse.json();
+
+        const businessJobs = allJobs.filter(function(job) {
+          return String(job.business) === String(businessId);
+        });
+
+        if (!businessJobs.length) {
+          status.textContent = "No job posts found.";
+          container.innerHTML =
+            "<p>Please create a job post to see recommended candidates.</p>";
+          return;
+        }
+
+        const jobId = businessJobs[0].id;
+
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/jobs/${jobId}/recommend-candidates/`
+        );
+
+        const recommendations = await response.json();
+
+        container.innerHTML = "";
+
+        if (!recommendations.length) {
+          status.textContent = "No candidates found.";
+          container.innerHTML = "<p>No recommended candidates found yet.</p>";
+          return;
+        }
+
+        status.textContent =
+          recommendations.length + " candidate" + (recommendations.length === 1 ? "" : "s") + " found.";
+
+        allRecommendedCandidates = recommendations;
+        showingAllCandidates = false;
+
+        renderRecommendedCandidates();
+
+      } catch (error) {
+        console.error("Could not load recommended candidates:", error);
+        status.textContent = "Could not load candidates.";
+        container.innerHTML = "<p>Could not load recommended candidates.</p>";
+      }
+    }
+
+    async function loadRecommendedCandidatesForJob(jobId, jobTitle) {
+        const container = document.getElementById("recommendedCandidatesContainer");
+        const status = document.getElementById("candidateResultsStatus");
+
+        status.textContent = "Loading matches for " + jobTitle + "...";
+        container.innerHTML = "<p>Loading recommended candidates...</p>";
+
+        try {
+            const response = await fetch(
+                `http://127.0.0.1:8000/api/jobs/${jobId}/recommend-candidates/`
+            );
+
+            const recommendations = await response.json();
+
+            container.innerHTML = "";
+
+            if (!recommendations.length) {
+                status.textContent =
+                    "No recommended candidates found for " + jobTitle + ".";
+
+                container.innerHTML =
+                    "<p>No recommended candidates found for this job.</p>";
+
+                return;
+            }
+
+            allRecommendedCandidates = recommendations;
+            showingAllCandidates = false;
+
+            renderRecommendedCandidates();
+            alert("Showing recommended candidates for " + jobTitle + ".");
+            status.textContent =
+                "Showing matches for: " +
+                jobTitle +
+                " — " +
+                recommendations.length +
+                " candidate" +
+                (recommendations.length === 1 ? "" : "s") +
+                " found.";
+
+        } catch (error) {
+            console.error("Could not load candidates for job:", error);
+            status.textContent = "Could not load candidates.";
+            container.innerHTML = "<p>Could not load recommended candidates.</p>";
+        }
+    }
+
+    function renderRecommendedCandidates() {
+      const container = document.getElementById("recommendedCandidatesContainer");
+      const status = document.getElementById("candidateResultsStatus");
+
+      container.innerHTML = "";
+
+      const isPremium =
+          checkPremiumMembership();
+
+      const availableCandidates =
+          isPremium
+              ? allRecommendedCandidates
+              : allRecommendedCandidates.slice(0, 10);
+
+      const candidatesToShow =
+          showingAllCandidates
+              ? availableCandidates
+              : availableCandidates.slice(0, 3);
+
+      status.textContent =
+          availableCandidates.length + " candidate" +
+          (availableCandidates.length === 1 ? "" : "s") + " found.";
+
+      candidatesToShow.forEach(function(item) {
+        const candidate = item.candidate;
+
+        const card = document.createElement("div");
+        card.className = "listing_box clickable candidate_listing_card";
+
+        card.dataset.search =
+          `${candidate.name} ${candidate.education} ${candidate.major} ${candidate.skills.join(" ")} ${candidate.preferred_location} ${candidate.preferred_working_mode}`;
+
+        card.dataset.education = candidate.education;
+        card.dataset.experience = String(candidate.experience);
+        card.dataset.skills = candidate.skills.join(",");
+        card.dataset.location = candidate.preferred_location;
+        card.dataset.workmode = candidate.preferred_working_mode;
+
+        card.innerHTML = `
+          <span class="match_label">Match Score: ${item.score}</span>
+          <div class="candidate_header"><h3>${candidate.name}</h3> <button type="button" class="blue_button" onclick="addCandidateToMatches(${candidate.id}, ${item.score})"> Add to Matches </button></div>
+          <p><b>Education:</b> ${candidate.education}</p>
+          <p><b>Major:</b> ${candidate.major}</p>
+          <p><b>Experience:</b> ${candidate.experience} years</p>
+          <p><b>Skills:</b> ${candidate.skills.join(", ")}</p>
+          <p><b>Preferred Location:</b> ${candidate.preferred_location}</p>
+          <p><b>Preferred Work Mode:</b> ${candidate.preferred_working_mode}</p>
+          <p><b>Contact Number:</b> ${candidate.contact}</p>
+          <p><b>Email:</b> ${candidate.email || "Not provided"}</p>
+          ${candidate.resume ? `
+          <button
+              type="button"
+              class="blue_button"
+              onclick="window.open('http://127.0.0.1:8000${candidate.resume}', '_blank')">
+              View Resume
+          </button>
+          ` : ""}
+        `;
+
+        container.appendChild(card);
+      });
+
+      if (availableCandidates.length > 3) {
+        const buttonWrapper = document.createElement("div");
+        buttonWrapper.className = "show_more_wrapper";
+
+        const button = document.createElement("button");
+
+        button.className = "blue_button";
+        button.textContent = showingAllCandidates
+          ? "Show Less"
+          : "Show More";
+
+        button.onclick = function() {
+          showingAllCandidates = !showingAllCandidates;
+          renderRecommendedCandidates();
+        };
+
+        buttonWrapper.appendChild(button);
+        container.appendChild(buttonWrapper);
+      }
+    }
+
+    async function addCandidateToMatches(candidateId, score) {
+      const businessId = sessionStorage.getItem("businessId");
+
+      if (!businessId) {
+        alert("Business account not found.");
+        return;
+      }
+
+      const response = await fetch("http://127.0.0.1:8000/api/matches/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          business: businessId,
+          candidate_id: candidateId,
+          score: score,
+          status: "New"
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log(data);
+        alert("Candidate is already in your matches or could not be added.");
+        return;
+      }
+
+      alert("Candidate added to matches.");
+    }
+
+    async function loadSavedMatches() {
+
+      const businessId = sessionStorage.getItem("businessId");
+
+      const container =
+        document.getElementById("matchesContainer");
+
+      container.innerHTML =
+        "<p>Loading matches...</p>";
+
+      try {
+
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/businesses/${businessId}/matches/`
+        );
+
+        const matches = await response.json();
+
+        container.innerHTML = "";
+
+        if (!matches.length) {
+          container.innerHTML =
+            "<p>No saved matches yet.</p>";
+          return;
+        }
+
+        matches.forEach(function(match) {
+
+          const candidate = match.candidate;
+
+          const card =
+            document.createElement("div");
+
+          card.className = "listing_box";
+
+          card.innerHTML = `
+            <div class="box_header">
+                <h3>${candidate.name}</h3>
+
+                <button
+                    type="button"
+                    class="red_button"
+                    onclick="removeMatch(${match.id})">
+                    Remove Match
+                </button>
+            </div>
+
+            <span class="match_label">
+              Score: ${match.score}
+            </span>
+
+            <p>
+              <b>Status:</b>
+            </p>
+
+            <select
+              onchange="updateMatchStatus(${match.id}, this.value)">
+
+              <option value="New"
+                ${match.status === "New" ? "selected" : ""}>
+                New
+              </option>
+
+              <option value="Shortlisted"
+                ${match.status === "Shortlisted" ? "selected" : ""}>
+                Shortlisted
+              </option>
+
+              <option value="Contacted"
+                ${match.status === "Contacted" ? "selected" : ""}>
+                Contacted
+              </option>
+
+              <option value="Rejected"
+                ${match.status === "Rejected" ? "selected" : ""}>
+                Rejected
+              </option>
+
+            </select>
+          `;
+
+          container.appendChild(card);
+        });
+
+      } catch(error) {
+
+        console.error(error);
+
+        container.innerHTML =
+          "<p>Could not load matches.</p>";
+      }
+    }
+
+    async function updateMatchStatus(matchId, status) {
+
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/matches/${matchId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            status: status
+          })
+        }
+      );
+
+      if (!response.ok) {
+        alert("Could not update status.");
+      }
+    }
+
+    async function removeMatch(matchId) {
+
+        const shouldDelete = confirm(
+            "Remove this candidate from your matches?"
+        );
+
+        if (!shouldDelete) {
+            return;
+        }
+
+        const response = await fetch(
+            `http://127.0.0.1:8000/api/matches/${matchId}/`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        if (!response.ok) {
+            alert("Could not remove match.");
+            return;
+        }
+
+        await loadSavedMatches();
+    }
+
+    async function initialiseBusinessPage() {
+      await loadBusinessProfile();
+        updatePremiumDisplay();
+        loadRecommendedCandidates();
+        loadCurrentJobs();
+    }
+
+    initialiseBusinessPage();
+    function logoutDemoUser() {
+      localStorage.setItem("isLoggedIn", "false");
+      localStorage.setItem("isPremiumMember", "false");
+      sessionStorage.removeItem("authSessionActive");
+      window.location.href = "Main.html";
+    }
+  </script>
+
+</body>
+
+</html>

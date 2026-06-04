@@ -1,0 +1,38 @@
+Business Logins
+BrightPath Analytics	careers@brightpath.com			password123
+CloudCore Systems	hr@cloudcore.com			password123
+Urban Retail Group	jobs@urbanretail.com			password123
+Nexus Cyber Security	careers@nexuscyber.com			password123
+GreenTech Solutions	people@greentech.com			password123
+
+
+Harbour View Events	careers@harbourviewevents.com		password123
+Harrison Legal Group	careers@harrisonlegal.com		password123
+Metro Retail Group	jobs@metroretail.com			password123
+Summit Construction	careers@summitconstruction.com		password123
+Southern Health Services	careers@southernhealth.com	password123
+
+
+Candidate Logins
+
+Maya Nguyen		maya.nguyen@example.com			password123
+Sophie Tan		sophie.tan@example.com			password123
+Ava Patel		ava.patel@example.com			password123
+Noah Wilson		noah.wilson@example.com			password123
+Emma Johnson		emma.johnson@example.com		password123
+Liam Brown		liam.brown@example.com			password123
+Sophia Wilson		sophia.wilson@example.com		password123
+Noah Taylor		noah.taylor@example.com			password123
+Ava Martin		ava.martin@example.com			password123
+William Anderson	william.anderson@example.com		password123
+Mia Thomas		mia.thomas@example.com			password123
+James White		james.white@example.com			password123
+Isabella Harris		isabella.harris@example.com		password123
+Lucas Clark		lucas.clark@example.com			password123
+Charlotte Lewis		charlotte.lewis@example.com		password123
+Henry Walker		henry.walker@example.com		password123
+Amelia Hall		amelia.hall@example.com			password123
+Jack Young		jack.young@example.com			password123
+Olivia King		olivia.king@example.com			password123
+Alexander Ristevski	test1@gmail.com				test123
+Matthew Ristevski	test3@gmail.com				test123

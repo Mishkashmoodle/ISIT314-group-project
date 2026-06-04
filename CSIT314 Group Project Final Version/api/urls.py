@@ -1,0 +1,38 @@
+from django.urls import path
+from .views import (
+    AccountLoginView,
+    AccountRegisterView,
+    CandidateListCreateView,
+    JobListCreateView,
+    BusinessListCreateView,
+    JobRecommendationView,
+    CandidateRecommendationView,
+    ResumeParseView,
+    CandidateDetailView,
+    BusinessDetailView,
+    SavedJobCreateView,
+    CandidateSavedJobsView,
+    MatchCreateView,
+    BusinessMatchesView,
+    MatchDetailView,
+    JobDetailView,
+)
+
+urlpatterns = [
+    path('candidates/', CandidateListCreateView.as_view(), name='candidate-list-create'),
+    path('jobs/', JobListCreateView.as_view(), name='job-list-create'),
+    path('businesses/', BusinessListCreateView.as_view(), name='business-list-create'),
+    path('candidates/<int:candidate_id>/recommend-jobs/', JobRecommendationView.as_view(), name='recommend-jobs'),
+    path('jobs/<int:job_id>/recommend-candidates/', CandidateRecommendationView.as_view(), name='recommend-candidates'),
+    path('parse-resume/', ResumeParseView.as_view(), name='parse-resume'),
+    path('register/', AccountRegisterView.as_view(), name='account-register'),
+    path('login/', AccountLoginView.as_view(), name='account-login'),
+    path('candidates/<int:candidate_id>/', CandidateDetailView.as_view(), name='candidate-detail'),
+    path('saved-jobs/', SavedJobCreateView.as_view(), name='saved-job-create'),
+    path('candidates/<int:candidate_id>/saved-jobs/', CandidateSavedJobsView.as_view(), name='candidate-saved-jobs'),
+    path('businesses/<int:business_id>/',BusinessDetailView.as_view(),name='business-detail'),
+    path('matches/', MatchCreateView.as_view(), name='match-create'),
+    path('businesses/<int:business_id>/matches/', BusinessMatchesView.as_view(), name='business-matches'),
+    path('matches/<int:match_id>/', MatchDetailView.as_view(), name='match-detail'),
+    path('jobs/<int:job_id>/', JobDetailView.as_view(), name='job-detail'),
+]

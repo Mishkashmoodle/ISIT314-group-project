@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>uMatch Profile Setup</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="setup_page">
+  <div class="header">
+    <div>
+      <h1>uMatch Profile Setup</h1>
+      <p>Finish your account so the platform can personalise your experience.</p>
+    </div>
+    <button class="back_button" type="button" onclick="window.location.href='Main.html'">Back to Home</button>
+  </div>
+
+  <div class="main">
+    <div class="setup_shell">
+      <aside class="panel">
+        <h2 class="progress_title">Setup Steps</h2>
+        <div class="info_banner">
+          <div class="role_summary" id="roleSummary">Candidate account</div>
+          <div id="emailSummary">Preparing your account details.</div>
+        </div>
+        <ol class="step_list" id="stepList">
+          <li class="step_item completed" id="stepOneItem"><span class="step_badge">1</span><span>Create your account</span></li>
+          <li class="step_item active" id="stepTwoItem"><span class="step_badge">2</span><span id="stepTwoLabel">Choose your setup method</span></li>
+          <li class="step_item" id="stepThreeItem"><span class="step_badge">3</span><span id="stepThreeLabel">Upload your resume</span></li>
+          <li class="step_item" id="stepFourItem"><span class="step_badge">4</span><span id="stepFourLabel">Review and continue</span></li>
+        </ol>
+      </aside>
+
+      <section class="panel">
+        <h2 class="setup_title" id="setupTitle">Complete your candidate profile</h2>
+        <p class="setup_subtitle" id="setupSubtitle">
+          We will guide you through the information needed so job recommendations and employer matching work properly.
+        </p>
+
+        <form id="profileSetupForm" onsubmit="return submitProfileSetup(event)">
+          <div id="candidateSetup" class="role_block">
+            <div class="form_section">
+              <h3>How would you like to set up your profile?</h3>
+              <div class="choice_grid">
+                <div id="resumeChoiceCard" class="choice_card active" onclick="setCandidateSetupMode('resume')">
+                  <h4>Use my resume</h4>
+                  <p>Upload your resume first and keep the setup lightweight while you finish the rest later.</p>
+                </div>
+                <div id="manualChoiceCard" class="choice_card" onclick="setCandidateSetupMode('manual')">
+                  <h4>I rather do it myself</h4>
+                  <p>Fill out your profile manually now so your job recommendations are ready straight away.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="form_section">
+              <h3>Resume Upload</h3>
+              <div class="field_grid">
+                <div class="field field_full">
+                  <label for="candidateResume">Upload Resume</label>
+                  <input id="candidateResume" name="candidateResume" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                  <p class="field_hint">Accepted file types: PDF, .doc, .docx</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="candidateManualSection" class="form_section hidden">
+              <h3>Candidate Details</h3>
+              <div class="field_grid">
+                <div class="field">
+                  <label for="candidateFullName">Full Name</label>
+                  <input id="candidateFullName" name="candidateFullName" type="text" placeholder="Enter your full name">
+                </div>
+                <div class="field">
+                  <label for="candidateContact">Contact Information</label>
+                  <input id="candidateContact" name="candidateContact" type="text" placeholder="Phone number or preferred contact">
+                </div>
+                <div class="field">
+                  <label for="candidateEducation">Education</label>
+                  <select id="candidateEducation" name="candidateEducation">
+                    <option value="">Select an education level</option>
+                    <option>None</option>
+                    <option>High School</option>
+                    <option>Certificate I</option>
+                    <option>Certificate II</option>
+                    <option>Certificate III</option>
+                    <option>Certificate IV</option>
+                    <option>Diploma</option>
+                    <option>Advanced Diploma</option>
+                    <option>Associate Degree</option>
+                    <option>Bachelor's Degree</option>
+                    <option>Graduate Certificate</option>
+                    <option>Graduate Diploma</option>
+                    <option>Master's Degree</option>
+                    <option>Doctorate</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="candidateMajor">Major / Field of Study</label>
+                  <div class="skill_input_wrapper">
+                    <input id="candidateMajor" name="candidateMajor" type="text" autocomplete="off" placeholder="Start typing your major or field">
+                    <div id="candidateMajorSuggestions" class="skill_suggestions"></div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="candidateSkills">Skills</label>
+                  <input id="candidateSkills" name="candidateSkills" type="text" placeholder="Example: JavaScript, Customer Service, SQL">
+                </div>
+                <div class="field">
+                  <label for="candidatePreferredLocation">Preferred Location</label>
+                  <select id="candidatePreferredLocation" name="candidatePreferredLocation">
+                    <option value="">Select a preferred location</option>
+                    <option>Sydney, NSW</option>
+                    <option>Melbourne, VIC</option>
+                    <option>Brisbane, QLD</option>
+                    <option>Perth, WA</option>
+                    <option>Adelaide, SA</option>
+                    <option>Canberra, ACT</option>
+                    <option>Wollongong, NSW</option>
+                    <option>Newcastle, NSW</option>
+                    <option>Open to multiple locations</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="candidateExperience">Years of Experience</label>
+                  <input id="candidateExperience" name="candidateExperience" type="number" min="0" step="1" placeholder="0">
+                </div>
+                <div class="field">
+                  <label for="candidatePreferredMode">Preferred Work Mode</label>
+                  <select id="candidatePreferredMode" name="candidatePreferredMode">
+                    <option value="">Select a work mode</option>
+                    <option>Remote</option>
+                    <option>On-site</option>
+                    <option>Hybrid</option>
+                  </select>
+                </div>
+                <div class="field field_full">
+                  <div class="box_header" style="align-items: center;">
+                    <label for="candidateWorkExperienceContainer"><b>Work Experience</b></label>
+                    <button type="button" class="blue_button" onclick="addCandidateWorkExperienceEntry()">Add Work Experience</button>
+                  </div>
+                  <div id="candidateWorkExperienceContainer" class="work_experience_container"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="businessSetup" class="role_block hidden">
+            <div class="form_section">
+              <h3>Business Details</h3>
+              <div class="field_grid">
+                <div class="field">
+                  <label for="businessName">Business Name</label>
+                  <input id="businessName" name="businessName" type="text" placeholder="Enter business name">
+                </div>
+                <div class="field">
+                  <label for="businessAbn">ABN</label>
+                  <input id="businessAbn" name="businessAbn" type="text" placeholder="Enter ABN">
+                </div>
+                <div class="field">
+                  <label for="businessContactPerson">Contact Person</label>
+                  <input id="businessContactPerson" name="businessContactPerson" type="text" placeholder="Enter contact person name">
+                </div>
+                <div class="field">
+                  <label for="businessContactNumber">Contact Number</label>
+                  <input id="businessContactNumber" name="businessContactNumber" type="text" placeholder="Enter business contact number">
+                </div>
+                <div class="field">
+                  <label for="businessLocation">Business Location</label>
+                  <input id="businessLocation" name="businessLocation" type="text" placeholder="Enter business location">
+                </div>
+                <div class="field">
+                  <label for="businessIndustry">Industry</label>
+                  <input id="businessIndustry" name="businessIndustry" type="text" placeholder="Enter your industry">
+                </div>
+                <div class="field field_full">
+                  <label for="businessDescription">Company Information</label>
+                  <textarea id="businessDescription" name="businessDescription" placeholder="Describe your company, team, and what candidates should know"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="button_row">
+            <button class="secondary_button" type="button" onclick="window.location.href='Main.html'">Finish Later</button>
+            <button class="primary_button" type="submit">Complete Setup</button>
+          </div>
+
+          <p id="setupStatus" class="status_text"></p>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    var setupContext = {
+      accountType: "candidate",
+      email: ""
+    };
+    var candidateSetupMode = "resume";
+    var availableMajors = [
+      "Accounting",
+      "Architecture",
+      "Artificial Intelligence",
+      "Business Administration",
+      "Business Analytics",
+      "Computer Engineering",
+      "Computer Science",
+      "Cyber Security",
+      "Data Analytics",
+      "Data Science",
+      "Digital Marketing",
+      "Economics",
+      "Education",
+      "Electrical Engineering",
+      "Finance",
+      "Graphic Design",
+      "Human Resource Management",
+      "Information Systems",
+      "Information Technology",
+      "Marketing",
+      "Mechanical Engineering",
+      "Nursing",
+      "Project Management",
+      "Psychology",
+      "Software Engineering"
+    ];
+
+    function isAustralianPhoneNumber(value) {
+      var normalizedValue = value.replace(/\s+/g, "");
+      return /^(?:\+61|0)(?:2|3|4|7|8)\d{8}$/.test(normalizedValue);
+    }
+
+    function validateAustralianPhoneField(fieldId, label) {
+      var field = document.getElementById(fieldId);
+      var value = field.value.trim();
+
+      if (!value) {
+        field.setCustomValidity("");
+        return;
+      }
+
+      if (!isAustralianPhoneNumber(value)) {
+        field.setCustomValidity(label + " must be a valid Australian phone number.");
+        return;
+      }
+
+      field.setCustomValidity("");
+    }
+
+    function loadSetupContext() {
+      var storedContext = sessionStorage.getItem("pendingProfileSetup");
+
+      if (storedContext) {
+        setupContext = JSON.parse(storedContext);
+      }
+
+      applyRoleView();
+    }
+
+    function applyRoleView() {
+      var isBusiness = setupContext.accountType === "business";
+
+      document.getElementById("roleSummary").textContent = isBusiness ? "Business account" : "Candidate account";
+      document.getElementById("emailSummary").textContent = setupContext.email
+        ? "Account email: " + setupContext.email
+        : "Account email will be added after sign up.";
+
+      document.getElementById("setupTitle").textContent = isBusiness
+        ? "Complete your business profile"
+        : "Complete your candidate profile";
+
+      document.getElementById("setupSubtitle").textContent = isBusiness
+        ? "Add the company information employers need so you can create job posts and receive candidate recommendations."
+        : "Add the profile details employers need so the platform can recommend the most relevant jobs for you.";
+
+      document.getElementById("stepTwoLabel").textContent = isBusiness ? "Complete your business profile" : "Choose your setup method";
+      document.getElementById("stepFourLabel").textContent = "Review and continue";
+
+      document.getElementById("candidateSetup").classList.toggle("hidden", isBusiness);
+      document.getElementById("businessSetup").classList.toggle("hidden", !isBusiness);
+
+      if (!isBusiness) {
+        setCandidateSetupMode(candidateSetupMode);
+      }
+
+      document.getElementById("businessName").required = isBusiness;
+      document.getElementById("businessAbn").required = isBusiness;
+      document.getElementById("businessContactPerson").required = isBusiness;
+      document.getElementById("businessContactNumber").required = isBusiness;
+      document.getElementById("businessLocation").required = isBusiness;
+      document.getElementById("businessIndustry").required = isBusiness;
+      document.getElementById("businessDescription").required = isBusiness;
+      updateSetupProgress();
+    }
+
+    function setCandidateSetupMode(mode) {
+      var manualMode = mode === "manual";
+
+      candidateSetupMode = mode;
+      document.getElementById("resumeChoiceCard").classList.toggle("active", !manualMode);
+      document.getElementById("manualChoiceCard").classList.toggle("active", manualMode);
+      document.getElementById("candidateManualSection").classList.toggle("hidden", !manualMode);
+
+      document.getElementById("candidateFullName").required = manualMode;
+      document.getElementById("candidateContact").required = manualMode;
+      document.getElementById("candidateEducation").required = manualMode;
+      document.getElementById("candidateMajor").required = manualMode;
+      document.getElementById("candidateSkills").required = manualMode;
+      document.getElementById("candidatePreferredLocation").required = manualMode;
+      document.getElementById("candidateExperience").required = manualMode;
+      document.getElementById("candidatePreferredMode").required = manualMode;
+      document.getElementById("candidateResume").required = !manualMode;
+
+      if (manualMode && !document.getElementById("candidateWorkExperienceContainer").querySelector(".work_experience_entry")) {
+        renderCandidateWorkExperienceEntries([{}]);
+      }
+
+      updateSetupProgress();
+    }
+
+    function isCandidateManualComplete() {
+      return Boolean(
+        document.getElementById("candidateFullName").value.trim() &&
+        document.getElementById("candidateContact").value.trim() &&
+        document.getElementById("candidateEducation").value &&
+        document.getElementById("candidateMajor").value.trim() &&
+        document.getElementById("candidateSkills").value.trim() &&
+        document.getElementById("candidatePreferredLocation").value &&
+        document.getElementById("candidateExperience").value.trim() &&
+        document.getElementById("candidatePreferredMode").value
+      );
+    }
+
+    function isCandidateResumeComplete() {
+      return document.getElementById("candidateResume").files.length > 0;
+    }
+
+    function isBusinessComplete() {
+      return Boolean(
+        document.getElementById("businessName").value.trim() &&
+        document.getElementById("businessAbn").value.trim() &&
+        document.getElementById("businessContactPerson").value.trim() &&
+        document.getElementById("businessContactNumber").value.trim() &&
+        document.getElementById("businessLocation").value.trim() &&
+        document.getElementById("businessIndustry").value.trim() &&
+        document.getElementById("businessDescription").value.trim()
+      );
+    }
+
+    function setStepState(stepId, state) {
+      var step = document.getElementById(stepId);
+      step.classList.remove("active", "completed");
+      if (state) {
+        step.classList.add(state);
+      }
+    }
+
+    function updateSetupProgress() {
+      var isBusiness = setupContext.accountType === "business";
+      var manualMode = candidateSetupMode === "manual";
+      var resumeDone = isCandidateResumeComplete();
+      var manualDone = isCandidateManualComplete();
+      var businessDone = isBusinessComplete();
+
+      setStepState("stepOneItem", "completed");
+
+      if (isBusiness) {
+        document.getElementById("stepTwoLabel").textContent = "Complete your business profile";
+        document.getElementById("stepThreeLabel").textContent = "Review your business profile";
+        document.getElementById("stepThreeItem").classList.remove("hidden_step");
+        document.getElementById("stepFourItem").classList.add("hidden_step");
+
+        setStepState("stepTwoItem", businessDone ? "completed" : "active");
+        setStepState("stepThreeItem", businessDone ? "active" : null);
+        setStepState("stepFourItem", null);
+        return;
+      }
+
+      document.getElementById("stepThreeItem").classList.remove("hidden_step");
+      document.getElementById("stepFourItem").classList.remove("hidden_step");
+      document.getElementById("stepTwoLabel").textContent = "Choose your setup method";
+      document.getElementById("stepThreeLabel").textContent = manualMode ? "Complete your profile" : "Upload your resume";
+
+      if (manualMode) {
+        setStepState("stepTwoItem", "completed");
+        setStepState("stepThreeItem", manualDone ? "completed" : "active");
+        setStepState("stepFourItem", manualDone ? "active" : null);
+      } else {
+        setStepState("stepTwoItem", "completed");
+        setStepState("stepThreeItem", resumeDone ? "completed" : "active");
+        setStepState("stepFourItem", resumeDone ? "active" : null);
+      }
+    }
+
+    function renderCandidateMajorSuggestions(matches) {
+      var suggestionsBox = document.getElementById("candidateMajorSuggestions");
+      suggestionsBox.innerHTML = "";
+
+      if (!matches.length) {
+        hideCandidateMajorSuggestions();
+        return;
+      }
+
+      matches.forEach(function(major) {
+        var suggestionItem = document.createElement("div");
+        suggestionItem.className = "skill_suggestion_item";
+        suggestionItem.textContent = major;
+        suggestionItem.onmousedown = function() {
+          document.getElementById("candidateMajor").value = major;
+          hideCandidateMajorSuggestions();
+        };
+        suggestionsBox.appendChild(suggestionItem);
+      });
+
+      suggestionsBox.style.display = "block";
+    }
+
+    function hideCandidateMajorSuggestions() {
+      document.getElementById("candidateMajorSuggestions").style.display = "none";
+    }
+
+    function renderCandidateWorkExperienceEntry(entryData) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+      var entry = document.createElement("div");
+      var header = document.createElement("div");
+      var removeButton = document.createElement("button");
+      var grid = document.createElement("div");
+      var fields = [
+        { field: "jobTitle", label: "Job Title", placeholder: "Enter job title" },
+        { field: "company", label: "Company", placeholder: "Enter company" },
+        { field: "duration", label: "Duration", placeholder: "e.g. 2021-2024 or 2 years" }
+      ];
+
+      entry.className = "work_experience_entry";
+
+      header.className = "work_experience_entry_header";
+      header.textContent = "Experience Entry";
+
+      removeButton.type = "button";
+      removeButton.className = "work_experience_remove_button";
+      removeButton.textContent = "Remove";
+      removeButton.onclick = function() {
+        entry.remove();
+        if (!container.querySelector(".work_experience_entry")) {
+          renderCandidateWorkExperienceEntries([{}]);
+        }
+        updateSetupProgress();
+      };
+
+      header.appendChild(removeButton);
+      grid.className = "field_grid work_experience_grid";
+
+      fields.forEach(function(fieldConfig) {
+        var field = document.createElement("div");
+        var label = document.createElement("label");
+        var input = document.createElement("input");
+
+        field.className = "field";
+        label.textContent = fieldConfig.label;
+        input.type = "text";
+        input.placeholder = fieldConfig.placeholder;
+        input.setAttribute("data-work-field", fieldConfig.field);
+        input.value = entryData && entryData[fieldConfig.field] ? entryData[fieldConfig.field] : "";
+        input.addEventListener("input", updateSetupProgress);
+
+        field.appendChild(label);
+        field.appendChild(input);
+        grid.appendChild(field);
+      });
+
+      entry.appendChild(header);
+      entry.appendChild(grid);
+      container.appendChild(entry);
+    }
+
+    function renderCandidateWorkExperienceEntries(entries) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+      var workExperienceEntries = entries && entries.length ? entries : [{}];
+
+      container.innerHTML = "";
+      workExperienceEntries.forEach(function(entryData) {
+        renderCandidateWorkExperienceEntry(entryData);
+      });
+    }
+
+    function addCandidateWorkExperienceEntry(entryData) {
+      var container = document.getElementById("candidateWorkExperienceContainer");
+
+      if (!container.querySelector(".work_experience_entry")) {
+        renderCandidateWorkExperienceEntries([entryData || {}]);
+        updateSetupProgress();
+        return;
+      }
+
+      renderCandidateWorkExperienceEntry(entryData || {});
+      updateSetupProgress();
+    }
+
+    function collectCandidateWorkExperienceEntries() {
+      var entries = [];
+
+      document.querySelectorAll("#candidateWorkExperienceContainer .work_experience_entry").forEach(function(entry) {
+        var jobTitleInput = entry.querySelector("[data-work-field='jobTitle']");
+        var companyInput = entry.querySelector("[data-work-field='company']");
+        var durationInput = entry.querySelector("[data-work-field='duration']");
+
+        if (!jobTitleInput || !companyInput || !durationInput) {
+          return;
+        }
+
+        if (!jobTitleInput.value.trim() && !companyInput.value.trim() && !durationInput.value.trim()) {
+          return;
+        }
+
+        entries.push({
+          jobTitle: jobTitleInput.value.trim(),
+          company: companyInput.value.trim(),
+          duration: durationInput.value.trim()
+        });
+      });
+
+      return entries;
+    }
+
+    async function submitProfileSetup(event) {
+      var formData;
+      var savedProfile;
+      var targetPage;
+
+      event.preventDefault();
+      formData = new FormData(event.target);
+
+      if (setupContext.accountType === "business") {
+        var businessDisplayName = formData.get("businessName") || setupContext.email || "Business";
+
+        savedProfile = {
+          accountType: "business",
+          email: setupContext.email,
+          businessName: formData.get("businessName"),
+          abn: formData.get("businessAbn"),
+          contactPerson: formData.get("businessContactPerson"),
+          contactNumber: formData.get("businessContactNumber"),
+          location: formData.get("businessLocation"),
+          industry: formData.get("businessIndustry"),
+          description: formData.get("businessDescription"),
+          isPremiumMember: setupContext.isPremiumMember === true
+        };
+
+        
+        targetPage = "business_view_profile.html";
+        localStorage.setItem("currentUserRole", "business");
+        localStorage.setItem("currentUserProfilePage", "business_view_profile.html");
+        localStorage.setItem("currentUserDisplayName", businessDisplayName);
+      } else {
+        var candidateDisplayName = formData.get("candidateFullName") || setupContext.email || "Candidate";
+        var candidateWorkExperience = collectCandidateWorkExperienceEntries();
+
+        savedProfile = {
+          accountType: "candidate",
+          email: setupContext.email,
+          fullName: formData.get("candidateFullName"),
+          contact: formData.get("candidateContact"),
+          education: formData.get("candidateEducation"),
+          major: formData.get("candidateMajor"),
+          skills: formData.get("candidateSkills"),
+          experience: formData.get("candidateExperience"),
+          preferredLocation: formData.get("candidatePreferredLocation"),
+          preferredMode: formData.get("candidatePreferredMode"),
+          preferredWorkMode: formData.get("candidatePreferredMode"),
+          workExperience: candidateWorkExperience,
+          setupMode: candidateSetupMode,
+          resumeFileName: formData.get("candidateResume") && formData.get("candidateResume").name
+            ? formData.get("candidateResume").name
+            : "",
+          isPremiumMember: setupContext.isPremiumMember === true
+        };
+        targetPage = "candidate_view_profile.html";
+        localStorage.setItem("currentUserRole", "candidate");
+        localStorage.setItem("currentUserProfilePage", "candidate_view_profile.html");
+        localStorage.setItem("currentUserDisplayName", candidateDisplayName);
+      }
+    
+      if (setupContext.accountType === "candidate") {
+        const candidatePayload = {
+            account: sessionStorage.getItem("accountId"),
+            name: savedProfile.fullName,
+            contact: savedProfile.contact || savedProfile.email,
+            user_type: "Candidate",
+            education: savedProfile.education,
+            major: savedProfile.major,
+            experience: parseInt(savedProfile.experience || "0"),
+            skills: savedProfile.skills
+            ? savedProfile.skills.split(",").map(skill => skill.trim()).filter(Boolean)
+            : [],
+            preferred_working_mode: savedProfile.preferredMode,
+            preferred_location: savedProfile.preferredLocation,
+            membership: savedProfile.isPremiumMember === true
+        };
+
+        const response = await fetch("http://127.0.0.1:8000/api/candidates/", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify(candidatePayload)
+        });
+
+        console.log("Candidate save status:", response.status);
+
+        const responseData = await response.json();
+        console.log("Candidate save response:", responseData);
+
+        sessionStorage.setItem(
+            "candidateId",
+            responseData.id
+        );
+
+        if (!response.ok) {
+            document.getElementById("setupStatus").textContent =
+            "Profile was filled, but could not be saved to backend.";
+            return false;
+        }
+        }
+
+        if (setupContext.accountType === "business") {
+
+            const businessPayload = {
+                account: sessionStorage.getItem("accountId"),
+                business_name: savedProfile.businessName,
+                abn: savedProfile.abn,
+                contact_person: savedProfile.contactPerson,
+                contact_number: savedProfile.contactNumber,
+                location: savedProfile.location,
+                industry: savedProfile.industry,
+                description: savedProfile.description,
+                membership: savedProfile.isPremiumMember === true
+            };
+
+            const response = await fetch(
+                "http://127.0.0.1:8000/api/businesses/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(businessPayload)
+                }
+            );
+
+            console.log("Business save status:", response.status);
+
+            const responseData = await response.json();
+            console.log("Business save response:", responseData);
+
+            if (!response.ok) {
+                document.getElementById("setupStatus").textContent =
+                    "Business profile could not be saved to backend.";
+                return false;
+            }
+        }
+
+      localStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("authSessionActive", "true");
+      localStorage.setItem("isPremiumMember", savedProfile.isPremiumMember ? "true" : "false");
+      sessionStorage.setItem("completedProfileSetup", JSON.stringify(savedProfile));
+      sessionStorage.removeItem("pendingProfileSetup");
+      document.getElementById("setupStatus").textContent = "Profile setup complete. Redirecting you now.";
+
+      setTimeout(function() {
+        window.location.href = targetPage;
+      }, 500);
+
+      return false;
+    }
+
+    document.getElementById("candidateMajor").addEventListener("input", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      if (!query) {
+        hideCandidateMajorSuggestions();
+        return;
+      }
+
+      renderCandidateMajorSuggestions(availableMajors.filter(function(major) {
+        return major.toLowerCase().indexOf(query) !== -1;
+      }));
+    });
+
+    document.getElementById("candidateMajor").addEventListener("focus", function(event) {
+      var query = event.target.value.trim().toLowerCase();
+
+      if (!query) {
+        return;
+      }
+
+      renderCandidateMajorSuggestions(availableMajors.filter(function(major) {
+        return major.toLowerCase().indexOf(query) !== -1;
+      }));
+    });
+
+    document.getElementById("candidateMajor").addEventListener("blur", function() {
+      setTimeout(hideCandidateMajorSuggestions, 100);
+    });
+
+    [
+      { id: "candidateContact", label: "Contact information" },
+      { id: "businessContactNumber", label: "Contact number" }
+    ].forEach(function(fieldConfig) {
+      var field = document.getElementById(fieldConfig.id);
+      field.addEventListener("input", function() {
+        validateAustralianPhoneField(fieldConfig.id, fieldConfig.label);
+        updateSetupProgress();
+      });
+      field.addEventListener("blur", function() {
+        validateAustralianPhoneField(fieldConfig.id, fieldConfig.label);
+      });
+    });
+
+    [
+      "candidateFullName",
+      "candidateEducation",
+      "candidateMajor",
+      "candidateSkills",
+      "candidatePreferredLocation",
+      "candidateExperience",
+      "candidatePreferredMode",
+      "businessName",
+      "businessAbn",
+      "businessContactPerson",
+      "businessLocation",
+      "businessIndustry",
+      "businessDescription"
+    ].forEach(function(fieldId) {
+      document.getElementById(fieldId).addEventListener("input", updateSetupProgress);
+      document.getElementById(fieldId).addEventListener("change", updateSetupProgress);
+    });
+
+    document.getElementById("candidateResume").addEventListener("change", async function(event) {
+
+  updateSetupProgress();
+
+  const file = event.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("resume", file);
+
+  try {
+
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/parse-resume/",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await response.json();
+
+    console.log("Resume Parse Result:", data);
+
+    // Auto-fill fields
+    if (data.name) {
+    document.getElementById("candidateFullName").value = data.name;
+    }
+
+    if (data.contact) {
+    document.getElementById("candidateContact").value = data.contact;
+    }
+
+    if (data.education) {
+    document.getElementById("candidateEducation").value = data.education;
+    }
+
+    if (data.major) {
+    document.getElementById("candidateMajor").value = data.major;
+    }
+
+    if (data.skills && data.skills.length > 0) {
+    document.getElementById("candidateSkills").value = data.skills.join(", ");
+    }
+
+    if (data.experience !== undefined && data.experience !== null) {
+    document.getElementById("candidateExperience").value = data.experience;
+    }
+
+    // Switch to manual mode so the user can review the results
+    setCandidateSetupMode("manual");
+
+    document.getElementById("setupStatus").textContent =
+    "Resume parsed successfully. Please review the details before completing setup.";
+
+    updateSetupProgress();
+
+  } catch (error) {
+
+    console.error("Resume parsing failed:", error);
+
+  }
+
+});
+
+    window.addEventListener("click", function(event) {
+      if (!document.getElementById("candidateMajorSuggestions").contains(event.target) && event.target.id !== "candidateMajor") {
+        hideCandidateMajorSuggestions();
+      }
+    });
+
+    loadSetupContext();
+  </script>
+</body>
+</html>
