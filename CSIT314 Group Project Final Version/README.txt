@@ -36,10 +36,10 @@ SETUP INSTRUCTIONS
    Preferred Method:
 
    macOS / Linux:
-   pip install -r requirements.txt
+   pip install -r "CSIT314 Group Project Final Version/requirements.txt"
 
    Windows:
-   pip install -r requirements.txt
+   pip install -r "CSIT314 Group Project Final Version/requirements.txt"
 
    Fallback Method (if requirements.txt does not work):
 
