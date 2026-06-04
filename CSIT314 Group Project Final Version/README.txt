@@ -1,8 +1,15 @@
 uMatch — Setup and Run Guide
 
 PREREQUISITES
-- Python 3.12 or newer
-- Internet connection
+
+* Python 3.12 or newer
+* Internet connection
+
+REQUIREMENTS.TXT
+
+The project includes a requirements.txt file containing all required Python
+packages. Installing dependencies using requirements.txt is the recommended
+setup method.
 
 SETUP INSTRUCTIONS
 
@@ -11,26 +18,36 @@ SETUP INSTRUCTIONS
 2. Create a virtual environment
 
    macOS / Linux:
-       python3 -m venv .venv
+   python3 -m venv .venv
 
    Windows:
-       python -m venv .venv
+   python -m venv .venv
 
 3. Activate the virtual environment
 
    macOS / Linux:
-       source .venv/bin/activate
+   source .venv/bin/activate
 
    Windows:
-       .venv\Scripts\activate
+   .venv\Scripts\activate
 
 4. Install required dependencies
 
+   Preferred Method:
+
    macOS / Linux:
-       pip install django djangorestframework django-cors-headers pdfplumber python-docx
+   pip install -r requirements.txt
 
    Windows:
-       pip install django djangorestframework django-cors-headers pdfplumber python-docx
+   pip install -r requirements.txt
+
+   Fallback Method (if requirements.txt does not work):
+
+   macOS / Linux:
+   pip install django djangorestframework django-cors-headers pdfplumber python-docx
+
+   Windows:
+   pip install django djangorestframework django-cors-headers pdfplumber python-docx
 
    Note: Once the virtual environment is active, pip points to the right place
    on both platforms. (On macOS you can also use pip3 if pip isn't found.)
@@ -42,27 +59,27 @@ SETUP INSTRUCTIONS
 6. Apply database migrations
 
    macOS / Linux:
-       python3 manage.py migrate
+   python3 manage.py migrate
 
    Windows:
-       python manage.py migrate
+   python manage.py migrate
 
 7. Start the Django server
 
    macOS / Linux:
-       python3 manage.py runserver
+   python3 manage.py runserver
 
    Windows:
-       python manage.py runserver
+   python manage.py runserver
 
 The backend API should now be available at:
 
-   http://127.0.0.1:8000/
+http://127.0.0.1:8000/
 
 Examples:
-   http://127.0.0.1:8000/api/candidates/
-   http://127.0.0.1:8000/api/jobs/
-   http://127.0.0.1:8000/api/businesses/
+http://127.0.0.1:8000/api/candidates/
+http://127.0.0.1:8000/api/jobs/
+http://127.0.0.1:8000/api/businesses/
 
 FRONTEND
 
@@ -73,20 +90,32 @@ FRONTEND
 Demo accounts are included in "Fake Accounts.txt", however any number of
 accounts can be created from scratch.
 
+
+
+
 NOTES
-- Uploaded resumes are stored locally in the media/resumes folder.
-- The database uses SQLite and is included with the project.
-- If job listings, candidates, or businesses do not appear, ensure migrations
+
+* Uploaded resumes are stored locally in the media/resumes folder.
+* The database uses SQLite and is included with the project.
+* If job listings, candidates, or businesses do not appear, ensure migrations
   have been applied and the Django server is running.
-- If dependencies are missing, install them using pip before starting the server.
+* If dependencies are missing, install them using pip before starting the server.
 
 TROUBLESHOOTING
-- "python" not found (macOS): macOS doesn't always alias python to Python 3.
+
+* "python" not found (macOS): macOS doesn't always alias python to Python 3.
   Use python3 instead.
-- "pip" not found (macOS): Use pip3, or make sure your virtual environment is
+* "pip" not found (macOS): Use pip3, or make sure your virtual environment is
   activated.
-- Activation fails on Windows PowerShell: If .venv\Scripts\activate is blocked,
+* Activation fails on Windows PowerShell: If .venv\Scripts\activate is blocked,
   run "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass" first, or use
   .venv\Scripts\activate.bat in Command Prompt.
-- Port already in use: Run the server on a different port, e.g.
+* Port already in use: Run the server on a different port, e.g.
   python3 manage.py runserver 8001.
+* ModuleNotFoundError: No module named 'docx': Install python-docx.
+* ModuleNotFoundError: No module named 'pdfplumber': Install pdfplumber.
+* If a package installation fails, try upgrading pip:
+
+  ```
+  python -m pip install --upgrade pip
+  ```
